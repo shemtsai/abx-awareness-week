@@ -1,44 +1,55 @@
 # Antibiotic Awareness Week Arcade
 
-Stewardship mini-games with a secret-code-word contest. One set of source files builds two versions:
+Stewardship mini-games with a secret-code-word contest. There are two versions, built from one file:
 
-| Version | What it is | Where it comes from |
-|---|---|---|
-| Website | Normal multi-file site | `dist/` (deployed by Vercel) |
-| theHUB block | One self-contained HTML block to paste into theHUB | `dist/hub.html` |
+| Version | What it is |
+|---|---|
+| **Standalone** | `standalone/aaw-arcade.html`: one self-contained HTML file. Paste it into any page that allows HTML blocks, or open it in a browser. |
+| **Website** | The Vercel site. It loads the standalone file as-is and adds code-word submissions, a leaderboard, and play tracking. |
 
 ## Where things live
 
 ```
-index.html          page shell for the website
-src/main.js         the menu list: which games appear, in what order
-src/core.js         code words, Microsoft Form link, menu, shared helpers
-src/style.css       all styles
-src/games/*.js      one file per game (quiz.js holds Myth/Fact, De-escalation Dash, Duration Station)
-build-hub.js        packs everything into dist/hub.html for theHUB
+standalone/aaw-arcade.html   the games: questions, code words, styles, everything
+web/index.html               website page around the arcade (header, submission form)
+web/main.js                  loads the arcade, sends tracking, handles submissions
+web/style.css                website styles
+web/admin.html, admin.js     private results page (/admin)
+api/submit.js                saves submitted code words
+api/event.js                 logs game starts/finishes
+api/admin.js                 leaderboard + activity for the admin page
+api/_lib.js                  database connection; reads the code words from the standalone file
 ```
 
-## Working on it
+## How we work
 
-1. Branch off `main`, make your change, open a pull request.
-2. Vercel posts a preview link on the pull request. Play-test there.
-   The theHUB version of that branch is at `<preview link>/hub.html`.
-3. Merge when it looks good. Vercel updates the live site.
+All game changes happen in **`standalone/aaw-arcade.html`**. The website picks them up automatically. You never copy changes over by hand.
 
-To get the theHUB block: open `<live site>/hub.html`, view the page source, and copy all of it into theHUB's HTML block.
+1. Make a branch, edit `standalone/aaw-arcade.html`, open a pull request.
+2. Vercel comments a preview link on the pull request. Play-test it there, or download the file from the branch and open it in a browser.
+3. Merge. The live website updates on its own.
 
-## Running it on your own computer (optional)
+Website-only changes (look, submission form, admin page) go in `web/` or `api/`.
 
-Needs [Node.js](https://nodejs.org) 22 or newer.
+### Rules for the standalone file
+- It must stay one self-contained file: no imports, no outside scripts or fonts.
+- If you add a game, add its code word to `CODES`. The website checks submissions against that list.
+- Keep the `track(...)` lines. They do nothing on their own, but the website uses them.
 
-```bash
-npm install      # once
-npm run dev      # live preview at http://localhost:5173
-npm run build    # builds dist/ and dist/hub.html
-```
+## One-time Vercel setup
 
-## Adding a game
+1. **Import the repo** in Vercel. The settings in `vercel.json` are picked up automatically.
+2. **Add a database:** Project → Storage → Create Database → **Neon** (free plan) → connect it to this project. Tables are created automatically on first use.
+3. **Set an admin password:** Project → Settings → Environment Variables → add `ADMIN_KEY` with a long random value. Never commit it.
+4. **Redeploy** (Deployments → ⋯ → Redeploy) so the new settings take effect.
+5. Results are at `/admin`. Enter the `ADMIN_KEY` there.
 
-1. Copy a similar file in `src/games/` and rename it.
-2. Import it in `src/main.js` and add a line to the `GAMES` list.
-3. Add its code word to `CODES` in `src/core.js` (the key must match the game's `id`).
+## Data collected
+- **Submissions:** the name or initials a player types and their valid code words.
+- **Activity:** which game was started or finished and whether a code was unlocked, tagged with a random ID per page visit. No names, accounts, or cookies.
+
+Note: this repo is public, so anyone reading `standalone/aaw-arcade.html` can see the code words.
+
+## Running locally (optional)
+
+Needs Node.js 22+. `npm install`, then `npm run dev` for the website at http://localhost:5173. Submissions and tracking only work on Vercel (or with `vercel dev`).

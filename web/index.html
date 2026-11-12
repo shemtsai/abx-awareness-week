@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦠</text></svg>" />
+    <title>Antibiotic Awareness Week</title>
+  </head>
+  <body>
+    <header class="hero">
+      <p class="eyebrow">Antimicrobial Stewardship Program</p>
+      <h1>Antibiotic Awareness Week</h1>
+      <p>Play the games, unlock secret code words, and submit them below for a chance to be recognized.</p>
+    </header>
+
+    <main>
+      <!-- The arcade from standalone/aaw-arcade.html is placed here -->
+      <div id="arcade"></div>
+
+      <section class="submit card">
+        <h2>🎟️ Submit your code words</h2>
+        <p class="muted">Codes you unlock on this page are filled in for you. Earned some in another copy of the arcade? Type them in too. You can submit more than once; we keep everything you've earned.</p>
+        <form id="submit-form">
+          <label>Your name or initials <input name="name" maxlength="60" placeholder="e.g. Jane Smith or JS" required /></label>
+          <label>Code words <textarea name="codes" rows="3" placeholder="e.g. NARROW, PATHOGEN"></textarea></label>
+          <button type="submit">Submit codes</button>
+        </form>
+        <div id="submit-result" role="status"></div>
+      </section>
+    </main>
+
+    <footer></footer>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

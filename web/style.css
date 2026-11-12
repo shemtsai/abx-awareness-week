@@ -1,0 +1,52 @@
+/* Styles for the Vercel page around the arcade. The arcade's own styles live in standalone/aaw-arcade.html. */
+:root { --c: #1f6f8b; --ink: #1d2a33; --muted: #5a6b76; --line: #d7e3ea; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--ink);
+  background: #eef3f6;
+  line-height: 1.5;
+}
+
+.hero {
+  background: linear-gradient(135deg, #123f50, #1f6f8b);
+  color: #fff;
+  padding: 48px 20px 88px;
+  text-align: center;
+}
+.hero h1 { margin: 4px 0 8px; font-size: clamp(1.7rem, 4vw, 2.5rem); }
+.hero p { margin: 0 auto; max-width: 560px; opacity: .9; }
+.hero .eyebrow { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+
+main { max-width: 744px; margin: -60px auto 0; padding: 0 12px; display: grid; gap: 20px; }
+#arcade #aaw-hub .card { box-shadow: 0 10px 30px rgba(18, 63, 80, .12); background: #fff; }
+
+/* The arcade's own "Submit your codes" link points to a Microsoft Form; here the form below replaces it */
+#arcade .pp a[target="_blank"] { display: none; }
+
+.card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+.submit h2 { margin: 0 0 4px; font-size: 1.25rem; color: var(--c); }
+.muted { color: var(--muted); font-size: .92rem; margin: 0 0 14px; }
+form { display: grid; gap: 12px; }
+label { display: grid; gap: 4px; font-weight: 600; font-size: .92rem; }
+input, textarea { font: inherit; padding: 10px 12px; border: 1.5px solid #c5d5de; border-radius: 8px; }
+input:focus, textarea:focus { outline: none; border-color: var(--c); }
+textarea { text-transform: uppercase; resize: vertical; }
+form button {
+  justify-self: start; font: inherit; font-weight: 600; cursor: pointer;
+  padding: 11px 22px; border: 0; border-radius: 8px; background: var(--c); color: #fff;
+}
+form button:disabled { opacity: .5; cursor: default; }
+#submit-result { margin-top: 12px; font-weight: 600; }
+#submit-result.ok { color: #2e7d32; }
+#submit-result.bad { color: #c62828; }
+
+footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 32px 12px; }
+
+/* Admin page */
+.admin main { margin-top: 24px; }
+table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+td.num, th.num { text-align: right; }

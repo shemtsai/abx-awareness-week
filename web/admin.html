@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Antibiotic Awareness Week · Admin</title>
+  </head>
+  <body class="admin">
+    <main>
+      <section class="card">
+        <h2>Antibiotic Awareness Week admin</h2>
+        <form id="key-form">
+          <label>Admin key <input name="key" type="password" required /></label>
+          <button type="submit">Load results</button>
+        </form>
+        <p id="status" class="muted"></p>
+      </section>
+
+      <section class="card" id="leaders" hidden>
+        <h2>Leaderboard</h2>
+        <p class="muted" id="leader-note"></p>
+        <table><thead><tr><th>#</th><th>Name / initials</th><th class="num">Codes</th><th>Code words</th><th>Last submitted</th></tr></thead><tbody></tbody></table>
+      </section>
+
+      <section class="card" id="games" hidden>
+        <h2>Game activity</h2>
+        <p class="muted" id="games-note"></p>
+        <table><thead><tr><th>Game</th><th class="num">Started</th><th class="num">Finished</th><th class="num">Unlocked code</th><th class="num">Unlock rate</th></tr></thead><tbody></tbody></table>
+      </section>
+    </main>
+    <script type="module" src="./admin.js"></script>
+  </body>
+</html>
