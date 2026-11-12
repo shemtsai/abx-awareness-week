@@ -3,33 +3,103 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦠</text></svg>" />
     <title>Antibiotic Awareness Week</title>
+    <meta name="description" content="Ten short, evidence-based games on using antibiotics well. Play, unlock secret code words, and submit them for recognition." />
+    <meta name="author" content="Shemual Tsai, PharmD" />
+    <meta name="theme-color" content="#0F3D45" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Antibiotic Awareness Week" />
+    <meta property="og:description" content="Ten short, evidence-based games on using antibiotics well." />
+    <meta property="og:url" content="https://abx-awareness-week.vercel.app/" />
+    <meta property="og:image" content="https://abx-awareness-week.vercel.app/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
+    <a class="skip" href="#arcade">Skip to the games</a>
+
     <header class="hero">
-      <p class="eyebrow">Antimicrobial Stewardship Program</p>
-      <h1>Antibiotic Awareness Week</h1>
-      <p>Play the games, unlock secret code words, and submit them below for a chance to be recognized.</p>
+      <div class="hero-text">
+        <h1>Antibiotic Awareness Week</h1>
+        <p class="lede">Ten short games on using antibiotics well, from picking the narrowest drug to knowing when to stop. Each one takes a minute or two, and every answer cites the guideline or trial behind it.</p>
+        <a class="cta" href="#arcade">Start playing</a>
+      </div>
+
+      <figure class="plate" aria-hidden="true">
+        <svg viewBox="0 0 400 400">
+          <defs>
+            <pattern id="lawn" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(18)">
+              <circle cx="2" cy="2" r="1.1" fill="#C9A85C" opacity=".55" />
+              <circle cx="6.5" cy="6" r=".8" fill="#C9A85C" opacity=".4" />
+            </pattern>
+            <clipPath id="agar"><circle cx="200" cy="200" r="168" /></clipPath>
+          </defs>
+          <circle class="rim" cx="200" cy="200" r="184" />
+          <circle cx="200" cy="200" r="168" fill="#F1DFAE" />
+          <circle cx="200" cy="200" r="168" fill="url(#lawn)" />
+          <g clip-path="url(#agar)">
+            <circle class="zone" style="--d:0s"   cx="200" cy="100" r="46" />
+            <circle class="zone" style="--d:.12s" cx="287" cy="150" r="38" />
+            <circle class="zone" style="--d:.24s" cx="287" cy="250" r="34" />
+            <circle class="zone" style="--d:.36s" cx="200" cy="300" r="44" />
+            <circle class="zone" style="--d:.48s" cx="113" cy="250" r="27" />
+            <circle class="zone" style="--d:.6s"  cx="200" cy="200" r="31" />
+          </g>
+          <g class="disks">
+            <circle cx="200" cy="100" r="15" /><text x="200" y="100">CFZ</text>
+            <circle cx="287" cy="150" r="15" /><text x="287" y="150">CRO</text>
+            <circle cx="287" cy="250" r="15" /><text x="287" y="250">FEP</text>
+            <circle cx="200" cy="300" r="15" /><text x="200" y="300">MEM</text>
+            <circle cx="113" cy="250" r="15" /><text x="113" y="250">VAN</text>
+            <circle cx="113" cy="150" r="15" /><text x="113" y="150">AMP</text>
+            <circle cx="200" cy="200" r="15" /><text x="200" y="200">SXT</text>
+          </g>
+        </svg>
+        <figcaption>Disk diffusion: no clear zone around ampicillin means this isolate is resistant to it.</figcaption>
+      </figure>
     </header>
 
     <main>
+      <section class="steps" aria-labelledby="steps-title">
+        <h2 id="steps-title" class="visually-hidden">How the contest works</h2>
+        <ol>
+          <li><strong>Play any game.</strong> Quizzes, an arcade shooter, a wheel puzzle, and more.</li>
+          <li><strong>Hit the target score.</strong> Each game unlocks its own secret code word.</li>
+          <li><strong>Submit your codes.</strong> Whoever collects the most by the end of the week is recognized.</li>
+        </ol>
+      </section>
+
       <!-- The arcade from standalone/aaw-arcade.html is placed here -->
       <div id="arcade"></div>
 
-      <section class="submit card">
-        <h2>🎟️ Submit your code words</h2>
-        <p class="muted">Codes you unlock on this page are filled in for you. Earned some in another copy of the arcade? Type them in too. You can submit more than once; we keep everything you've earned.</p>
+      <section class="submit" id="submit" aria-labelledby="submit-title">
+        <div class="submit-head">
+          <h2 id="submit-title">Submit your code words</h2>
+          <p class="tally"><span id="tally-n">0</span> unlocked on this visit</p>
+        </div>
+        <p class="muted">Codes you unlock on this page fill in automatically. You can submit more than once; everything you've earned is kept together under your name.</p>
         <form id="submit-form">
-          <label>Your name or initials <input name="name" maxlength="60" placeholder="e.g. Jane Smith or JS" required /></label>
-          <label>Code words <textarea name="codes" rows="3" placeholder="e.g. NARROW, PATHOGEN"></textarea></label>
+          <label>Your name or initials
+            <input name="name" maxlength="60" placeholder="Jane Smith or JS" required />
+          </label>
+          <label>Code words
+            <textarea name="codes" rows="2" placeholder="Separate with commas or spaces"></textarea>
+          </label>
           <button type="submit">Submit codes</button>
         </form>
         <div id="submit-result" role="status"></div>
       </section>
+
+      <section class="about" aria-labelledby="about-title">
+        <h2 id="about-title">About</h2>
+        <div class="about-grid">
+          <p>Created by <strong>Shemual Tsai, PharmD</strong>, an infectious diseases and antimicrobial stewardship pharmacist. Questions, issues, or ideas for new games? Email <a href="mailto:shemual@gmail.com">shemual@gmail.com</a>.</p>
+          <p>Want to run this for your own team? The arcade is a single HTML file you can paste into any page that allows custom HTML. Everything is on <a href="https://github.com/shemtsai/abx-awareness-week">GitHub</a>.</p>
+          <p class="fine">For education only. Content reflects published guidelines and trials at the time of writing; follow your local guidelines and clinical judgment for patient care.</p>
+        </div>
+      </section>
     </main>
 
-    <footer></footer>
     <script type="module" src="./main.js"></script>
   </body>
 </html>

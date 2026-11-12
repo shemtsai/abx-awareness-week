@@ -1,52 +1,176 @@
-/* Styles for the Vercel page around the arcade. The arcade's own styles live in standalone/aaw-arcade.html. */
-:root { --c: #1f6f8b; --ink: #1d2a33; --muted: #5a6b76; --line: #d7e3ea; }
+/* Website styles. The arcade's own styles live in standalone/aaw-arcade.html; a few overrides at the bottom fit it to this page. */
+:root {
+  --teal: #0F3D45;      /* culture-room teal: hero, headings */
+  --teal-2: #1F6F8B;    /* arcade accent, links */
+  --agar: #F1DFAE;      /* Mueller-Hinton agar */
+  --disk: #FBFAF6;      /* antibiotic disk white */
+  --paper: #EEF2F1;     /* page background */
+  --ink: #17282D;
+  --muted: #55686E;
+  --line: #D3DEDC;
+  --s: #2F7D5B;         /* susceptible */
+  --r: #B8402F;         /* resistant */
+  --display: "Bricolage Grotesque Variable", "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
 * { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  color: var(--ink);
-  background: #eef3f6;
-  line-height: 1.5;
-}
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; font-family: var(--body); font-size: 1.0625rem; line-height: 1.6; color: var(--ink); background: var(--paper); }
+a { color: var(--teal-2); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid #E0B341; outline-offset: 2px; border-radius: 4px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: 12px; top: -48px; background: var(--disk); color: var(--teal); padding: 8px 14px; border-radius: 6px; z-index: 10; }
+.skip:focus { top: 12px; }
 
+/* ---------- Hero ---------- */
 .hero {
-  background: linear-gradient(135deg, #123f50, #1f6f8b);
-  color: #fff;
-  padding: 48px 20px 88px;
-  text-align: center;
+  background: var(--teal);
+  color: var(--disk);
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+  align-items: center;
+  gap: clamp(24px, 5vw, 72px);
+  padding: clamp(40px, 7vw, 96px) max(20px, calc((100vw - 1080px) / 2)) clamp(48px, 7vw, 96px);
 }
-.hero h1 { margin: 4px 0 8px; font-size: clamp(1.7rem, 4vw, 2.5rem); }
-.hero p { margin: 0 auto; max-width: 560px; opacity: .9; }
-.hero .eyebrow { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+.hero h1 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(2.6rem, 6.4vw, 4.75rem);
+  line-height: .98;
+  letter-spacing: -.025em;
+  margin: 0 0 22px;
+  max-width: 11ch;
+}
+.lede { font-size: clamp(1.05rem, 1.6vw, 1.2rem); max-width: 46ch; margin: 0 0 30px; color: #D6E4E2; }
+.cta {
+  display: inline-block;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--teal);
+  background: var(--agar);
+  padding: 13px 26px;
+  border-radius: 999px;
+  transition: background .15s;
+}
+.cta:hover { background: var(--disk); }
 
-main { max-width: 744px; margin: -60px auto 0; padding: 0 12px; display: grid; gap: 20px; }
-#arcade #aaw-hub .card { box-shadow: 0 10px 30px rgba(18, 63, 80, .12); background: #fff; }
+.plate { margin: 0; justify-self: center; width: min(100%, 420px); }
+.plate svg { display: block; width: 100%; height: auto; }
+.plate .rim { fill: none; stroke: #6F9AA0; stroke-width: 3; opacity: .55; }
+.plate .zone { fill: #FAF1D6; stroke: #E2C98A; stroke-width: .8; transform-box: fill-box; transform-origin: center; }
+.plate .disks circle { fill: var(--disk); stroke: #BFB59A; stroke-width: 1; }
+.plate .disks text { font: 700 8.5px var(--body); fill: var(--teal); text-anchor: middle; dominant-baseline: central; letter-spacing: .04em; }
+.plate figcaption { font-size: .82rem; color: #A9C2C0; text-align: center; margin-top: 10px; }
 
-/* The arcade's own "Submit your codes" link points to a Microsoft Form; here the form below replaces it */
-#arcade .pp a[target="_blank"] { display: none; }
+/* The one animation on the page: zones of inhibition spreading from each disk */
+@media (prefers-reduced-motion: no-preference) {
+  .plate .zone { animation: diffuse 1.6s cubic-bezier(.2, .7, .2, 1) var(--d) both; }
+}
+@keyframes diffuse { from { transform: scale(0); opacity: 0; } 30% { opacity: 1; } to { transform: scale(1); } }
 
-.card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
-.submit h2 { margin: 0 0 4px; font-size: 1.25rem; color: var(--c); }
-.muted { color: var(--muted); font-size: .92rem; margin: 0 0 14px; }
-form { display: grid; gap: 12px; }
-label { display: grid; gap: 4px; font-weight: 600; font-size: .92rem; }
-input, textarea { font: inherit; padding: 10px 12px; border: 1.5px solid #c5d5de; border-radius: 8px; }
-input:focus, textarea:focus { outline: none; border-color: var(--c); }
-textarea { text-transform: uppercase; resize: vertical; }
+/* ---------- Main column ---------- */
+main { max-width: 760px; margin: 0 auto; padding: 0 16px 56px; }
+h2 { font-family: var(--display); font-weight: 700; letter-spacing: -.01em; color: var(--teal); }
+
+.steps ol {
+  list-style: none;
+  counter-reset: step;
+  margin: 0;
+  padding: 36px 0 32px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.steps li { counter-increment: step; font-size: .97rem; color: var(--muted); }
+.steps li::before {
+  content: counter(step);
+  display: grid; place-items: center;
+  width: 34px; height: 34px; margin-bottom: 10px;
+  border-radius: 50%;
+  background: var(--disk);
+  border: 1.5px solid #BFB59A;
+  font: 800 1rem var(--display);
+  color: var(--teal);
+}
+.steps strong { display: block; color: var(--ink); font-size: 1.02rem; }
+
+/* ---------- Submission ---------- */
+.submit {
+  margin-top: 28px;
+  background: var(--disk);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 26px 26px 22px;
+}
+.submit-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.submit h2 { margin: 0; font-size: 1.5rem; }
+.tally { margin: 0; font-size: .92rem; color: var(--muted); }
+.tally span { font: 800 1.15rem var(--display); color: var(--s); }
+.muted { color: var(--muted); font-size: .95rem; margin: 6px 0 18px; max-width: 62ch; }
+form { display: grid; grid-template-columns: 1fr 1.4fr; gap: 14px 16px; align-items: start; }
+label { display: grid; gap: 5px; font-weight: 700; font-size: .92rem; }
+input, textarea {
+  font: inherit; font-weight: 400;
+  padding: 10px 12px;
+  border: 1.5px solid #C2D0CE; border-radius: 8px;
+  background: #fff; color: var(--ink);
+}
+input:focus, textarea:focus { outline: none; border-color: var(--teal-2); box-shadow: 0 0 0 3px rgba(31, 111, 139, .18); }
+textarea { text-transform: uppercase; resize: vertical; min-height: 46px; }
+textarea::placeholder { text-transform: none; }
 form button {
-  justify-self: start; font: inherit; font-weight: 600; cursor: pointer;
-  padding: 11px 22px; border: 0; border-radius: 8px; background: var(--c); color: #fff;
+  grid-column: 1 / -1; justify-self: start;
+  font: 700 1rem var(--body);
+  padding: 12px 26px; border: 0; border-radius: 999px;
+  background: var(--teal); color: var(--disk); cursor: pointer;
 }
+form button:hover { background: var(--teal-2); }
 form button:disabled { opacity: .5; cursor: default; }
-#submit-result { margin-top: 12px; font-weight: 600; }
-#submit-result.ok { color: #2e7d32; }
-#submit-result.bad { color: #c62828; }
+#submit-result { margin-top: 14px; font-weight: 700; }
+#submit-result:empty { display: none; }
+#submit-result.ok { color: var(--s); }
+#submit-result.bad { color: var(--r); }
 
-footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 32px 12px; }
+/* ---------- About ---------- */
+.about { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--line); }
+.about h2 { margin: 0 0 12px; font-size: 1.3rem; }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 28px; }
+.about-grid p { margin: 0 0 12px; font-size: .97rem; }
+.about .fine { grid-column: 1 / -1; font-size: .85rem; color: var(--muted); }
 
-/* Admin page */
-.admin main { margin-top: 24px; }
-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
-th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
-th { color: var(--muted); font-weight: 600; }
-td.num, th.num { text-align: right; }
+/* ---------- Arcade fitted to this page ---------- */
+#arcade { scroll-margin-top: 16px; }
+#arcade #aaw-hub { font-family: var(--body); max-width: none; }
+#arcade #aaw-hub .card { background: var(--disk); border-color: var(--line); border-radius: 14px; }
+#arcade #aaw-hub h2 { font-family: var(--display); font-weight: 700; letter-spacing: -.01em; }
+#arcade #aaw-hub .tile { border-radius: 10px; }
+#arcade #aaw-hub .tile h3 { font-family: var(--display); font-weight: 700; }
+#arcade .aaw-credit { display: none; }             /* credit is in the About section here */
+#arcade .pp a[target="_blank"] { display: none; }  /* the form above replaces the arcade's own submit link */
+
+/* ---------- Small screens ---------- */
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; text-align: left; }
+  .plate { width: min(58%, 230px); order: -1; justify-self: start; }
+  .plate figcaption { display: none; }
+  .steps ol { grid-template-columns: 1fr; gap: 16px; padding: 28px 0; }
+  .steps li { display: grid; grid-template-columns: 34px 1fr; column-gap: 14px; }
+  .steps li::before { margin: 0; grid-row: span 2; }
+  form, .about-grid { grid-template-columns: 1fr; }
+  .submit { padding: 22px 18px 18px; }
+}
+
+/* ---------- Admin page ---------- */
+.admin { background: var(--paper); }
+.admin main { margin-top: 32px; display: grid; gap: 20px; }
+.admin .card { background: var(--disk); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+.admin .card h2 { margin: 0 0 10px; font-size: 1.3rem; }
+.admin form { grid-template-columns: 1fr auto; }
+.admin form button { grid-column: auto; }
+.admin .row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.admin .ghost { font: 700 .9rem var(--body); background: none; border: 1.5px solid var(--teal-2); color: var(--teal-2); padding: 8px 16px; border-radius: 999px; cursor: pointer; }
+table { width: 100%; border-collapse: collapse; font-size: .93rem; }
+th, td { text-align: left; padding: 9px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 700; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }

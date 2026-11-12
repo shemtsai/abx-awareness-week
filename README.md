@@ -1,55 +1,86 @@
 # Antibiotic Awareness Week Arcade
 
-Stewardship mini-games with a secret-code-word contest. There are two versions, built from one file:
+Ten short, evidence-based games that teach antimicrobial stewardship, built for Antibiotic Awareness Week. Players unlock a secret code word in each game and submit them for recognition.
 
-| Version | What it is |
+## 🎮 [Play it here: Antibiotic Awareness Week](https://abx-awareness-week.vercel.app/)
+
+No download or sign-up needed. It works on phones and computers.
+
+Created by **Shemual Tsai, PharmD**. Questions, issues, or ideas: [shemual@gmail.com](mailto:shemual@gmail.com)
+
+![The website: an agar plate hero above the game menu](docs/screenshot.png)
+
+## The games
+
+| Game | What it teaches |
 |---|---|
-| **Standalone** | `standalone/aaw-arcade.html`: one self-contained HTML file. Paste it into any page that allows HTML blocks, or open it in a browser. |
-| **Website** | The Vercel site. It loads the standalone file as-is and adds code-word submissions, a leaderboard, and play tracking. |
+| Stewardship Wheel | Core stewardship principles, as word puzzles |
+| Bug Blaster | Picking the narrowest drug that covers each organism |
+| Order Whack | Spotting inappropriate antibiotic orders |
+| Stewardship Catch | Good practices vs. common pitfalls |
+| Stop the Clock | Evidence-based treatment durations |
+| Myth or Fact | Penicillin allergy, asymptomatic bacteriuria, C. difficile testing, MRSA nares |
+| Bug–Drug Match | Targeted therapy for common pathogens |
+| De-escalation Dash | Narrowing therapy once cultures return |
+| Duration Station | Short-course trials (PTC, STOP-IT, Yahav et al.) |
+| Stewardship Scramble | Stewardship vocabulary |
 
-## Where things live
+Every answer explains the reasoning and cites its source: IDSA, ATS/IDSA, IDSA/SHEA, and ACP guidance, plus key trials such as MERINO, STOP-IT, and PTC.
+
+## Two ways to use it
+
+**1. The standalone file.** [`standalone/aaw-arcade.html`](standalone/aaw-arcade.html) is the whole arcade in one self-contained HTML block. It has no dependencies and no outside requests. Paste it into any page that accepts custom HTML (an intranet, LMS, or SharePoint-style site), or just open it in a browser.
+
+**2. The website.** The [live site](https://abx-awareness-week.vercel.app/) loads that same file and adds:
+- a code word submission form, with codes filled in automatically as players unlock them
+- a private admin page (`/admin`) with the leaderboard, a CSV export, and per-game play and unlock counts
+
+## Run it for your own team
+
+**Standalone only (5 minutes):**
+1. Download `standalone/aaw-arcade.html`.
+2. Near the top of the script, change the code words in `CODES` to your own. Optionally, set `FORM_URL` to a form where players submit codes.
+3. Paste the whole file into your page.
+
+**Your own website, with submissions (about 15 minutes):**
+1. Fork this repo and change `CODES` as above.
+2. Import the fork in [Vercel](https://vercel.com). The settings in `vercel.json` are picked up automatically.
+3. In the Vercel project, go to Storage, add a **Neon** Postgres database (the free plan is fine), and connect it. Tables are created automatically.
+4. Under Settings → Environment Variables, add `ADMIN_KEY` with a long random value, then redeploy.
+5. Results are at `/admin`.
+
+## Project layout
 
 ```
-standalone/aaw-arcade.html   the games: questions, code words, styles, everything
-web/index.html               website page around the arcade (header, submission form)
-web/main.js                  loads the arcade, sends tracking, handles submissions
-web/style.css                website styles
-web/admin.html, admin.js     private results page (/admin)
-api/submit.js                saves submitted code words
-api/event.js                 logs game starts/finishes
-api/admin.js                 leaderboard + activity for the admin page
-api/_lib.js                  database connection; reads the code words from the standalone file
+standalone/aaw-arcade.html   all games, questions, code words, and arcade styles
+web/                         the website around the arcade (page, form, admin page)
+api/                         serverless functions: submit codes, log plays, admin data
+docs/                        README images
 ```
 
-## How we work
+The website reads the code words from the standalone file, so the list only exists in one place.
 
-All game changes happen in **`standalone/aaw-arcade.html`**. The website picks them up automatically. You never copy changes over by hand.
+## Contributing
 
-1. Make a branch, edit `standalone/aaw-arcade.html`, open a pull request.
-2. Vercel comments a preview link on the pull request. Play-test it there, or download the file from the branch and open it in a browser.
-3. Merge. The live website updates on its own.
+Corrections, new questions, and new games are welcome. Open an issue or email [shemual@gmail.com](mailto:shemual@gmail.com).
 
-Website-only changes (look, submission form, admin page) go in `web/` or `api/`.
+To make changes:
+1. Create a branch and edit `standalone/aaw-arcade.html` (for games) or `web/` (for the website).
+2. Open a pull request. Vercel comments a preview link to play-test.
+3. Keep the standalone file self-contained: no imports, no outside scripts. If you add a game, give it a code word in `CODES`. Leave the `track(...)` calls in place; the website uses them.
 
-### Rules for the standalone file
-- It must stay one self-contained file: no imports, no outside scripts or fonts.
-- If you add a game, add its code word to `CODES`. The website checks submissions against that list.
-- Keep the `track(...)` lines. They do nothing on their own, but the website uses them.
+To run the website locally (Node.js 22+): `npm install`, then `npm run dev`. Submissions need the deployed site or `vercel dev`.
 
-## One-time Vercel setup
+## Data and privacy
 
-1. **Import the repo** in Vercel. The settings in `vercel.json` are picked up automatically.
-2. **Add a database:** Project → Storage → Create Database → **Neon** (free plan) → connect it to this project. Tables are created automatically on first use.
-3. **Set an admin password:** Project → Settings → Environment Variables → add `ADMIN_KEY` with a long random value. Never commit it.
-4. **Redeploy** (Deployments → ⋯ → Redeploy) so the new settings take effect.
-5. Results are at `/admin`. Enter the `ADMIN_KEY` there.
+The website stores only what players type when they submit (a name or initials, plus code words) and anonymous play events (which game was started or finished, tagged with a random per-visit ID). There are no accounts, cookies, or third-party analytics, and fonts are served from the site itself. The standalone file stores nothing.
 
-## Data collected
-- **Submissions:** the name or initials a player types and their valid code words.
-- **Activity:** which game was started or finished and whether a code was unlocked, tagged with a random ID per page visit. No names, accounts, or cookies.
+Note that the code words are visible in the source of this public repo. Change them if you run a contest of your own.
 
-Note: this repo is public, so anyone reading `standalone/aaw-arcade.html` can see the code words.
+## Disclaimer
 
-## Running locally (optional)
+For education only. Content reflects published guidelines and trials at the time of writing and is not a substitute for clinical judgment or local institutional guidance.
 
-Needs Node.js 22+. `npm install`, then `npm run dev` for the website at http://localhost:5173. Submissions and tracking only work on Vercel (or with `vercel dev`).
+## Citing
+
+If you use or adapt this work in teaching or research, please credit the author. Citation details are in [`CITATION.cff`](CITATION.cff); GitHub's "Cite this repository" button reads that file.

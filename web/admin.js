@@ -1,5 +1,8 @@
 // Admin page: shows the leaderboard and game activity. Needs the ADMIN_KEY you set in Vercel.
 import './style.css';
+import '@fontsource/atkinson-hyperlegible/400.css';
+import '@fontsource/atkinson-hyperlegible/700.css';
+import '@fontsource-variable/bricolage-grotesque/opsz.css';
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const form = document.getElementById('key-form');
@@ -22,6 +25,15 @@ form.addEventListener('submit', async e => {
   document.querySelector('#games tbody').innerHTML = data.games.map(g =>
     `<tr><td>${esc(g.game)}</td><td class="num">${g.started}</td><td class="num">${g.finished}</td><td class="num">${g.unlocked}</td><td class="num">${g.finished ? Math.round(g.unlocked / g.finished * 100) + '%' : '–'}</td></tr>`
   ).join('');
+
+  document.getElementById('csv').onclick = () => {
+    const q = v => `"${String(v).replace(/"/g, '""')}"`;
+    const rows = [['Rank', 'Name', 'Codes', 'Code words', 'Last submitted'], ...data.leaders.map((p, i) => [i + 1, p.name, p.count, p.codes.join(' '), p.last])];
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([rows.map(r => r.map(q).join(',')).join('\n')], { type: 'text/csv' }));
+    a.download = 'aaw-leaderboard.csv';
+    a.click();
+  };
 
   document.getElementById('leaders').hidden = false;
   document.getElementById('games').hidden = false;

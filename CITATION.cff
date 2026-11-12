@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use or adapt this work, please cite it as below."
+title: "Antibiotic Awareness Week Arcade: evidence-based antimicrobial stewardship games"
+type: software
+authors:
+  - family-names: Tsai
+    given-names: Shemual
+    email: shemual@gmail.com
+repository-code: "https://github.com/shemtsai/abx-awareness-week"
+url: "https://abx-awareness-week.vercel.app"
+keywords:
+  - antimicrobial stewardship
+  - antibiotic awareness week
+  - gamification
+  - pharmacy education
+  - infectious diseases
+version: 1.0.0
+date-released: 2026-11-12
