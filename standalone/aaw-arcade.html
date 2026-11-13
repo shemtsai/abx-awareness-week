@@ -94,8 +94,8 @@
   var got={};
   /* Reports game activity (start/finish). Does nothing in the standalone file; the Vercel site listens for it to track plays and fill in codes. */
   function track(type,game,extra){try{var d={type:type,game:game};for(var k in extra)d[k]=extra[k];root.dispatchEvent(new CustomEvent('aaw',{bubbles:true,detail:d}))}catch(e){}}
-  function award(id,ok,need){
-    track('finish',id,{unlocked:!!ok,code:ok?CODES[id]:null});
+  function award(id,ok,need,score){
+    track('finish',id,{unlocked:!!ok,code:ok?CODES[id]:null,score:score});
     if(!ok)return '<p class="sub">🎟️ '+need+' to unlock this game\'s secret code word.</p>';
     got[id]=1;var n=Object.keys(got).length,t=Object.keys(CODES).length;
     return '<div class="code">🎟️ Secret code unlocked!<b>'+CODES[id]+'</b><span class="sub">Write it down! You have '+n+' of '+t+' codes.</span></div>';
@@ -192,7 +192,7 @@
         '<button class="btn nx">'+(i<qs.length-1?'Next →':'See results')+'</button>';
       $('.nx').onclick=function(){i++;i<qs.length?show():end()};
     }
-    function end(){var need=Math.ceil(qs.length*.7);root.innerHTML=finish(title,score,qs.length,MSGS,award(id,score>=need,'Score '+need+'/'+qs.length+' or better'));wireBack();$('.again').onclick=function(){quiz(title,bank,id)};$('.home').onclick=menu}
+    function end(){var need=Math.ceil(qs.length*.7);root.innerHTML=finish(title,score,qs.length,MSGS,award(id,score>=need,'Score '+need+'/'+qs.length+' or better',score));wireBack();$('.again').onclick=function(){quiz(title,bank,id)};$('.home').onclick=menu}
     show();
   }
 
@@ -222,7 +222,7 @@
         var p=PAIRS.filter(function(x){return x.b===d.dataset.b})[0];
         $('.fb').innerHTML='<div class="exp"><b class="ok">Match!</b> '+esc(p.b)+' → '+esc(p.d)+'. '+esc(p.p)+'</div>';
         sel=null;done++;$('.dn').textContent='Matched: '+done+'/'+PAIRS.length;
-        if(done===PAIRS.length){var s=Math.max(0,PAIRS.length-miss);setTimeout(function(){root.innerHTML=finish('Bug–Drug Match',s,PAIRS.length,MSGS,'<p class="sub">Misses: '+miss+'</p>'+award('match',miss<=2,'Finish with 2 or fewer misses'));wireBack();$('.again').onclick=match;$('.home').onclick=menu},1200)}
+        if(done===PAIRS.length){var s=Math.max(0,PAIRS.length-miss);setTimeout(function(){root.innerHTML=finish('Bug–Drug Match',s,PAIRS.length,MSGS,'<p class="sub">Misses: '+miss+'</p>'+award('match',miss<=2,'Finish with 2 or fewer misses',s));wireBack();$('.again').onclick=match;$('.home').onclick=menu},1200)}
       }else{
         miss++;$('.ms').textContent='Misses: '+miss;d.classList.add('bad','shake');
         setTimeout(function(){d.classList.remove('bad','shake')},600);
@@ -260,7 +260,7 @@
       $('.hn').onclick=function(){$('.fb').innerHTML='<div class="exp">💡 '+esc(x.h)+'</div>'};
       $('.sk').onclick=function(){$('.fb').innerHTML='<div class="exp">The answer was <b>'+x.w+'</b>.</div>';inp.disabled=true;setTimeout(next,1200)};
     }
-    function end(){root.innerHTML=finish('Stewardship Scramble',score,ws.length,MSGS,award('scr',score>=4,'Unscramble 4 or more words'));wireBack();$('.again').onclick=scramble;$('.home').onclick=menu}
+    function end(){root.innerHTML=finish('Stewardship Scramble',score,ws.length,MSGS,award('scr',score>=4,'Unscramble 4 or more words',score));wireBack();$('.again').onclick=scramble;$('.home').onclick=menu}
     show();
   }
 
@@ -359,7 +359,7 @@
     function nextBtn(){return '<button class="btn nx">'+(pi<ps.length-1?'Next puzzle →':'See results')+'</button>'}
     function wireNext(){$('.nx').onclick=function(){
       pi++;if(pi<ps.length)return round();
-      root.innerHTML='<div class="card center">'+BACK+'<h2>🎡 Final winnings</h2><div class="big">$'+total+'</div><p>'+(total>=3000?'Stewardship millionaire! 🏆':total>0?'Nice spinning!':'Better luck next spin!')+'</p><p class="sub">Puzzles solved: '+solved+' of '+ps.length+'</p>'+award('wheel',solved>=2,'Solve both puzzles')+'<button class="btn again">Play again</button><button class="btn ghost home">More games</button></div>';
+      root.innerHTML='<div class="card center">'+BACK+'<h2>🎡 Final winnings</h2><div class="big">$'+total+'</div><p>'+(total>=3000?'Stewardship millionaire! 🏆':total>0?'Nice spinning!':'Better luck next spin!')+'</p><p class="sub">Puzzles solved: '+solved+' of '+ps.length+'</p>'+award('wheel',solved>=2,'Solve both puzzles',total)+'<button class="btn again">Play again</button><button class="btn ghost home">More games</button></div>';
       wireBack();$('.again').onclick=wheel;$('.home').onclick=menu;if(total>0)confetti();
     }}
     round();
@@ -436,7 +436,7 @@
     }
     function over(why){
       running=false;cancelAnimationFrame(raf);draw();
-      ov('<h2>'+(el>=60?'Nice work!':'Game over')+'</h2><p>'+why+'</p><div class="big">'+score+'</div><p class="sub">Every 🎯 narrow kill also lowers resistance.</p>'+award('blast',score>=1000,'Score 1,000+')+'<div><button class="btn go">Play again</button><button class="btn ghost home">More games</button></div>');
+      ov('<h2>'+(el>=60?'Nice work!':'Game over')+'</h2><p>'+why+'</p><div class="big">'+score+'</div><p class="sub">Every 🎯 narrow kill also lowers resistance.</p>'+award('blast',score>=1000,'Score 1,000+',score)+'<div><button class="btn go">Play again</button><button class="btn ghost home">More games</button></div>');
       if(score>=1500)confetti();
     }
     function key(e){var n=+e.key;if(n>=1&&n<=W.length)setSel(n-1)}
@@ -517,7 +517,7 @@
     function over(){
       running=false;H.forEach(clear);
       var seen=[],les='';misses.forEach(function(m){if(seen.indexOf(m)<0&&seen.length<4){seen.push(m);les+='<li><b>'+esc(m.t)+'</b>: '+esc(m.w)+'</li>'}});
-      overlay('<h2>⏱ Time!</h2><div class="big">'+score+'</div>'+(les?'<div class="sub" style="text-align:left;max-width:460px"><b>Worth reviewing:</b><ul style="margin:6px 0 0;padding-left:18px">'+les+'</ul></div>':'<p>Perfect run! 🏆</p>')+award('whack',score>=2000,'Score 2,000+')+AGAIN,start);
+      overlay('<h2>⏱ Time!</h2><div class="big">'+score+'</div>'+(les?'<div class="sub" style="text-align:left;max-width:460px"><b>Worth reviewing:</b><ul style="margin:6px 0 0;padding-left:18px">'+les+'</ul></div>':'<p>Perfect run! 🏆</p>')+award('whack',score>=2000,'Score 2,000+',score)+AGAIN,start);
       if(score>=1500||!misses.length)confetti();
     }
     cleanup=function(){running=false;cancelAnimationFrame(raf)};
@@ -566,7 +566,7 @@
       ctx.fillStyle='#fff';ctx.font='bold 12px system-ui,sans-serif';ctx.textBaseline='middle';ctx.fillText('🛡️ ASP',px,py+1);ctx.textBaseline='alphabetic';
       fx.forEach(function(f){ctx.globalAlpha=Math.max(0,f.life);ctx.font='bold 16px system-ui,sans-serif';ctx.fillStyle=f.c;ctx.fillText(f.t,f.x,f.y);ctx.globalAlpha=1});
     }
-    function over(timeUp){running=false;cancelAnimationFrame(raf);draw();overlay('<h2>'+(timeUp?'⏱ Time\'s up!':'Game over')+'</h2><div class="big">'+score+'</div><p class="sub">Tip: 5 good catches in a row raises your multiplier.</p>'+award('catch',score>=1000,'Score 1,000+')+AGAIN,start);if(score>=2000)confetti()}
+    function over(timeUp){running=false;cancelAnimationFrame(raf);draw();overlay('<h2>'+(timeUp?'⏱ Time\'s up!':'Game over')+'</h2><div class="big">'+score+'</div><p class="sub">Tip: 5 good catches in a row raises your multiplier.</p>'+award('catch',score>=1000,'Score 1,000+',score)+AGAIN,start);if(score>=2000)confetti()}
     function mv(e){var r=cv.getBoundingClientRect();px=e.clientX-r.left}
     function kd(e){if(e.key==='ArrowLeft'||e.key==='ArrowRight'){keys[e.key]=1;if(running)e.preventDefault()}}
     function ku(e){keys[e.key]=0}
@@ -624,7 +624,7 @@
       $('.fb').innerHTML='<div class="exp"><b class="'+(pts>=80?'ok">🎯 Bullseye!':pts>0?'ok">Close!':'bad">Missed!')+'</b> You stopped at '+pos.toFixed(1)+' days. Target: <b>'+r.lo+(r.hi>r.lo?'–'+r.hi:'')+' days</b>. +'+pts+
         '<br>'+esc(r.e)+'<span class="src">Source: '+esc(r.s)+'</span></div><button class="btn nx">'+(ri<rs.length-1?'Next →':'See results')+'</button>';
       if(pts>=80)confetti();
-      $('.nx').onclick=function(){ri++;if(ri<rs.length)round();else{root.innerHTML=finish('⏱️ Stop the Clock',score,rs.length*100,MSGS,award('clock',score>=420,'Score 420+'));wireBack();$('.again').onclick=clock;$('.home').onclick=menu;if(score>=rs.length*70)confetti()}};
+      $('.nx').onclick=function(){ri++;if(ri<rs.length)round();else{root.innerHTML=finish('⏱️ Stop the Clock',score,rs.length*100,MSGS,award('clock',score>=420,'Score 420+',score));wireBack();$('.again').onclick=clock;$('.home').onclick=menu;if(score>=rs.length*70)confetti()}};
     }
     function key(e){if((e.key===' '||e.key==='Enter')&&running){e.preventDefault();stop()}}
     document.addEventListener('keydown',key);window.addEventListener('resize',size);
