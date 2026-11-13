@@ -1,6 +1,6 @@
 // The website. It loads the standalone arcade file as-is, then adds:
 //   1. a player name (a random antibiotic by default) remembered in this browser
-//   2. automatic code word submission + a live leaderboard  -> /api/submit, /api/leaderboard
+//   2. automatic progress saving + a live leaderboard  -> /api/submit, /api/leaderboard
 //   3. anonymous play tracking                              -> /api/event
 // Edit the games in standalone/aaw-arcade.html; this page picks up changes automatically.
 import arcadeHtml from '../standalone/aaw-arcade.html?raw';
@@ -27,13 +27,38 @@ scripts.forEach(old => {
 });
 
 // --- Player: random ID + name, remembered in this browser when possible ---
-const DRUGS = ['Amikacin', 'Amoxicillin', 'Ampicillin', 'Azithromycin', 'Aztreonam', 'Cefazolin', 'Cefepime', 'Cefiderocol',
-  'Ceftaroline', 'Ceftriaxone', 'Cephalexin', 'Clindamycin', 'Dalbavancin', 'Daptomycin', 'Doxycycline', 'Ertapenem',
-  'Fidaxomicin', 'Fosfomycin', 'Gentamicin', 'Levofloxacin', 'Linezolid', 'Meropenem', 'Metronidazole', 'Minocycline',
-  'Nafcillin', 'Nitrofurantoin', 'Oritavancin', 'Penicillin', 'Piperacillin', 'Rifampin', 'Tedizolid', 'Tobramycin', 'Vancomycin'];
-const ADJ = { A: ['Agile', 'Astute'], C: ['Clever', 'Calm'], D: ['Daring', 'Dashing'], E: ['Eager', 'Epic'], F: ['Fearless', 'Fierce'],
-  G: ['Gallant', 'Gutsy'], L: ['Lucky', 'Legendary'], M: ['Mighty', 'Masterful'], N: ['Nimble', 'Noble'], O: ['Optimal', 'Outstanding'],
-  P: ['Plucky', 'Precise'], R: ['Radiant', 'Resolute'], T: ['Tenacious', 'Trusty'], V: ['Valiant', 'Vigilant'] };
+// Random player names: an adjective + an antimicrobial (all US FDA-approved) starting with the same letter.
+const DRUGS = [
+  'Acyclovir', 'Amikacin', 'Amoxicillin', 'Amphotericin', 'Ampicillin', 'Anidulafungin', 'Atovaquone', 'Azithromycin',
+  'Aztreonam', 'Baloxavir', 'Bedaquiline', 'Caspofungin', 'Cefadroxil', 'Cefazolin', 'Cefdinir', 'Cefepime', 'Cefiderocol',
+  'Cefoxitin', 'Ceftaroline', 'Ceftazidime', 'Ceftriaxone', 'Cefuroxime', 'Cephalexin', 'Ciprofloxacin', 'Clarithromycin',
+  'Clindamycin', 'Colistimethate', 'Dalbavancin', 'Daptomycin', 'Delafloxacin', 'Dicloxacillin', 'Doxycycline', 'Eravacycline',
+  'Ertapenem', 'Erythromycin', 'Ethambutol', 'Famciclovir', 'Fidaxomicin', 'Fluconazole', 'Fosfomycin', 'Ganciclovir',
+  'Gentamicin', 'Ibrexafungerp', 'Imipenem', 'Isavuconazonium', 'Isoniazid', 'Itraconazole', 'Lefamulin', 'Levofloxacin',
+  'Linezolid', 'Meropenem', 'Metronidazole', 'Micafungin', 'Minocycline', 'Moxifloxacin', 'Nafcillin', 'Nitrofurantoin',
+  'Nystatin', 'Omadacycline', 'Oritavancin', 'Oseltamivir', 'Oxacillin', 'Penicillin', 'Piperacillin', 'Plazomicin',
+  'Polymyxin', 'Posaconazole', 'Remdesivir', 'Rezafungin', 'Rifabutin', 'Rifampin', 'Rifaximin', 'Streptomycin', 'Sulopenem',
+  'Tedizolid', 'Telavancin', 'Terbinafine', 'Tigecycline', 'Tobramycin', 'Valacyclovir', 'Valganciclovir', 'Vancomycin',
+  'Voriconazole'];
+const ADJ = {
+  A: ['Agile', 'Astute', 'Adept', 'Ambitious', 'Audacious', 'Awesome'],
+  B: ['Bold', 'Brave', 'Bright', 'Brilliant', 'Brisk', 'Buoyant'],
+  C: ['Calm', 'Clever', 'Confident', 'Courageous', 'Curious', 'Cheerful'],
+  D: ['Daring', 'Dashing', 'Dauntless', 'Dazzling', 'Diligent', 'Dynamic'],
+  E: ['Eager', 'Earnest', 'Elegant', 'Energetic', 'Epic', 'Excellent'],
+  F: ['Fabulous', 'Fearless', 'Fierce', 'Focused', 'Formidable', 'Friendly'],
+  G: ['Gallant', 'Genial', 'Gleaming', 'Gracious', 'Grand', 'Gutsy'],
+  I: ['Illustrious', 'Ingenious', 'Insightful', 'Inspired', 'Intrepid', 'Inventive'],
+  L: ['Legendary', 'Lionhearted', 'Lively', 'Loyal', 'Lucky', 'Luminous'],
+  M: ['Magnificent', 'Marvelous', 'Masterful', 'Merry', 'Mighty', 'Mindful'],
+  N: ['Nifty', 'Nimble', 'Noble', 'Nonstop', 'Notable', 'Nurturing'],
+  O: ['Observant', 'Optimal', 'Optimistic', 'Original', 'Outstanding', 'Overachieving'],
+  P: ['Persistent', 'Plucky', 'Powerful', 'Precise', 'Proactive', 'Prudent'],
+  R: ['Radiant', 'Rapid', 'Reliable', 'Remarkable', 'Resolute', 'Resourceful'],
+  S: ['Sharp', 'Sincere', 'Spirited', 'Steady', 'Stellar', 'Swift'],
+  T: ['Tenacious', 'Terrific', 'Thoughtful', 'Tireless', 'Triumphant', 'Trusty'],
+  V: ['Valiant', 'Venerable', 'Versatile', 'Vibrant', 'Vigilant', 'Vivid'],
+};
 const pick = a => a[Math.floor(Math.random() * a.length)];
 const randomName = () => { const d = pick(DRUGS); return `${pick(ADJ[d[0]])} ${d}`; };
 
@@ -43,7 +68,7 @@ const store = {
 };
 const me = store.get('player') || { id: crypto.randomUUID(), name: randomName() };
 store.set('player', me);
-const earned = new Set(store.get('codes') || []);   // every code unlocked in this browser
+const earned = new Set(store.get('codes') || []);   // games completed in this browser (stored as each game's hidden key)
 const pending = new Set(store.get('pending') || []); // unlocked but not yet saved on the server
 $('player-name').textContent = me.name;
 
@@ -61,18 +86,18 @@ async function submit(codes, name = me.name) {
   });
   const data = await res.json().catch(() => ({ error: 'The leaderboard only works on the live site.', detail: 'HTTP ' + res.status + ' (not JSON)' }));
   if (!res.ok) {
-    console.warn('Code submission failed:', res.status, data.detail || data.error); // shows the real cause in the browser console
-    throw new Error(data.error || 'Your codes were not saved. Try again in a minute.');
+    console.warn('Saving progress failed:', res.status, data.detail || data.error); // shows the real cause in the browser console
+    throw new Error(data.error || 'Your progress was not saved. Try again in a minute.');
   }
   return data;
 }
 
-// --- Leaderboards: overall (code words) plus one per game ---
+// --- Leaderboards: overall (games completed) plus one per game ---
 const DOTS = 10;
 const pts = n => n.toLocaleString() + ' pts';
 const correct = n => n + ' correct';
 const BOARDS = [
-  { id: 'overall', label: 'Code words' },
+  { id: 'overall', label: 'Games completed' },
   { id: 'wheel', label: 'Stewardship Wheel', fmt: n => '$' + n.toLocaleString() },
   { id: 'blast', label: 'Bug Blaster', fmt: pts },
   { id: 'run', label: 'Antibiotic Runner', fmt: pts },
@@ -113,14 +138,14 @@ function render(data) {
     const row = p => {
       const dots = Array.from({ length: data.of || DOTS }, (_, i) => `<i class="${i < p.count ? 'on' : ''}"></i>`).join('');
       return `<li class="${p.me ? 'me' : ''}"><span class="rank">${p.rank}</span><span class="who">${esc(p.name)}${p.me ? ' <em>(you)</em>' : ''}</span>` +
-        `<span class="dots" aria-hidden="true">${dots}</span><span class="count">${p.count}<span class="visually-hidden"> code words</span></span></li>`;
+        `<span class="dots" aria-hidden="true">${dots}</span><span class="count">${p.count}<span class="visually-hidden"> game${p.count === 1 ? "" : "s"} completed</span></span></li>`;
     };
     $('board-list').innerHTML = data.top.length ? data.top.map(row).join('')
-      : '<li class="empty">No code words yet. Unlock one in any game to take the top spot.</li>';
+      : '<li class="empty">No games completed yet. Hit the target score in any game to take the top spot.</li>';
     $('board-meta').textContent = data.players ? `${data.players} player${data.players === 1 ? '' : 's'} so far` : '';
     const showMe = data.me && !data.top.some(p => p.me);
     $('board-me').hidden = !showMe;
-    if (showMe) $('board-me').innerHTML = `You're #${data.me.rank} with ${data.me.count} code word${data.me.count === 1 ? '' : 's'}.`;
+    if (showMe) $('board-me').innerHTML = `You're #${data.me.rank} with ${data.me.count} game${data.me.count === 1 ? '' : 's'} completed.`;
   }
 }
 
@@ -139,10 +164,10 @@ loadBoard();
 setInterval(() => {
   if (document.hidden) return;
   loadBoard();
-  if (pending.size) save([]).then(() => status('Your saved code words were added to the leaderboard.', 'ok')).catch(() => {}); // keep retrying unsaved codes
+  if (pending.size) save([]).then(() => status('Your saved progress was added to the leaderboard.', 'ok')).catch(() => {}); // keep retrying unsaved progress
 }, 30000);
 
-// Save codes, retrying later if the network or server hiccups
+// Save progress, retrying later if the network or server hiccups
 function save(codes) {
   codes.forEach(c => pending.add(c));
   store.set('pending', [...pending]);
@@ -155,7 +180,7 @@ function save(codes) {
 }
 if (pending.size) save([]).catch(() => {});
 
-// --- Game events: tracking + automatic code submission ---
+// --- Game events: tracking + automatic progress saving ---
 const session = crypto.randomUUID(); // one random ID per visit, used only to count plays
 document.addEventListener('aaw', e => {
   const { type, game, unlocked, code } = e.detail;
@@ -168,10 +193,11 @@ document.addEventListener('aaw', e => {
   if (code && !earned.has(code)) {
     earned.add(code);
     store.set('codes', [...earned]);
-    status(`Adding ${code} to the leaderboard…`);
+    const label = BOARDS.find(b => b.id === game)?.label || 'this game';
+    status(`Saving your progress in ${label}…`);
     save([code])
-      .then(d => status(`${code} added. You have ${d.total} of ${d.of} code words.`, 'ok'))
-      .catch(() => status(`${code} is saved in this browser. It will be added to the leaderboard automatically once the leaderboard is reachable.`, 'bad'));
+      .then(d => status(`${label} completed. You've completed ${d.total} of ${d.of} games.`, 'ok'))
+      .catch(() => status(`Your ${label} progress is saved in this browser and will be added to the leaderboard automatically once it's reachable.`, 'bad'));
   }
 });
 
@@ -194,37 +220,8 @@ renameForm.addEventListener('submit', async e => {
   $('player-name').textContent = name;
   toggleRename(false);
   try {
-    await submit([], name); // updates your name on the leaderboard; your codes stay with you
+    await submit([], name); // updates your name on the leaderboard; your progress stays with you
     status('Name saved.', 'ok');
     loadBoard();
   } catch (err) { status(err.message, 'bad'); }
-});
-
-// --- Add codes earned somewhere else ---
-const form = $('submit-form');
-const result = $('submit-result');
-form.addEventListener('submit', async e => {
-  e.preventDefault();
-  const typed = form.elements.codes.value.toUpperCase().split(/[^A-Z]+/).filter(Boolean);
-  if (!typed.length) return;
-  const btn = form.querySelector('button');
-  btn.disabled = true;
-  result.className = '';
-  result.textContent = 'Adding…';
-  try {
-    const data = await submit(typed);
-    data.accepted.forEach(c => earned.add(c));
-    store.set('codes', [...earned]);
-    let msg = `Added. You have ${data.total} of ${data.of} code words.`;
-    if (data.rejected.length) msg += ` Not recognized: ${data.rejected.join(', ')}. Check the spelling and try again.`;
-    result.className = data.accepted.length ? 'ok' : 'bad';
-    result.textContent = msg;
-    form.elements.codes.value = data.rejected.join(', ');
-    loadBoard();
-  } catch (err) {
-    result.className = 'bad';
-    result.textContent = err.message;
-  } finally {
-    btn.disabled = false;
-  }
 });

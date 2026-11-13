@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Antibiotic Awareness Week</title>
-    <meta name="description" content="Twelve short, evidence-based games on using antibiotics well. Play, unlock secret code words, and submit them for recognition." />
+    <title>Antibiotic Awareness Week 2026 (November 18–24)</title>
+    <meta name="description" content="Twelve short, evidence-based games on using antibiotics well. Play, hit the target scores, and climb the leaderboard." />
     <meta name="author" content="Shemual Tsai, PharmD, ID/Stewardship pharmacist" />
     <meta name="theme-color" content="#0F3D45" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Antibiotic Awareness Week" />
+    <meta property="og:title" content="Antibiotic Awareness Week 2026 (November 18–24)" />
     <meta property="og:description" content="Twelve short, evidence-based games on using antibiotics well." />
     <meta property="og:url" content="https://abx-awareness-week.vercel.app/" />
     <meta property="og:image" content="https://abx-awareness-week.vercel.app/og.png" />
@@ -20,7 +20,8 @@
 
     <header class="hero">
       <div class="hero-text">
-        <h1>Antibiotic Awareness Week</h1>
+        <p class="dates">November 18–24, 2026</p>
+        <h1>Antibiotic Awareness Week 2026</h1>
         <p class="lede">Twelve short games on using antibiotics well, from picking the narrowest drug to knowing when to stop. Most take a minute or two, and every answer cites the guideline or trial behind it.</p>
         <a class="cta" href="#arcade">Start playing</a>
         <a class="cta cta-alt" href="/learn.html">Learn about the week</a>
@@ -65,8 +66,8 @@
         <h2 id="steps-title" class="visually-hidden">How the contest works</h2>
         <ol>
           <li><strong>Play any game.</strong> Quizzes, an arcade shooter, a wheel puzzle, and more.</li>
-          <li><strong>Hit the target score.</strong> Each game unlocks its own secret code word.</li>
-          <li><strong>Climb the leaderboard.</strong> Codes you unlock are added for you. Most codes by the end of the week wins.</li>
+          <li><strong>Hit the target score.</strong> Reach it to complete the game.</li>
+          <li><strong>Climb the leaderboard.</strong> Your progress and scores are added for you. Most games completed by the end of the week wins.</li>
         </ol>
       </section>
 
@@ -78,7 +79,7 @@
           <span class="disk" aria-hidden="true"></span>
           <div>
             <p class="playing-as">Playing as <strong id="player-name"></strong></p>
-            <p class="muted" id="player-status">Codes you unlock here go on the leaderboard automatically.</p>
+            <p class="muted" id="player-status">Your progress and scores go on the leaderboard automatically.</p>
           </div>
         </div>
         <button type="button" class="link" id="rename-btn">Change name</button>
@@ -98,17 +99,6 @@
         <div class="tabs" id="board-tabs" role="group" aria-label="Choose a leaderboard"></div>
         <ol id="board-list" aria-live="polite"></ol>
         <p class="me-row" id="board-me" hidden></p>
-
-        <details class="manual">
-          <summary>Earned code words somewhere else? Add them here</summary>
-          <form id="submit-form">
-            <label>Code words
-              <textarea name="codes" rows="2" placeholder="Separate with commas or spaces"></textarea>
-            </label>
-            <button type="submit">Add codes</button>
-          </form>
-          <div id="submit-result" role="status"></div>
-        </details>
       </section>
 
       <section class="about" aria-labelledby="about-title">

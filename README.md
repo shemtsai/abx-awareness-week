@@ -1,6 +1,6 @@
 # Antibiotic Awareness Week Arcade
 
-Twelve short, evidence-based games that teach antimicrobial stewardship, built for Antibiotic Awareness Week. Players unlock a secret code word in each game and submit them for recognition.
+Twelve short, evidence-based games that teach antimicrobial stewardship, built for Antibiotic Awareness Week. Players hit a target score in each game, and the website tracks progress and scores on a leaderboard.
 
 ## 🎮 [Play it here: Antibiotic Awareness Week](https://abx-awareness-week.vercel.app/)
 
@@ -35,9 +35,8 @@ Every answer explains the reasoning and cites its source: IDSA, ATS/IDSA, IDSA/S
 
 **2. The website.** The [live site](https://abx-awareness-week.vercel.app/) loads that same file and adds:
 - a player name for everyone, starting as a random antibiotic ("Mighty Meropenem") that players can change
-- a live public leaderboard: code words are added automatically as players unlock them, and only the counts are shown, never the words
+- a live public leaderboard of games completed, updated automatically as players hit each game's target score
 - a leaderboard for each game, showing every player's best score
-- a form for adding code words earned in another copy of the arcade
 - a private admin page (`/admin`) with the full leaderboard, a CSV export, and per-game play and unlock counts
 
 ## Run it for your own team

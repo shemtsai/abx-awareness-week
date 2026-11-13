@@ -34,6 +34,14 @@ a { color: var(--teal-2); text-underline-offset: 3px; }
   gap: clamp(24px, 5vw, 72px);
   padding: clamp(40px, 7vw, 96px) max(20px, calc((100vw - 1080px) / 2)) clamp(48px, 7vw, 96px);
 }
+.hero .dates {
+  margin: 0 0 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-size: .9rem;
+  opacity: .85;
+}
 .hero h1 {
   font-family: var(--display);
   font-weight: 800;
@@ -147,9 +155,6 @@ button.link { background: none; border: 0; padding: 4px 0; font: 700 .95rem var(
 .count { font: 800 1.1rem var(--display); color: var(--teal); text-align: right; font-variant-numeric: tabular-nums; }
 .me-row { margin: 10px 4px 0; font-weight: 700; color: var(--teal); }
 
-.manual { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 12px; }
-.manual summary { cursor: pointer; font-weight: 700; color: var(--teal-2); }
-.manual form { margin-top: 12px; grid-template-columns: 1fr; }
 .muted { color: var(--muted); font-size: .95rem; margin: 6px 0 18px; max-width: 62ch; }
 form { display: grid; gap: 14px 16px; align-items: start; }
 label { display: grid; gap: 5px; font-weight: 700; font-size: .92rem; }
@@ -170,10 +175,6 @@ form button {
 }
 form button:hover { background: var(--teal-2); }
 form button:disabled { opacity: .5; cursor: default; }
-#submit-result { margin-top: 12px; font-weight: 700; }
-#submit-result:empty { display: none; }
-#submit-result.ok { color: var(--s); }
-#submit-result.bad { color: var(--r); }
 
 /* ---------- About ---------- */
 .about { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--line); }
