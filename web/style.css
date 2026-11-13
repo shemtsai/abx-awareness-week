@@ -144,7 +144,7 @@ button.link { background: none; border: 0; padding: 4px 0; font: 700 .95rem var(
 .board-backdrop[hidden] { display: none; }
 .board {
   position: fixed; top: 0; right: 0; bottom: 0; z-index: 50;
-  width: min(440px, 100vw); overflow-y: auto;
+  width: min(460px, 100vw); overflow-y: auto; overscroll-behavior: contain;
   background: var(--disk); border-left: 1px solid var(--line);
   box-shadow: -8px 0 30px rgba(15, 61, 69, .18);
   padding: 22px 22px 28px;
@@ -157,26 +157,50 @@ button.link { background: none; border: 0; padding: 4px 0; font: 700 .95rem var(
 .board h2 { margin: 0; font-size: 1.5rem; }
 .board-close { background: none; border: 0; font-size: 1.8rem; line-height: 1; color: var(--muted); cursor: pointer; padding: 0 4px; }
 .board-close:hover { color: var(--teal); }
-.board-pick { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--muted); }
-.board-pick select { flex: 1; font: 700 .95rem var(--body); color: var(--teal); padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; }
-.board .muted { margin: 10px 0 6px; font-size: .88rem; }
-.steps button.link { font: inherit; color: var(--teal-2); padding: 0; }
-#board-list { list-style: none; margin: 0; padding: 0; }
-#board-list li.score-row { grid-template-columns: 2.2rem minmax(0, 1fr) auto; }
-#board-list li.score-row .count { font-size: 1rem; white-space: nowrap; }
-#board-list li { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto 2rem; align-items: center; gap: 12px; padding: 10px 8px; border-bottom: 1px solid var(--line); }
-#board-list li:last-child { border-bottom: 0; }
-#board-list li.me { background: #FAF1D6; border-radius: 10px; border-bottom-color: transparent; }
-#board-list li.empty { display: block; color: var(--muted); padding: 14px 4px; }
-.rank { font: 800 1.05rem var(--display); color: var(--muted); text-align: center; }
-#board-list li:nth-child(-n+3) .rank { color: var(--teal); }
-.who { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.board .muted { margin: -6px 0 14px; font-size: .85rem; color: var(--muted); }
+.board-sub { font: 700 1.05rem var(--display); color: var(--teal); margin: 22px 0 8px; }
+
+/* Your progress */
+.you { background: var(--teal); color: var(--disk); border-radius: 14px; padding: 16px; }
+.you-name { margin: 0; font: 800 1.15rem var(--display); overflow-wrap: anywhere; }
+.you-line { margin: 4px 0 12px; color: #CFE1DE; }
+.you-line strong { color: var(--agar); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 700 .78rem var(--body); padding: 5px 10px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgba(241, 223, 174, .45); background: transparent; color: #CFE1DE; }
+.chip.on { background: var(--agar); border-color: var(--agar); color: var(--teal); }
+.chip:hover { border-color: var(--agar); color: var(--disk); }
+.chip.on:hover { color: var(--teal); }
+
+/* Ranked rows: names wrap instead of being cut off */
+.ranks { list-style: none; margin: 0; padding: 0; }
+.ranks li { display: grid; grid-template-columns: 1.9rem minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+.ranks li:last-child { border-bottom: 0; }
+.ranks li.me { background: var(--agar-lt); border-radius: 10px; border-bottom-color: transparent; }
+.ranks li.empty, .board p.empty { display: block; color: var(--muted); padding: 8px 4px; margin: 0; }
+.ranks li.gap { display: block; text-align: center; color: var(--muted); padding: 0; border: 0; line-height: 1; }
+.rank { width: 1.7rem; height: 1.7rem; border-radius: 50%; display: grid; place-items: center;
+  font: 800 .85rem var(--display); color: var(--muted); background: var(--paper); }
+.rank.r1 { background: #E9C46A; color: #4A3A0C; }
+.rank.r2 { background: #D5DCDD; color: #33444A; }
+.rank.r3 { background: #E2B48A; color: #5A3415; }
+.who { font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
 .who em { font-style: normal; font-weight: 400; color: var(--muted); }
-.dots { display: flex; gap: 4px; }
-.dots i { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid #D6C79D; background: transparent; }
-.dots i.on { background: var(--agar); border-color: #C9A85C; }
-.count { font: 800 1.1rem var(--display); color: var(--teal); text-align: right; font-variant-numeric: tabular-nums; }
-.me-row { margin: 10px 4px 0; font-weight: 700; color: var(--teal); }
+.val { font: 800 .98rem var(--display); color: var(--teal); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.bar { display: block; width: 64px; height: 5px; margin-top: 4px; border-radius: 3px; background: var(--line); margin-left: auto; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--s); }
+
+/* One card per game */
+.game-card { border: 1px solid var(--line); border-radius: 12px; padding: 12px 12px 10px; margin-bottom: 10px; background: #fff; scroll-margin: 20px; }
+.game-card.focus { border-color: var(--teal-2); box-shadow: 0 0 0 2px var(--teal-2); }
+.game-card header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 4px; }
+.game-card h4 { margin: 0; font: 700 1rem var(--display); color: var(--ink); }
+.play { font: 700 .82rem var(--body); padding: 5px 12px; border-radius: 999px; cursor: pointer; border: 1.5px solid var(--teal); background: none; color: var(--teal); }
+.play:hover { background: var(--teal); color: var(--disk); }
+.game-card details summary { cursor: pointer; font: 700 .85rem var(--body); color: var(--teal-2); padding: 6px 6px 2px; }
+.mine { margin: 8px 0 0; padding-top: 8px; border-top: 1px dashed var(--line); font-size: .88rem; color: var(--ink); }
+.mine.none { color: var(--muted); }
+.steps button.link { font: inherit; color: var(--teal-2); padding: 0; }
 
 .muted { color: var(--muted); font-size: .95rem; margin: 6px 0 18px; max-width: 62ch; }
 form { display: grid; gap: 14px 16px; align-items: start; }
@@ -226,9 +250,6 @@ form button:disabled { opacity: .5; cursor: default; }
   .about-grid { grid-template-columns: 1fr; }
   .board { padding: 18px 14px 24px; }
   .board-toggle { right: 14px; bottom: 14px; padding: 11px 16px; }
-  #board-list li { grid-template-columns: 1.8rem minmax(0, 1fr) 1.6rem; gap: 10px; }
-  #board-list li.score-row { grid-template-columns: 1.8rem minmax(0, 1fr) auto; }
-  .dots { display: none; }
 }
 
 /* ---------- Admin page ---------- */

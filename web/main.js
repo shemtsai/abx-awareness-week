@@ -92,13 +92,11 @@ async function submit(codes, name = me.name) {
   return data;
 }
 
-// --- Leaderboards: overall (games completed) plus one per game ---
-const DOTS = 10;
+// --- Leaderboard panel: your progress, overall standings, and every game's top scores in one scroll ---
 const pts = n => n.toLocaleString() + ' pts';
 const correct = n => n + ' correct';
 // Same order as the games in the arcade
-const BOARDS = [
-  { id: 'overall', label: 'Games completed' },
+const GAMES = [
   { id: 'blast', label: 'Bug Blaster', fmt: pts },
   { id: 'run', label: 'Antibiotic Runner', fmt: pts },
   { id: 'clock', label: 'Stop the Clock', fmt: pts },
@@ -112,17 +110,9 @@ const BOARDS = [
   { id: 'dur', label: 'Duration Station', fmt: correct },
   { id: 'scr', label: 'Stewardship Scramble', fmt: correct },
 ];
-let current = 'overall';
 let lastData = null;
-const pickEl = $('board-pick');
-pickEl.innerHTML = `<option value="overall">Games completed (overall)</option><optgroup label="Best score by game">` +
-  BOARDS.slice(1).map(b => `<option value="${b.id}">${b.label}</option>`).join('') + '</optgroup>';
-function showBoard(id) {
-  current = id;
-  pickEl.value = id;
-  if (lastData) render(lastData);
-}
-pickEl.addEventListener('change', () => showBoard(pickEl.value));
+let focusGame = null; // the game just played: its card is highlighted and scrolled into view
+const done = new Set(store.get('done') || []); // games completed in this browser, shown before the server answers
 
 // The leaderboard opens as a side panel from the button in the corner
 const panel = $('board');
@@ -133,45 +123,83 @@ function openBoard(open) {
   panel.inert = !open;
   $('board-backdrop').hidden = !open;
   toggle.setAttribute('aria-expanded', open);
-  if (open) { loadBoard(); pickEl.focus(); } else toggle.focus();
+  if (open) { loadBoard(); $('board-close').focus(); scrollToGame(focusGame); } else toggle.focus();
 }
 toggle.onclick = () => openBoard(!panel.classList.contains('open'));
 $('board-close').onclick = () => openBoard(false);
 $('board-backdrop').onclick = () => openBoard(false);
 document.querySelectorAll('.open-board').forEach(b => { b.onclick = () => openBoard(true); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.classList.contains('open')) openBoard(false); });
+
 // Tuck the button away mid-game so it never covers game controls; it returns on the menu or results screen
 const arcadeEl = $('arcade');
 new MutationObserver(() => {
   if (arcadeEl.querySelector('.menu, .again')) toggle.classList.remove('playing');
 }).observe(arcadeEl, { childList: true, subtree: true });
 document.addEventListener('aaw', e => { if (e.detail.type === 'start') toggle.classList.add('playing'); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.classList.contains('open')) openBoard(false); });
+
+function scrollToGame(id) {
+  const card = id && $('gc-' + id);
+  if (card) setTimeout(() => card.scrollIntoView({ block: 'center', behavior: 'smooth' }), 260);
+}
+
+// "Play" opens that game's instructions in the arcade
+function play(id) {
+  const g = GAMES.find(x => x.id === id);
+  openBoard(false);
+  arcadeEl.querySelector('.back')?.click(); // back to the menu if a game is open
+  const tile = [...arcadeEl.querySelectorAll('.tile')].find(t => t.querySelector('h3')?.textContent === g.label);
+  tile?.click();
+  arcadeEl.scrollIntoView({ behavior: 'smooth' });
+}
+panel.addEventListener('click', e => {
+  const btn = e.target.closest('[data-play], [data-jump]');
+  if (!btn) return;
+  if (btn.dataset.play) play(btn.dataset.play);
+  else scrollToGame(btn.dataset.jump);
+});
+
+const rankRow = (p, value) => `<li class="${p.me ? 'me' : ''}"><span class="rank r${p.rank}">${p.rank}</span>` +
+  `<span class="who">${esc(p.name)}${p.me ? ' <em>(you)</em>' : ''}</span><span class="val">${value}</span></li>`;
 
 function render(data) {
-  if (current !== 'overall') {
-    const board = BOARDS.find(b => b.id === current);
-    const list = data.games?.[current] || [];
-    $('board-list').innerHTML = list.length
-      ? list.map(p => `<li class="score-row ${p.me ? 'me' : ''}"><span class="rank">${p.rank}</span><span class="who">${esc(p.name)}${p.me ? ' <em>(you)</em>' : ''}</span>` +
-          `<span class="count">${board.fmt(p.score)}</span></li>`).join('')
-      : `<li class="empty">No scores yet. Finish a round of ${board.label} to set the first one.</li>`;
-    $('board-meta').textContent = 'Best score per player';
-    $('board-me').hidden = true;
-    return;
-  }
-  {
-    const row = p => {
-      const dots = Array.from({ length: data.of || DOTS }, (_, i) => `<i class="${i < p.count ? 'on' : ''}"></i>`).join('');
-      return `<li class="${p.me ? 'me' : ''}"><span class="rank">${p.rank}</span><span class="who">${esc(p.name)}${p.me ? ' <em>(you)</em>' : ''}</span>` +
-        `<span class="dots" aria-hidden="true">${dots}</span><span class="count">${p.count}<span class="visually-hidden"> game${p.count === 1 ? "" : "s"} completed</span></span></li>`;
-    };
-    $('board-list').innerHTML = data.top.length ? data.top.map(row).join('')
-      : '<li class="empty">No games completed yet. Hit the target score in any game to take the top spot.</li>';
-    $('board-meta').textContent = data.players ? `${data.players} player${data.players === 1 ? '' : 's'} so far` : '';
-    const showMe = data.me && !data.top.some(p => p.me);
-    $('board-me').hidden = !showMe;
-    if (showMe) $('board-me').innerHTML = `You're #${data.me.rank} with ${data.me.count} game${data.me.count === 1 ? '' : 's'} completed.`;
-  }
+  const of = data.of || GAMES.length;
+  const mine = new Set(data.me?.games || []);
+  done.forEach(g => mine.add(g));
+  $('board-meta').textContent = (data.players ? `${data.players} player${data.players === 1 ? '' : 's'} so far · ` : '') +
+    'Updated ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+
+  // Your progress: one chip per game, filled in once you hit its target score. Tap a chip to see that game's scores.
+  $('board-you').innerHTML =
+    `<p class="you-name">${esc(me.name)}</p>` +
+    `<p class="you-line"><strong>${mine.size} of ${of}</strong> games completed` +
+    (data.me ? ` · <strong>#${data.me.rank}</strong> of ${data.players} overall` : '') + '</p>' +
+    `<div class="chips">${GAMES.map(g => `<button type="button" class="chip ${mine.has(g.id) ? 'on' : ''}" data-jump="${g.id}"` +
+      ` aria-label="${g.label}: ${mine.has(g.id) ? 'completed' : 'not completed yet'}">${mine.has(g.id) ? '✓ ' : ''}${g.label}</button>`).join('')}</div>`;
+
+  // Overall standings, with a slim bar showing how many of the games each person has completed
+  const bar = n => `<span class="bar" aria-hidden="true"><i style="width:${Math.round(n / of * 100)}%"></i></span>`;
+  $('board-overall').innerHTML = data.top.length
+    ? data.top.map(p => rankRow(p, `${p.count}/${of}${bar(p.count)}`)).join('') +
+      (data.me && !data.top.some(p => p.me) ? `<li class="gap" aria-hidden="true">⋯</li>` + rankRow({ ...data.me, me: true }, `${data.me.count}/${of}${bar(data.me.count)}`) : '')
+    : '<li class="empty">No games completed yet. Hit the target score in any game to take the top spot.</li>';
+
+  // Every game's podium, with the rest of the top 10 one tap away and your own best always shown
+  $('board-games').innerHTML = GAMES.map(g => {
+    const b = data.games?.[g.id] || { top: [] };
+    const top = b.top || [];
+    const rows = list => list.map(p => rankRow(p, g.fmt(p.score))).join('');
+    const you = b.me
+      ? `You: <strong>#${b.me.rank}</strong> of ${b.players} · best ${g.fmt(b.me.score)}`
+      : 'You haven’t played this one yet.';
+    return `<article class="game-card ${g.id === focusGame ? 'focus' : ''}" id="gc-${g.id}">
+      <header><h4>${g.label}</h4><button type="button" class="play" data-play="${g.id}">Play</button></header>
+      ${top.length ? `<ol class="ranks">${rows(top.slice(0, 3))}</ol>` +
+        (top.length > 3 ? `<details><summary>Show top ${top.length}</summary><ol class="ranks">${rows(top.slice(3))}</ol></details>` : '')
+        : '<p class="empty">No scores yet. Be the first.</p>'}
+      <p class="mine ${b.me ? '' : 'none'}">${you}</p>
+    </article>`;
+  }).join('');
 }
 
 async function loadBoard() {
@@ -182,7 +210,7 @@ async function loadBoard() {
     lastData = data;
     render(data);
   } catch {
-    $('board-list').innerHTML = '<li class="empty">The leaderboard will appear on the live site.</li>';
+    $('board-overall').innerHTML = '<li class="empty">The leaderboard will appear on the live site.</li>';
   }
 }
 loadBoard();
@@ -214,7 +242,8 @@ document.addEventListener('aaw', e => {
   navigator.sendBeacon?.('/api/event', body) || fetch('/api/event', { method: 'POST', body, keepalive: true }).catch(() => {});
 
   if (type === 'finish' && score != null) {
-    if (BOARDS.some(b => b.id === game)) showBoard(game); // the panel opens on this game's scores
+    if (GAMES.some(g => g.id === game)) focusGame = game; // the panel opens on this game's scores
+    if (unlocked) { done.add(game); store.set('done', [...done]); }
     toggle.classList.remove('nudge'); void toggle.offsetWidth; toggle.classList.add('nudge');
     setTimeout(loadBoard, 1000); // show the new score
   }
@@ -222,7 +251,7 @@ document.addEventListener('aaw', e => {
   if (code && !earned.has(code)) {
     earned.add(code);
     store.set('codes', [...earned]);
-    const label = BOARDS.find(b => b.id === game)?.label || 'this game';
+    const label = GAMES.find(g => g.id === game)?.label || 'this game';
     status(`Saving your progress in ${label}…`);
     save([code])
       .then(d => status(`${label} completed. You've completed ${d.total} of ${d.of} games.`, 'ok'))

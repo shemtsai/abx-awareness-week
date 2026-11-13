@@ -67,8 +67,9 @@ export async function players(sql) {
     .sort((a, b) => b.codes.length - a.codes.length || new Date(a.last) - new Date(b.last));
 }
 
-// Best score per player for every game, highest first (ties go to whoever got there first).
-export async function gameBoards(sql, limit = 10) {
+// Best score per player for every game, highest first (ties go to whoever got there first):
+// the top `limit` players, plus `player`'s own rank and best score even if they're further down.
+export async function gameBoards(sql, player, limit = 10) {
   const best = await sql`
     SELECT DISTINCT ON (game, player_id) game, player_id, score, created_at
     FROM events WHERE type = 'finish' AND score IS NOT NULL AND player_id IS NOT NULL
@@ -79,13 +80,14 @@ export async function gameBoards(sql, limit = 10) {
       SELECT player_id, name, created_at FROM submissions WHERE player_id IS NOT NULL
       UNION ALL SELECT player_id, name, created_at FROM events WHERE player_id IS NOT NULL AND name IS NOT NULL
     ) t ORDER BY player_id, created_at DESC`).map(r => [r.player_id, r.name]));
+  const byGame = {};
+  for (const r of best) (byGame[r.game] ||= []).push(r);
   const boards = {};
-  for (const r of best) (boards[r.game] ||= []).push(r);
-  for (const g in boards) {
-    boards[g] = boards[g]
+  for (const g in byGame) {
+    const ranked = byGame[g]
       .sort((a, b) => b.score - a.score || new Date(a.created_at) - new Date(b.created_at))
-      .slice(0, limit)
-      .map(r => ({ player: r.player_id, name: names.get(r.player_id) || 'Anonymous', score: r.score }));
+      .map((r, i) => ({ rank: i + 1, name: names.get(r.player_id) || 'Anonymous', score: r.score, me: !!player && r.player_id === player }));
+    boards[g] = { top: ranked.slice(0, limit), me: ranked.find(r => r.me) || null, players: ranked.length };
   }
   return boards;
 }
