@@ -1,10 +1,9 @@
 <!--
-  Antibiotic Awareness Week Arcade
-  Created by Shemual Tsai, PharmD, ID/Stewardship pharmacist. Questions, issues, or ideas: shemual@gmail.com
+  Antibiotic Awareness Week: Stewardship Learning Challenge
   Source: https://github.com/shemtsai/abx-awareness-week
 
   This is a self-contained HTML block. Paste the whole thing into any page that allows custom HTML,
-  or open it directly in a browser. To run your own contest, change CODES and FORM_URL below.
+  or open it directly in a browser.
 -->
 <div class="aaw-wrap">
 <div id="aaw-hub"></div>
@@ -48,7 +47,7 @@
 #aaw-hub .shake{animation:aaw-shake .25s 2}
 #aaw-hub{position:relative}
 #aaw-hub .btn:disabled{opacity:.4;cursor:default}
-#aaw-hub .tile.feat{border-color:var(--c);background:#eef7fa}
+
 /* wheel */
 #aaw-hub .board{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 16px;padding:14px;background:#123f50;border-radius:10px;margin-bottom:10px}
 #aaw-hub .wd{display:flex;gap:4px}
@@ -77,28 +76,76 @@
 #aaw-hub .pop.up{transform:none}
 #aaw-hub .pop.good{background:#e8f5e9;color:var(--ok)}#aaw-hub .pop.oops{background:#ffebee;color:var(--bad)}
 #aaw-hub .stop{display:block;width:100%;padding:16px;font-size:1.2em;margin-top:12px}
-#aaw-hub .code{margin:12px auto;padding:12px 16px;border:2px dashed #e67e22;background:#fff8ec;border-radius:10px;max-width:380px;text-align:center}
-#aaw-hub .code b{display:block;letter-spacing:.18em;font-size:1.5em;color:#b45309;margin:4px 0}
-#aaw-hub .pp{margin-top:14px;padding:12px 14px;background:#fff;border:2px dashed #e67e22;border-radius:10px;font-size:.92em}
-#aaw-hub .chip{display:inline-block;padding:3px 9px;margin:3px 3px 0 0;border-radius:12px;background:#fff1dc;color:#b45309;font-weight:700;letter-spacing:.08em;font-size:.85em}
-#aaw-hub .tile{position:relative}#aaw-hub .tile .gotit{position:absolute;top:8px;right:10px;font-size:.8em;font-weight:700;color:var(--ok)}
+
 #aaw-hub .ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(246,249,251,.94);text-align:center;padding:20px}
+/* instructions screen */
+#aaw-hub .intro .ic{font-size:2em;line-height:1}
+#aaw-hub .intro h3{margin:14px 0 4px;color:#123f50}
+#aaw-hub .intro ol{margin:0;padding-left:22px}#aaw-hub .intro li{margin-bottom:5px}
+/* runner coverage reference */
+#aaw-hub details.ref{margin-top:12px;background:#fff;border:1px solid #d7e3ea;border-radius:10px}
+#aaw-hub details.ref summary{cursor:pointer;padding:10px 14px;font-weight:700;color:#123f50}
+#aaw-hub .tw{overflow-x:auto;padding:0 12px 12px}
+#aaw-hub table.abg{width:100%;border-collapse:collapse;font-size:.76em;text-align:center}
+#aaw-hub table.abg th,#aaw-hub table.abg td{border:1px solid #e2e8f0;padding:5px 4px}
+#aaw-hub table.abg th{background:#f6f9fb}
+#aaw-hub table.abg td.dn{text-align:left;font-weight:700;white-space:nowrap}
+#aaw-hub table.abg td.y{background:#dcfce7;color:#166534;font-weight:800}
+#aaw-hub table.abg td.n{color:#b9c4cb}
+/* allergy detective */
+#aaw-hub .ad h1,#aaw-hub .ad h2,#aaw-hub .ad h3,#aaw-hub .ad p{margin-top:0}
+#aaw-hub .ad h1{font-size:1.55em;margin-bottom:5px}
+#aaw-hub .ad h2{font-size:1.2em;color:#123f50;margin-bottom:8px}
+#aaw-hub .ad h3{font-size:1em;margin-bottom:5px}
+#aaw-hub .ad .muted{color:#5a6b76;font-size:.92em}
+#aaw-hub .ad .eyebrow{display:block;font-size:.75em;text-transform:uppercase;letter-spacing:.09em;font-weight:800;color:var(--c);margin-bottom:4px}
+#aaw-hub .ad .hero{background:linear-gradient(135deg,#123f50,#1f6f8b);color:#fff;border-radius:12px;padding:20px;margin-bottom:14px}
+#aaw-hub .ad .hero h1{color:#fff}#aaw-hub .ad .hero p{margin-bottom:0;color:#e5f1f5}
+#aaw-hub .ad .pill{display:inline-block;border-radius:99px;padding:4px 10px;background:#e3f1f6;color:var(--c);font-size:.75em;font-weight:800}
+#aaw-hub .ad .row{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+#aaw-hub .ad .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+#aaw-hub .ad .stat{background:#fff;border:1px solid #d7e3ea;border-radius:9px;padding:10px;text-align:center}
+#aaw-hub .ad .stat strong{display:block;font-size:1.25em;color:var(--c)}#aaw-hub .ad .stat span{font-size:.75em;color:#5a6b76}
+#aaw-hub .ad .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+#aaw-hub .ad .actions .btn{margin:0}
+#aaw-hub .ad .btn.secondary{background:#fff;color:var(--c);border:1.5px solid var(--c)}
+#aaw-hub .ad .btn:disabled{opacity:.45;cursor:not-allowed}
+#aaw-hub .ad .progress{height:7px;background:#dce8ed;border-radius:8px;overflow:hidden;margin:10px 0 8px}
+#aaw-hub .ad .progress span{display:block;height:100%;background:var(--c);transition:width .25s}
+#aaw-hub .ad .case-intro{background:#fff;border:1px solid #d7e3ea;border-radius:10px;padding:14px;margin:12px 0}
+#aaw-hub .ad .clue-grid,#aaw-hub .ad .choices{display:grid;gap:8px}
+#aaw-hub .ad .clue{display:flex;align-items:center;gap:10px;text-align:left;width:100%;padding:12px;border:1.5px solid #c5d5de;background:#fff}
+#aaw-hub .ad .clue:hover:not(:disabled){border-color:var(--c)}
+#aaw-hub .ad .clue .symbol{font-weight:800;color:var(--c);width:1em;text-align:center}
+#aaw-hub .ad .clue small{display:block;color:#5a6b76;font-size:.85em;margin-top:2px}
+#aaw-hub .ad .clue.revealed{border-color:#8bb5c5;background:#f1f8fa}#aaw-hub .ad .clue:disabled{cursor:default}
+#aaw-hub .ad .answer{width:100%;text-align:left;padding:12px 14px;border:1.5px solid #c5d5de;background:#fff}
+#aaw-hub .ad .answer:hover:not(:disabled){border-color:var(--c);background:#f3f9fb}
+#aaw-hub .ad .answer.correct{border-color:var(--ok);background:#e8f5e9}#aaw-hub .ad .answer.incorrect{border-color:var(--bad);background:#ffebee}
+#aaw-hub .ad .answer:disabled{cursor:default}
+#aaw-hub .ad .feedback{padding:12px 14px;margin-top:12px;background:#fff;border-left:4px solid var(--c);border-radius:7px;font-size:.93em}
+#aaw-hub .ad .feedback.good{border-color:var(--ok)}#aaw-hub .ad .feedback.warn{border-color:#d18a19}
+#aaw-hub .ad .feedback strong{display:block;margin-bottom:4px}
+#aaw-hub .ad .notice{background:#fff8ec;border:1px solid #f1d6a9;border-radius:9px;padding:11px 13px;font-size:.87em;color:#70420b;margin-top:14px}
+#aaw-hub .ad .score{font-size:2.3em;font-weight:800;color:var(--c);line-height:1.1;margin:10px 0 4px}
+#aaw-hub .ad .case-list{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:14px 0}
+#aaw-hub .ad .case-tile{background:#fff;border:1px solid #d7e3ea;border-radius:10px;padding:12px}
+#aaw-hub .ad .case-tile strong{display:block;color:#123f50}#aaw-hub .ad .case-tile span{font-size:.8em;color:#5a6b76}
+#aaw-hub .ad .case-tile.done{border-color:#8dbb91;background:#f1f8f1}
+#aaw-hub .ad .refs p{font-size:.84em;margin-bottom:8px}
+@media(max-width:520px){#aaw-hub .ad .case-list{grid-template-columns:1fr}#aaw-hub .ad .stat{padding:8px 4px}}
 /*]]>*/</style>
 <script>//<![CDATA[
 (function(){
-  /* ===== EDIT ME: link to your Microsoft Form for code submissions (leave '' to hide the link) ===== */
-  var FORM_URL='';
   var root=document.getElementById('aaw-hub'),cleanup=null;
-  /* Secret code words, one per game, and the score needed to unlock each */
-  var CODES={wheel:'NARROW',blast:'TARGETED',whack:'TIMEOUT',catch:'SHIELD',clock:'SHORTER',myth:'DELABEL',match:'PATHOGEN',dash:'DEESCALATE',dur:'DURATION',scr:'STEWARD'};
-  var got={};
+  /* Internal game IDs. Not shown in the games; the website uses them for its leaderboard. */
+  var CODES={wheel:'NARROW',blast:'TARGETED',run:'COVERAGE',whack:'TIMEOUT',catch:'SHIELD',clock:'SHORTER',allergy:'PENICILLIN',myth:'DELABEL',match:'PATHOGEN',dash:'DEESCALATE',dur:'DURATION',scr:'STEWARD'};
   /* Reports game activity (start/finish). Does nothing in the standalone file; the Vercel site listens for it to track plays and fill in codes. */
   function track(type,game,extra){try{var d={type:type,game:game};for(var k in extra)d[k]=extra[k];root.dispatchEvent(new CustomEvent('aaw',{bubbles:true,detail:d}))}catch(e){}}
+  /* Reports a finished game and its score (used only by the website's leaderboard). Shows nothing. */
   function award(id,ok,need,score){
     track('finish',id,{unlocked:!!ok,code:ok?CODES[id]:null,score:score});
-    if(!ok)return '<p class="sub">🎟️ '+need+' to unlock this game\'s secret code word.</p>';
-    got[id]=1;var n=Object.keys(got).length,t=Object.keys(CODES).length;
-    return '<div class="code">🎟️ Secret code unlocked!<b>'+CODES[id]+'</b><span class="sub">Write it down! You have '+n+' of '+t+' codes.</span></div>';
+    return '';
   }
   function confetti(){
     var c=document.createElement('canvas');c.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:5';root.appendChild(c);
@@ -118,32 +165,53 @@
     return '<div class="card center">'+BACK+'<h2>'+title+'</h2><div class="big">'+score+' / '+total+'</div><p>'+msg+'</p>'+(extra||'')+
       '<button class="btn again">Play again</button><button class="btn ghost home">More games</button></div>';
   }
-  var MSGS=['Stewardship superstar! 🏆','Great work, stewardship ally!','Solid start. You picked up a few new pearls.','Thanks for playing! Every bit of awareness helps.'];
+  var MSGS=['Excellent work.','Well done.','Good effort. Review the explanations to strengthen your knowledge.','Thank you for participating. Review the explanations and try again.'];
 
   /* ---------- MENU ---------- */
   var GAMES=[
-    {ic:'🎡',name:'Stewardship Wheel',d:'Spin, guess letters, solve the stewardship puzzle.',fn:wheel,f:1,id:'wheel'},
-    {ic:'💥',name:'Bug Blaster',d:'Treat the falling bugs with the narrowest drug, before they escape.',fn:blaster,f:1,id:'blast'},
-    {ic:'🔨',name:'Order Whack',d:'Whack the inappropriate antibiotic orders. Leave the good ones alone!',fn:whack,f:1,id:'whack'},
-    {ic:'🛡️',name:'Stewardship Catch',d:'Catch good stewardship practices and dodge the bad ones.',fn:catcher,f:1,id:'catch'},
-    {ic:'⏱️',name:'Stop the Clock',d:'Stop the moving marker on the right treatment duration.',fn:clock,f:1,id:'clock'},
-    {ic:'🧠',name:'Myth or Fact',d:'Bust common antibiotic myths.',fn:function(){quiz('Myth or Fact',MYTHS,'myth')},id:'myth'},
-    {ic:'🎯',name:'Bug–Drug Match',d:'Pair each organism with its go-to targeted therapy.',fn:match,id:'match'},
-    {ic:'📉',name:'De-escalation Dash',d:'Cultures are back. Pick the narrowest effective option.',fn:function(){quiz('De-escalation Dash',DASH,'dash')},id:'dash'},
-    {ic:'⏱️',name:'Duration Station',d:'How short can you go? Evidence-based durations.',fn:function(){quiz('Duration Station',DUR,'dur')},id:'dur'},
-    {ic:'🔤',name:'Stewardship Scramble',d:'Unscramble key stewardship terms.',fn:scramble,id:'scr'}
+    {ic:'💥',name:'Bug Blaster',d:'Treat each organism with the narrowest effective antibiotic.',fn:blaster,f:1,id:'blast',time:'1 minute',
+     learn:'Matching common organisms to the narrowest effective antibiotic.',
+     how:['Organisms move down the screen for 60 seconds.','Select an antibiotic below the game area (or press 1 to 5), then click or tap an organism to treat it.','The narrowest effective choice earns 100 points and lowers the resistance meter. A broader antibiotic that still works earns 25 points and raises it. An antibiotic without coverage makes the organism larger and faster.','The game ends early if three organisms reach the bottom or resistance reaches 100%.']},
+    {ic:'🏃',name:'Antibiotic Runner',d:'Apply spectrum of activity as you move through the bloodstream.',fn:runner,f:1,id:'run',time:'Up to 1 minute',
+     learn:'Spectrum of activity: which organisms common antibiotics do and do not cover.',
+     how:['You are an antibiotic moving through the bloodstream, and organisms approach from the right.','Make contact with organisms your antibiotic covers. Jump over organisms it does not cover by pressing Space or the Up arrow, or by tapping the game area.','Each correct action earns 1 point. Hitting an organism your antibiotic does not cover, or jumping over one it does cover, costs one of three lives.','Your antibiotic changes every 5 points, and the speed increases every 10 seconds.','A coverage reference table is available below the game area.']},
+    {ic:'⏱️',name:'Stop the Clock',d:'Select evidence-based treatment durations against the clock.',fn:clock,f:1,id:'clock',time:'About 2 minutes',
+     learn:'Evidence-based antibiotic treatment durations.',
+     how:['Each round describes a clinical scenario.','A marker moves back and forth across a 0 to 21 day scale. Select Stop (or press Space) when it reaches the recommended duration.','Points are based on how close you stop to the target. There are six rounds, and the marker speeds up each round.']},
+    {ic:'🔨',name:'Order Whack',d:'Identify inappropriate antibiotic orders as they appear.',fn:whack,f:1,id:'whack',time:'1 minute',
+     learn:'Recognizing appropriate and inappropriate antibiotic orders.',
+     how:['Antibiotic orders appear in the grid for 60 seconds.','Select each inappropriate order (+100 points). Leave appropriate orders alone.','Selecting an appropriate order costs 50 points, and letting an inappropriate order pass costs 25 points.','A summary of items to review is shown at the end.']},
+    {ic:'🛡️',name:'Stewardship Catch',d:'Catch stewardship best practices and avoid the pitfalls.',fn:catcher,f:1,id:'catch',time:'1 minute',
+     learn:'Distinguishing stewardship best practices from common pitfalls.',
+     how:['Items fall for 60 seconds. Green items are good practices, and red items are practices to avoid.','Move the paddle by dragging within the game area or by using the left and right arrow keys.','Each green item caught earns 50 points, with a multiplier for consecutive catches. Catching a red item costs one of three lives.']},
+    {ic:'🎡',name:'Stewardship Wheel',d:'Solve word puzzles built around key stewardship principles.',fn:wheel,f:1,id:'wheel',time:'About 2 minutes',
+     learn:'Core antimicrobial stewardship principles and terminology.',
+     how:['Select Spin to land on a dollar value.','Choose a consonant. Each time it appears in the puzzle, the value is added to your round total.','Buy a vowel for $250, or select Solve when you know the phrase.','Landing on Lose a Turn, or choosing a consonant that is not in the puzzle, counts as a strike. Three strikes end the puzzle.','There are two puzzles, each followed by a brief teaching point.']},
+    {ic:'🔍',name:'Allergy Detective',d:'Evaluate penicillin allergy labels in four patient cases.',fn:detective,f:1,id:'allergy',time:'5 to 8 minutes',
+     learn:'Evaluating penicillin allergy histories and how allergy labels affect antibiotic selection.',
+     how:['Work through four patient cases with a reported penicillin allergy.','In each case, review the allergy history, calculate the modified PEN-FAST score, choose an evaluation pathway, and make an antibiotic decision.','Feedback with the rationale follows each decision, and key takeaways and references appear at the end.']},
+    {ic:'🧠',name:'Myth or Fact',d:'Test common beliefs about antibiotic use.',fn:function(){quiz('Myth or Fact',MYTHS,'myth')},id:'myth',time:'About 2 minutes',
+     learn:'Common misconceptions about antibiotics, allergies, and testing.',
+     how:['Read each statement and select Myth or Fact.','An explanation and source appear after each answer.','There are eight statements.']},
+    {ic:'🎯',name:'Bug–Drug Match',d:'Pair each organism with its preferred targeted therapy.',fn:match,id:'match',time:'About 1 minute',
+     learn:'Preferred targeted therapy for common organisms.',
+     how:['Select an organism in the left column, then select its preferred targeted therapy in the right column.','Each correct match shows a brief teaching point.','There are seven pairs.']},
+    {ic:'📉',name:'De-escalation Dash',d:'Choose the narrowest effective option once cultures return.',fn:function(){quiz('De-escalation Dash',DASH,'dash')},id:'dash',time:'About 2 minutes',
+     learn:'De-escalating therapy once culture results and the clinical course are known.',
+     how:['Each case presents a culture result or clinical update.','Select the narrowest effective option.','There are six cases, each followed by an explanation and source.']},
+    {ic:'📅',name:'Duration Station',d:'Select evidence-based treatment durations.',fn:function(){quiz('Duration Station',DUR,'dur')},id:'dur',time:'About 2 minutes',
+     learn:'Evidence-based treatment durations for common infections.',
+     how:['Read each scenario and select the evidence-based duration.','There are six questions, each followed by an explanation and source.']},
+    {ic:'🔤',name:'Stewardship Scramble',d:'Unscramble key stewardship terms.',fn:scramble,id:'scr',time:'About 1 minute',
+     learn:'Key antimicrobial stewardship terms.',
+     how:['Unscramble the letters to form a stewardship term, then select Check (or press Enter).','Select Hint for a definition, or Skip to reveal the answer.','There are six words.']}
   ];
   function menu(){
     if(cleanup){cleanup();cleanup=null}
-    var h='<div class="card"><h2>🦠 Antibiotic Awareness Week Arcade</h2><p class="sub">Pick any game. Each takes about 1–2 minutes.</p><div class="menu">';
-    GAMES.forEach(function(g,i){h+='<button class="tile'+(g.f?' feat':'')+'" data-i="'+i+'">'+(got[g.id]?'<span class="gotit">🎟️ ✓</span>':'')+'<div class="ic">'+g.ic+'</div><h3>'+g.name+'</h3><p>'+g.d+'</p></button>'});
-    var ids=Object.keys(CODES),mine=ids.filter(function(k){return got[k]}),chips=mine.map(function(k){return '<span class="chip">'+CODES[k]+'</span>'}).join('');
-    h+='</div><div class="pp"><b>🎟️ Code Word Passport: '+mine.length+' of '+ids.length+' collected</b><br>Hit the target score in any game to unlock its secret code word, and keep track of every code you earn. Whoever submits the most secret code words by the end of Antibiotic Awareness Week will be recognized! 🏆'+
-      (chips?'<div style="margin-top:6px">'+chips+'</div>':'')+
-      (FORM_URL?'<div style="margin-top:8px"><a href="'+FORM_URL+'" target="_blank" rel="noopener" style="color:var(--c);font-weight:700">Submit your codes →</a></div>':'')+
-      '<div class="sub" style="margin:6px 0 0">Codes aren\'t saved when you leave or refresh the page, so write them down!</div></div>';
-    root.innerHTML=h+'<p class="sub aaw-credit" style="margin:14px 0 0">Created by Shemual Tsai, PharmD, ID/Stewardship pharmacist. Questions or issues? <a href="mailto:shemual@gmail.com" style="color:var(--c)">shemual@gmail.com</a></p></div>';
-    $$('.tile').forEach(function(b){b.onclick=function(){var g=GAMES[+b.dataset.i];track('start',g.id);g.fn()}});
+    var h='<div class="card"><h2>Stewardship Learning Challenge</h2><p class="sub">Antibiotic Awareness Week: '+GAMES.length+' short, evidence-based games. Select a game to view its instructions.</p><div class="menu">';
+    GAMES.forEach(function(g,i){h+='<button class="tile'+(g.f?' feat':'')+'" data-i="'+i+'">'+'<div class="ic">'+g.ic+'</div><h3>'+g.name+'</h3><p>'+g.d+'</p></button>'});
+    root.innerHTML=h+'</div></div>';
+    $$('.tile').forEach(function(b){b.onclick=function(){intro(GAMES[+b.dataset.i])}});
   }
 
   /* ---------- QUIZ ENGINE (Myth/Fact, Dash, Duration) ---------- */
@@ -188,7 +256,7 @@
       var q=qs[i],right=k===q.a;if(right)score++;
       $$('.opt').forEach(function(b){var j=+b.dataset.k;b.disabled=true;if(j===q.a)b.classList.add('ok');else if(j===k)b.classList.add('bad')});
       $('.sc').textContent='Score: '+score;
-      $('.fb').innerHTML='<div class="exp"><b class="'+(right?'ok">Correct!':'bad">Not quite.')+'</b> '+esc(q.e)+'<span class="src">Source: '+esc(q.s)+'</span></div>'+
+      $('.fb').innerHTML='<div class="exp"><b class="'+(right?'ok">Correct.':'bad">Incorrect.')+'</b> '+esc(q.e)+'<span class="src">Source: '+esc(q.s)+'</span></div>'+
         '<button class="btn nx">'+(i<qs.length-1?'Next →':'See results')+'</button>';
       $('.nx').onclick=function(){i++;i<qs.length?show():end()};
     }
@@ -208,11 +276,11 @@
   ];
   function match(){
     var bugs=shuffle(PAIRS),drugs=shuffle(PAIRS),sel=null,done=0,miss=0;
-    var h='<div class="card">'+BACK+'<h2>🎯 Bug–Drug Match</h2><p class="sub">Tap an organism, then its preferred targeted therapy.</p>'+
+    var h='<div class="card">'+BACK+'<h2>Bug–Drug Match</h2><p class="sub">Tap an organism, then its preferred targeted therapy.</p>'+
       '<div class="meta"><span class="dn">Matched: 0/'+PAIRS.length+'</span><span class="ms">Misses: 0</span></div><div class="cols"><div class="opts">';
-    bugs.forEach(function(p){h+='<button class="opt bug" data-b="'+esc(p.b)+'">🦠 '+esc(p.b)+'</button>'});
+    bugs.forEach(function(p){h+='<button class="opt bug" data-b="'+esc(p.b)+'">'+esc(p.b)+'</button>'});
     h+='</div><div class="opts">';
-    drugs.forEach(function(p){h+='<button class="opt drug" data-b="'+esc(p.b)+'">💊 '+esc(p.d)+'</button>'});
+    drugs.forEach(function(p){h+='<button class="opt drug" data-b="'+esc(p.b)+'">'+esc(p.d)+'</button>'});
     root.innerHTML=h+'</div></div><div class="fb"></div></div>';wireBack();
     $$('.bug').forEach(function(b){b.onclick=function(){$$('.bug').forEach(function(x){x.classList.remove('sel')});b.classList.add('sel');sel=b}});
     $$('.drug').forEach(function(d){d.onclick=function(){
@@ -220,9 +288,9 @@
       if(d.dataset.b===sel.dataset.b){
         [sel,d].forEach(function(x){x.classList.remove('sel');x.classList.add('ok');x.disabled=true});
         var p=PAIRS.filter(function(x){return x.b===d.dataset.b})[0];
-        $('.fb').innerHTML='<div class="exp"><b class="ok">Match!</b> '+esc(p.b)+' → '+esc(p.d)+'. '+esc(p.p)+'</div>';
+        $('.fb').innerHTML='<div class="exp"><b class="ok">Correct match.</b> '+esc(p.b)+' → '+esc(p.d)+'. '+esc(p.p)+'</div>';
         sel=null;done++;$('.dn').textContent='Matched: '+done+'/'+PAIRS.length;
-        if(done===PAIRS.length){var s=Math.max(0,PAIRS.length-miss);setTimeout(function(){root.innerHTML=finish('Bug–Drug Match',s,PAIRS.length,MSGS,'<p class="sub">Misses: '+miss+'</p>'+award('match',miss<=2,'Finish with 2 or fewer misses',s));wireBack();$('.again').onclick=match;$('.home').onclick=menu},1200)}
+        if(done===PAIRS.length){var s=Math.max(0,PAIRS.length-miss);setTimeout(function(){root.innerHTML=finish('Bug–Drug Match',s,PAIRS.length,MSGS,'<p class="sub">Incorrect matches: '+miss+'</p>'+award('match',miss<=2,'Finish with 2 or fewer misses',s));wireBack();$('.again').onclick=match;$('.home').onclick=menu},1200)}
       }else{
         miss++;$('.ms').textContent='Misses: '+miss;d.classList.add('bad','shake');
         setTimeout(function(){d.classList.remove('bad','shake')},600);
@@ -232,7 +300,7 @@
 
   /* ---------- SCRAMBLE ---------- */
   var WORDS=[
-    {w:'STEWARDSHIP',h:'Optimizing antimicrobial use. The theme of this week!'},
+    {w:'STEWARDSHIP',h:'Optimizing antimicrobial use, the focus of this week.'},
     {w:'ANTIBIOGRAM',h:'Annual summary of local susceptibility data.'},
     {w:'DEESCALATION',h:'Narrowing therapy once cultures return.'},
     {w:'RESISTANCE',h:'What overuse breeds.'},
@@ -253,11 +321,11 @@
       wireBack();var inp=$('.in');inp.focus();
       function next(){i++;i<ws.length?show():end()}
       function check(){
-        if(inp.value.toUpperCase().replace(/[^A-Z]/g,'')===x.w){score++;inp.disabled=true;$('.fb').innerHTML='<div class="exp"><b class="ok">Correct!</b> '+x.w+'</div>';setTimeout(next,900)}
+        if(inp.value.toUpperCase().replace(/[^A-Z]/g,'')===x.w){score++;inp.disabled=true;$('.fb').innerHTML='<div class="exp"><b class="ok">Correct.</b> '+x.w+'</div>';setTimeout(next,900)}
         else{inp.classList.add('shake');setTimeout(function(){inp.classList.remove('shake')},600)}
       }
       $('.ck').onclick=check;inp.onkeydown=function(e){if(e.key==='Enter')check()};
-      $('.hn').onclick=function(){$('.fb').innerHTML='<div class="exp">💡 '+esc(x.h)+'</div>'};
+      $('.hn').onclick=function(){$('.fb').innerHTML='<div class="exp">Hint: '+esc(x.h)+'</div>'};
       $('.sk').onclick=function(){$('.fb').innerHTML='<div class="exp">The answer was <b>'+x.w+'</b>.</div>';inp.disabled=true;setTimeout(next,1200)};
     }
     function end(){root.innerHTML=finish('Stewardship Scramble',score,ws.length,MSGS,award('scr',score>=4,'Unscramble 4 or more words',score));wireBack();$('.again').onclick=scramble;$('.home').onclick=menu}
@@ -288,7 +356,7 @@
         '<span class="tag">Category: '+esc(ps[pi].c)+'</span><div class="board"></div>'+
         '<div class="meta"><span>This round: $<b class="wb">0</b></span><span class="ws"></span></div>'+
         '<div class="whw"><div class="ptr"></div><canvas class="wc" width="560" height="560"></canvas></div>'+
-        '<div class="wctl"><button class="btn sp">🎡 Spin</button><button class="btn ghost bv">Buy a vowel ($250)</button><button class="btn ghost so">Solve</button></div>'+
+        '<div class="wctl"><button class="btn sp">Spin</button><button class="btn ghost bv">Buy a vowel ($250)</button><button class="btn ghost so">Solve</button></div>'+
         '<div class="kb"></div><div class="slv"></div><div class="fb"></div></div>';
       wireBack();
       var kb='';for(var i=0;i<26;i++){var L=String.fromCharCode(65+i);kb+='<button class="key" data-l="'+L+'">'+L+'</button>'}
@@ -297,13 +365,13 @@
       $('.sp').onclick=spin;
       $('.bv').onclick=function(){if(bank<250)return say('You need $250 in this round to buy a vowel.');bank-=250;phase='vowel';ui();say('Pick a vowel.')};
       $('.so').onclick=solveBox;
-      drawW();ui();say('Spin the wheel to start! 3 strikes ends the puzzle.');
+      drawW();ui();say('Select Spin to begin. Three strikes end the puzzle.');
     }
     function ui(){
       var b='';
       ps[pi].p.split(' ').forEach(function(wd){b+='<span class="wd">';wd.split('').forEach(function(ch){var isL=/[A-Z]/.test(ch);b+='<span class="lt'+(isL?'':' pn')+'">'+(!isL||used[ch]||done?ch:'')+'</span>'});b+='</span>'});
       $('.board').innerHTML=b;$('.wt').textContent=total;$('.wb').textContent=bank;
-      $('.ws').textContent='Strikes: '+(strikes?Array(strikes+1).join('❌'):'none');
+      $('.ws').textContent='Strikes: '+strikes+' of 3';
       $$('.key').forEach(function(k){var L=k.dataset.l,v=VOW.indexOf(L)>=0;k.disabled=done||!!used[L]||!((phase==='guess'&&!v)||(phase==='vowel'&&v));k.classList.toggle('used',!!used[L])});
       var busy=done||spinning||phase!=='spin';
       $('.sp').disabled=busy||left(false)===0;$('.bv').disabled=busy||left(true)===0;$('.so').disabled=busy;
@@ -321,7 +389,7 @@
       }
       x.beginPath();x.arc(R,R,R-5,0,2*Math.PI);x.strokeStyle='#1f6f8b';x.lineWidth=10;x.stroke();
       x.beginPath();x.arc(R,R,36,0,2*Math.PI);x.fillStyle='#fff';x.fill();x.lineWidth=6;x.stroke();
-      x.font='30px system-ui';x.textAlign='center';x.textBaseline='middle';x.fillText('🦠',R,R+2);
+      x.font='30px system-ui';x.textAlign='center';x.textBaseline='middle';
     }
     function spin(){
       if(spinning||phase!=='spin'||done)return;
@@ -331,35 +399,35 @@
     }
     function land(){
       spinning=false;var n=SEG.length,a=2*Math.PI/n,T=2*Math.PI,idx=Math.floor((((1.5*Math.PI-rot)%T)+T)%T/a),s=SEG[idx];
-      if(s==='BANKRUPT'){bank=0;ui();say('💸 <b>BANKRUPT!</b> Your round winnings are gone. Spin again.')}
-      else if(s==='LOSE A TURN')strike('🚫 <b>Lose a turn!</b>');
-      else{val=s;phase='guess';ui();say('🎉 <b>$'+s+'</b>! Pick a consonant.')}
+      if(s==='BANKRUPT'){bank=0;ui();say('<b>Bankrupt.</b> Your round total has been reset. Spin again.')}
+      else if(s==='LOSE A TURN')strike('<b>Lose a turn.</b>');
+      else{val=s;phase='guess';ui();say('<b>$'+s+'</b>. Select a consonant.')}
     }
     function guess(L){
       if(used[L]||done)return;
       var vow=phase==='vowel';used[L]=1;phase='spin';
       var n=letters().split('').filter(function(x){return x===L}).length;
-      if(!vow){if(!n)return strike('No '+L+'.');bank+=val*n;say('✅ '+n+' '+L+(n>1?"'s":'')+'! +$'+(val*n)+'.')}
-      else say(n?'✅ '+n+' '+L+(n>1?"'s":'')+'.':'No '+L+'. (Vowels never cost a strike.)');
+      if(!vow){if(!n)return strike('No '+L+'.');bank+=val*n;say('Correct: '+n+' '+L+(n>1?"'s":'')+'. +$'+(val*n)+'.')}
+      else say(n?'Correct: '+n+' '+L+(n>1?"'s":'')+'.':'No '+L+'. (Vowels never cost a strike.)');
       ui();if(left(true)+left(false)===0)win();
     }
     function strike(m){
       strikes++;
-      if(strikes>=3){done=true;bank=0;ui();say(m+' That\'s 3 strikes. The answer was <b>'+esc(ps[pi].p)+'</b>.<span class="src">💡 '+esc(ps[pi].e)+'</span>'+nextBtn());wireNext()}
+      if(strikes>=3){done=true;bank=0;ui();say(m+' That\'s 3 strikes. The answer was <b>'+esc(ps[pi].p)+'</b>.<span class="src">'+esc(ps[pi].e)+'</span>'+nextBtn());wireNext()}
       else{ui();say(m+' Strike '+strikes+' of 3.')}
     }
     function solveBox(){
       if(phase!=='spin'||done)return;
       $('.slv').innerHTML='<input class="in" placeholder="Type the full answer" autocomplete="off"><button class="btn ck">Submit</button>';
       var i=$('.in');i.focus();
-      function go(){var g=i.value.toUpperCase().replace(/[^A-Z]/g,'');if(!g)return;$('.slv').innerHTML='';if(g===letters())win();else strike('❌ Not quite.')}
+      function go(){var g=i.value.toUpperCase().replace(/[^A-Z]/g,'');if(!g)return;$('.slv').innerHTML='';if(g===letters())win();else strike('Incorrect.')}
       $('.ck').onclick=go;i.onkeydown=function(e){if(e.key==='Enter')go()};
     }
-    function win(){done=true;solved++;total+=bank;ui();$('.slv').innerHTML='';say('🏆 <b>Solved!</b> +$'+bank+' banked.<span class="src">💡 '+esc(ps[pi].e)+'</span>'+nextBtn());wireNext();confetti()}
+    function win(){done=true;solved++;total+=bank;ui();$('.slv').innerHTML='';say('<b>Solved.</b> +$'+bank+' added to your total.<span class="src">'+esc(ps[pi].e)+'</span>'+nextBtn());wireNext();confetti()}
     function nextBtn(){return '<button class="btn nx">'+(pi<ps.length-1?'Next puzzle →':'See results')+'</button>'}
     function wireNext(){$('.nx').onclick=function(){
       pi++;if(pi<ps.length)return round();
-      root.innerHTML='<div class="card center">'+BACK+'<h2>🎡 Final winnings</h2><div class="big">$'+total+'</div><p>'+(total>=3000?'Stewardship millionaire! 🏆':total>0?'Nice spinning!':'Better luck next spin!')+'</p><p class="sub">Puzzles solved: '+solved+' of '+ps.length+'</p>'+award('wheel',solved>=2,'Solve both puzzles',total)+'<button class="btn again">Play again</button><button class="btn ghost home">More games</button></div>';
+      root.innerHTML='<div class="card center">'+BACK+'<h2>Final total</h2><div class="big">$'+total+'</div><p>'+(solved?'Thank you for participating.':'Thank you for participating. Review the phrases and try again.')+'</p><p class="sub">Puzzles solved: '+solved+' of '+ps.length+'</p>'+award('wheel',solved>=2,'Solve both puzzles',total)+'<button class="btn again">Play again</button><button class="btn ghost home">More games</button></div>';
       wireBack();$('.again').onclick=wheel;$('.home').onclick=menu;if(total>0)confetti();
     }}
     round();
@@ -376,8 +444,8 @@
       {n:'H. influenzae',best:1,ok:[2,3],col:'#2d9cdb',tip:'H. influenzae → ceftriaxone. No need for cefepime or meropenem.'},
       {n:'N. gonorrhoeae',best:1,ok:[2,3],col:'#e67e22',tip:'N. gonorrhoeae → ceftriaxone (CDC STI guidelines).'}
     ];
-    root.innerHTML='<div class="card">'+BACK+'<h2>💥 Bug Blaster</h2>'+
-      '<div class="meta"><span>Score: <b class="bs">0</b></span><span>⏱ <b class="bt">60</b>s</span><span class="bl">❤️❤️❤️</span></div>'+
+    root.innerHTML='<div class="card">'+BACK+'<h2>Bug Blaster</h2>'+
+      '<div class="meta"><span>Score: <b class="bs">0</b></span><span>Time left: <b class="bt">60</b> s</span><span>Lives: <b class="bl">3</b></span></div>'+
       '<div class="meta" style="align-items:center;gap:8px"><span>Resistance</span><div class="bar" style="flex:1;margin:0"><i class="br" style="width:0%;background:var(--bad)"></i></div></div>'+
       '<div class="bw"><canvas class="bc"></canvas></div><div class="wp"></div><p class="sub bm" style="margin:8px 0 0;min-height:2.8em"></p></div>';
     wireBack();
@@ -386,18 +454,18 @@
     var cv=$('.bc'),ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,w,h,bugs=[],fx=[],score,lives,res,el,spawn,running=false,raf,last,sel=0;
     function size(){w=cv.clientWidth;h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);draw()}
     function setSel(i){sel=i;$$('.wbtn').forEach(function(b){b.classList.toggle('on',+b.dataset.i===i)})}
-    function hud(){$('.bs').textContent=score;$('.bl').textContent=lives>0?Array(lives+1).join('❤️'):'💀';$('.br').style.width=Math.min(100,res)+'%'}
+    function hud(){$('.bs').textContent=score;$('.bl').textContent=Math.max(0,lives);$('.br').style.width=Math.min(100,res)+'%'}
     function msg(t){$('.bm').innerHTML=t}
     function ov(html){var o=$('.ov');if(o)o.parentNode.removeChild(o);if(!html)return;var d=document.createElement('div');d.className='ov';d.innerHTML=html;$('.bw').appendChild(d);
       var g=d.querySelector('.go');if(g)g.onclick=start;var hm=d.querySelector('.home');if(hm)hm.onclick=menu}
-    function start(){bugs=[];fx=[];score=0;lives=3;res=0;el=0;spawn=.4;running=true;last=performance.now();hud();ov(null);msg('Pick a drug, then tap a bug!');raf=requestAnimationFrame(loop)}
+    function start(){bugs=[];fx=[];score=0;lives=3;res=0;el=0;spawn=.4;running=true;last=performance.now();hud();ov(null);msg('Select an antibiotic, then click or tap an organism.');raf=requestAnimationFrame(loop)}
     function loop(t){
       if(!running)return;
       var dt=Math.min(.05,(t-last)/1000);last=t;el+=dt;spawn-=dt;
-      $('.bt').textContent=Math.max(0,Math.ceil(60-el));if(el>=60)return over('⏱ Time\'s up! Infections contained.');
+      $('.bt').textContent=Math.max(0,Math.ceil(60-el));if(el>=60)return over('Time complete.');
       if(spawn<=0){spawn=Math.max(.75,2.2-el*.025);bugs.push({k:Math.floor(Math.random()*B.length),x:34+Math.random()*(w-68),y:-26,r:20,v:22+el*.7+Math.random()*10,ph:Math.random()*6})}
       bugs.forEach(function(b){b.y+=b.v*dt;b.ph+=dt*3});
-      for(var i=bugs.length-1;i>=0;i--){var b=bugs[i];if(b.y-b.r>h){bugs.splice(i,1);lives--;hud();msg('😷 <b>'+B[b.k].n+'</b> got away! '+esc(B[b.k].tip));if(lives<=0)return over('Too many infections got away.')}}
+      for(var i=bugs.length-1;i>=0;i--){var b=bugs[i];if(b.y-b.r>h){bugs.splice(i,1);lives--;hud();msg('<b>'+B[b.k].n+'</b> reached the bottom. '+esc(B[b.k].tip));if(lives<=0)return over('Three organisms reached the bottom.')}}
       fx.forEach(function(f){f.life-=dt;f.y-=f.vy*dt;f.x+=(f.vx||0)*dt});fx=fx.filter(function(f){return f.life>0});
       draw();raf=requestAnimationFrame(loop);
     }
@@ -429,14 +497,14 @@
       var r=cv.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top,best=null,bd=1e9;
       bugs.forEach(function(b){var d=Math.hypot(bx(b)-px,b.y-py);if(d<b.r+14&&d<bd){bd=d;best=b}});
       if(!best)return;var d=B[best.k];
-      if(sel===d.best){score+=100;res=Math.max(0,res-4);kill(best,'+100 🎯','#2e7d32');msg('✅ Narrowest effective choice for <b>'+d.n+'</b>!')}
-      else if(d.ok.indexOf(sel)>=0){score+=25;res+=12;kill(best,'+25 too broad','#e67e22');msg('⚠️ '+W[sel].n+' works, but it\'s broader than needed. '+esc(d.tip))}
-      else{res+=8;best.v*=1.25;best.r=Math.min(30,best.r+3);best.m=1;fx.push({t:'No coverage!',x:bx(best),y:best.y-best.r,vy:30,life:1.1,c:'#c62828'});msg('❌ '+W[sel].n+' doesn\'t cover <b>'+d.n+'</b>, and now it\'s stronger! '+esc(d.tip))}
-      hud();if(res>=100)over('Resistance took over! Too much broad-spectrum use.');
+      if(sel===d.best){score+=100;res=Math.max(0,res-4);kill(best,'+100','#2e7d32');msg('Correct: narrowest effective choice for <b>'+d.n+'</b>.')}
+      else if(d.ok.indexOf(sel)>=0){score+=25;res+=12;kill(best,'+25 too broad','#e67e22');msg('Effective but broader than needed: '+W[sel].n+'. '+esc(d.tip))}
+      else{res+=8;best.v*=1.25;best.r=Math.min(30,best.r+3);best.m=1;fx.push({t:'No coverage',x:bx(best),y:best.y-best.r,vy:30,life:1.1,c:'#c62828'});msg('Incorrect: '+W[sel].n+' does not cover <b>'+d.n+'</b>. '+esc(d.tip))}
+      hud();if(res>=100)over('Resistance reached 100% from broad-spectrum use.');
     }
     function over(why){
       running=false;cancelAnimationFrame(raf);draw();
-      ov('<h2>'+(el>=60?'Nice work!':'Game over')+'</h2><p>'+why+'</p><div class="big">'+score+'</div><p class="sub">Every 🎯 narrow kill also lowers resistance.</p>'+award('blast',score>=1000,'Score 1,000+',score)+'<div><button class="btn go">Play again</button><button class="btn ghost home">More games</button></div>');
+      ov('<h2>'+(el>=60?'Time complete':'Game over')+'</h2><p>'+why+'</p><div class="big">'+score+'</div><p class="sub">Each narrowest effective choice also lowers resistance.</p>'+award('blast',score>=1000,'Score 1,000+',score)+'<div><button class="btn go">Play again</button><button class="btn ghost home">More games</button></div>');
       if(score>=1500)confetti();
     }
     function key(e){var n=+e.key;if(n>=1&&n<=W.length)setSel(n-1)}
@@ -444,8 +512,7 @@
     cv.addEventListener('pointerdown',hit);document.addEventListener('keydown',key);window.addEventListener('resize',size);
     cleanup=function(){running=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',key);window.removeEventListener('resize',size)};
     setSel(0);size();
-    ov('<h2>💥 Bug Blaster</h2><p>Bugs are invading for 60 seconds! Pick a drug below (or press 1–5), then tap a bug to treat it.</p>'+
-      '<p class="sub">🎯 Narrowest effective drug: +100 and resistance drops<br>⚠️ Works but too broad: +25 and resistance rises<br>❌ No coverage: the bug gets bigger and faster<br>Lose all 3 ❤️ or hit 100% resistance and it\'s game over.</p><button class="btn go">Start</button>');
+    ov('<h2>Bug Blaster</h2><p class="sub">Select Start when you are ready.</p><button class="btn go">Start</button>');
   }
 
   /* shared overlay helper for action games */
@@ -480,8 +547,8 @@
   ];
   function whack(){
     var LEN=60;
-    root.innerHTML='<div class="card">'+BACK+'<h2>🔨 Order Whack</h2>'+
-      '<div class="meta"><span>Score: <b class="ws2">0</b></span><span>⏱ <b class="wt2">'+LEN+'</b>s</span></div>'+
+    root.innerHTML='<div class="card">'+BACK+'<h2>Order Whack</h2>'+
+      '<div class="meta"><span>Score: <b class="ws2">0</b></span><span>Time left: <b class="wt2">'+LEN+'</b>s</span></div>'+
       '<div class="bar"><i class="wtb" style="width:100%"></i></div><div class="bw"><div class="wg"></div></div><p class="sub bm" style="margin:8px 0 0;min-height:2.8em"></p></div>';
     wireBack();
     var g='';for(var i=0;i<9;i++)g+='<div class="hole"><button class="pop"></button></div>';$('.wg').innerHTML=g;
@@ -489,24 +556,24 @@
     function msg(t){$('.bm').innerHTML=t}
     H.forEach(function(h){h.el.onclick=function(){
       if(!running||!h.o||h.done)return;h.done=true;h.exp=performance.now()+600;
-      if(h.o.b){score+=100;h.el.classList.add('good');h.el.textContent='✅ Stopped! +100';msg('✅ '+esc(h.o.w))}
-      else{score-=50;misses.push(h.o);h.el.classList.add('oops');h.el.textContent='🙅 That was a good order! −50';msg('🙅 <b>'+esc(h.o.t)+'</b> was appropriate. '+esc(h.o.w))}
+      if(h.o.b){score+=100;h.el.classList.add('good');h.el.textContent='Inappropriate order. +100';msg('Correct. '+esc(h.o.w))}
+      else{score-=50;misses.push(h.o);h.el.classList.add('oops');h.el.textContent='Appropriate order. −50';msg('<b>'+esc(h.o.t)+'</b> was appropriate. '+esc(h.o.w))}
       $('.ws2').textContent=score;
     }});
     function clear(h){h.el.classList.remove('up');setTimeout(function(){if(!h.el.classList.contains('up')){h.el.className='pop';h.el.textContent=''}},160);h.o=null}
-    function start(){score=0;misses=[];t0=performance.now();next=0;running=true;H.forEach(clear);overlay(null);msg('Whack the <b>bad</b> orders. Let the good ones go!');$('.ws2').textContent=0;raf=requestAnimationFrame(loop)}
+    function start(){score=0;misses=[];t0=performance.now();next=0;running=true;H.forEach(clear);overlay(null);msg('Select the <b>inappropriate</b> orders. Leave appropriate orders alone.');$('.ws2').textContent=0;raf=requestAnimationFrame(loop)}
     function loop(now){
       if(!running)return;var t=(now-t0)/1000,rem=Math.max(0,LEN-t);
       $('.wt2').textContent=Math.ceil(rem);$('.wtb').style.width=(rem/LEN*100)+'%';
       H.forEach(function(h){if(h.o&&now>h.exp){
-        if(!h.done){if(h.o.b){score-=25;misses.push(h.o);msg('😬 Missed one: <b>'+esc(h.o.t)+'</b>. '+esc(h.o.w))}else score+=10;$('.ws2').textContent=score}
+        if(!h.done){if(h.o.b){score-=25;misses.push(h.o);msg('Missed: <b>'+esc(h.o.t)+'</b>. '+esc(h.o.w))}else score+=10;$('.ws2').textContent=score}
         clear(h)}});
       if(now>=next){
         var free=H.filter(function(h){return !h.o&&!h.el.classList.contains('up')});
         if(free.length){
           var h=free[Math.floor(Math.random()*free.length)],showing=H.map(function(x){return x.o}),pool=ORDERS.filter(function(o){return showing.indexOf(o)<0&&(Math.random()<.6?o.b:!o.b)});
           if(!pool.length)pool=ORDERS.filter(function(o){return showing.indexOf(o)<0});
-          h.o=pool[Math.floor(Math.random()*pool.length)];h.done=false;h.exp=now+1000*Math.max(2.5,4-t*.03);
+          h.o=pool[Math.floor(Math.random()*pool.length)];h.done=false;h.exp=now+1000*Math.max(1.3,2.6-t*.03);
           h.el.className='pop up';h.el.textContent=h.o.t;
         }
         next=now+1000*Math.max(.45,1.1-t*.015);
@@ -517,27 +584,27 @@
     function over(){
       running=false;H.forEach(clear);
       var seen=[],les='';misses.forEach(function(m){if(seen.indexOf(m)<0&&seen.length<4){seen.push(m);les+='<li><b>'+esc(m.t)+'</b>: '+esc(m.w)+'</li>'}});
-      overlay('<h2>⏱ Time!</h2><div class="big">'+score+'</div>'+(les?'<div class="sub" style="text-align:left;max-width:460px"><b>Worth reviewing:</b><ul style="margin:6px 0 0;padding-left:18px">'+les+'</ul></div>':'<p>Perfect run! 🏆</p>')+award('whack',score>=2000,'Score 2,000+',score)+AGAIN,start);
+      overlay('<h2>Time complete</h2><div class="big">'+score+'</div>'+(les?'<div class="sub" style="text-align:left;max-width:460px"><b>Worth reviewing:</b><ul style="margin:6px 0 0;padding-left:18px">'+les+'</ul></div>':'<p>No errors. Excellent work.</p>')+award('whack',score>=2000,'Score 2,000+',score)+AGAIN,start);
       if(score>=1500||!misses.length)confetti();
     }
     cleanup=function(){running=false;cancelAnimationFrame(raf)};
-    overlay('<h2>🔨 Order Whack</h2><p>Antibiotic orders pop up for '+LEN+' seconds.</p><p class="sub">🔨 Whack an inappropriate order: +100<br>🙅 Whack an appropriate one: −50<br>😬 Let a bad order through: −25</p><button class="btn go">Start</button>',start);
+    overlay('<h2>Order Whack</h2><p class="sub">Select Start when you are ready.</p><button class="btn go">Start</button>',start);
   }
 
   /* ---------- STEWARDSHIP CATCH ---------- */
   function catcher(){
     var GOOD=[{e:'🧫',t:'Cultures first'},{e:'💊',t:'IV → PO'},{e:'⏱️',t:'48–72h time-out'},{e:'📉',t:'De-escalate'},{e:'🩺',t:'Allergy delabel'},{e:'✂️',t:'Short course'},{e:'📊',t:'Check antibiogram'}];
-    var BAD=[{e:'🤧',t:'Abx for a cold',w:"Viral URIs don't need antibiotics."},{e:'🚽',t:'Treat ASB',w:"Asymptomatic bacteriuria usually shouldn't be treated."},{e:'📆',t:'14d cellulitis',w:'5–6 days is usually enough for cellulitis.'},
+    var BAD=[{e:'🤧',t:'Antibiotics for a cold',w:"Viral URIs don't need antibiotics."},{e:'🚽',t:'Treat ASB',w:"Asymptomatic bacteriuria usually shouldn't be treated."},{e:'📆',t:'14d cellulitis',w:'5–6 days is usually enough for cellulitis.'},
       {e:'💣',t:'Meropenem for susceptible E. coli',w:'Use the narrowest active agent.'},{e:'🔁',t:'Double anaerobe coverage',w:'Pip-tazo already covers anaerobes. Skip the metronidazole.'},{e:'🧻',t:'C. diff test, formed stool',w:'Only test unformed stools.'}];
-    root.innerHTML='<div class="card">'+BACK+'<h2>🛡️ Stewardship Catch</h2>'+
-      '<div class="meta"><span>Score: <b class="cs">0</b> <span class="cm"></span></span><span>⏱ <b class="ct">60</b>s</span><span class="cl">❤️❤️❤️</span></div>'+
+    root.innerHTML='<div class="card">'+BACK+'<h2>Stewardship Catch</h2>'+
+      '<div class="meta"><span>Score: <b class="cs">0</b> <span class="cm"></span></span><span>Time left: <b class="ct">60</b> s</span><span>Lives: <b class="cl">3</b></span></div>'+
       '<div class="bw"><canvas class="bc" style="touch-action:none;cursor:ew-resize"></canvas></div><p class="sub bm" style="margin:8px 0 0;min-height:2.8em">Drag, or use the ← → arrow keys.</p></div>';
     wireBack();
     var cv=$('.bc'),ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,w,h,px,PW=120,items=[],fx=[],score,lives,combo,el,spawn,running=false,raf,last,keys={};
     function size(){w=cv.clientWidth;h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);if(px==null)px=w/2;draw()}
     function msg(t){$('.bm').innerHTML=t}
-    function hud(){$('.cs').textContent=score;$('.cl').textContent=lives>0?Array(lives+1).join('❤️'):'💀';var m=Math.min(5,1+Math.floor(combo/5));$('.cm').textContent=m>1?'· combo ×'+m:''}
-    function start(){items=[];fx=[];score=0;lives=3;combo=0;el=0;spawn=.3;running=true;last=performance.now();hud();overlay(null);msg('Catch the good practices! 🛡️');raf=requestAnimationFrame(loop)}
+    function hud(){$('.cs').textContent=score;$('.cl').textContent=Math.max(0,lives);var m=Math.min(5,1+Math.floor(combo/5));$('.cm').textContent=m>1?'· combo ×'+m:''}
+    function start(){items=[];fx=[];score=0;lives=3;combo=0;el=0;spawn=.3;running=true;last=performance.now();hud();overlay(null);msg('Catch the good practices (green) and avoid the others (red).');raf=requestAnimationFrame(loop)}
     function loop(t){
       if(!running)return;var dt=Math.min(.05,(t-last)/1000);last=t;el+=dt;spawn-=dt;
       $('.ct').textContent=Math.max(0,Math.ceil(60-el));if(el>=60)return over(1);
@@ -548,7 +615,7 @@
       for(var i=items.length-1;i>=0;i--){var it=items[i];it.y+=it.v*dt;
         if(it.y>py-14&&it.y<py+10&&Math.abs(it.x-px)<PW/2+14){items.splice(i,1);
           if(it.g){combo++;var m=Math.min(5,1+Math.floor(combo/5)),p=50*m;score+=p;fx.push({t:'+'+p,x:it.x,y:py-30,vy:50,life:1,c:'#2e7d32'})}
-          else{lives--;combo=0;fx.push({t:'Ouch!',x:it.x,y:py-30,vy:50,life:1,c:'#c62828'});msg('❌ <b>'+esc(it.d.t)+'</b>: '+esc(it.d.w))}
+          else{lives--;combo=0;fx.push({t:'Avoid',x:it.x,y:py-30,vy:50,life:1,c:'#c62828'});msg('Avoid: <b>'+esc(it.d.t)+'</b>: '+esc(it.d.w))}
           hud();if(lives<=0)return over()}
         else if(it.y>h+30){items.splice(i,1);if(it.g&&combo){combo=0;hud()}}}
       fx.forEach(function(f){f.life-=dt;f.y-=f.vy*dt});fx=fx.filter(function(f){return f.life>0});
@@ -563,10 +630,10 @@
         ctx.font='bold 11px system-ui,sans-serif';ctx.textBaseline='alphabetic';ctx.lineWidth=3;ctx.strokeStyle='rgba(255,255,255,.9)';ctx.strokeText(it.d.t,it.x,it.y+34);ctx.fillStyle=it.g?'#1b5e20':'#b71c1c';ctx.fillText(it.d.t,it.x,it.y+34);
       });
       var py=h-34;ctx.fillStyle='#1f6f8b';ctx.beginPath();if(ctx.roundRect)ctx.roundRect(px-PW/2,py-8,PW,18,9);else ctx.rect(px-PW/2,py-8,PW,18);ctx.fill();
-      ctx.fillStyle='#fff';ctx.font='bold 12px system-ui,sans-serif';ctx.textBaseline='middle';ctx.fillText('🛡️ ASP',px,py+1);ctx.textBaseline='alphabetic';
+      ctx.fillStyle='#fff';ctx.font='bold 12px system-ui,sans-serif';ctx.textBaseline='middle';ctx.fillText('ASP',px,py+1);ctx.textBaseline='alphabetic';
       fx.forEach(function(f){ctx.globalAlpha=Math.max(0,f.life);ctx.font='bold 16px system-ui,sans-serif';ctx.fillStyle=f.c;ctx.fillText(f.t,f.x,f.y);ctx.globalAlpha=1});
     }
-    function over(timeUp){running=false;cancelAnimationFrame(raf);draw();overlay('<h2>'+(timeUp?'⏱ Time\'s up!':'Game over')+'</h2><div class="big">'+score+'</div><p class="sub">Tip: 5 good catches in a row raises your multiplier.</p>'+award('catch',score>=1000,'Score 1,000+',score)+AGAIN,start);if(score>=2000)confetti()}
+    function over(timeUp){running=false;cancelAnimationFrame(raf);draw();overlay('<h2>'+(timeUp?'Time complete':'Game over')+'</h2><div class="big">'+score+'</div><p class="sub">Tip: 5 good catches in a row raises your multiplier.</p>'+award('catch',score>=1000,'Score 1,000+',score)+AGAIN,start);if(score>=2000)confetti()}
     function mv(e){var r=cv.getBoundingClientRect();px=e.clientX-r.left}
     function kd(e){if(e.key==='ArrowLeft'||e.key==='ArrowRight'){keys[e.key]=1;if(running)e.preventDefault()}}
     function ku(e){keys[e.key]=0}
@@ -574,7 +641,7 @@
     document.addEventListener('keydown',kd);document.addEventListener('keyup',ku);window.addEventListener('resize',size);
     cleanup=function(){running=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',kd);document.removeEventListener('keyup',ku);window.removeEventListener('resize',size)};
     size();
-    overlay('<h2>🛡️ Stewardship Catch</h2><p>You have 60 seconds. Move the ASP shield to catch good practices (green) and dodge bad ones (red).</p><p class="sub">🟢 Catch: +50, with a combo multiplier up to ×5<br>🔴 Catch a bad one: lose a ❤️<br>Drag on the game, or use the ← → keys.</p><button class="btn go">Start</button>',start);
+    overlay('<h2>Stewardship Catch</h2><p class="sub">Select Start when you are ready.</p><button class="btn go">Start</button>',start);
   }
 
   /* ---------- STOP THE CLOCK ---------- */
@@ -608,10 +675,10 @@
     }
     function round(){
       var r=rs[ri];stopped=false;pos=0;dir=1;spd=6+ri*1.6;
-      root.innerHTML='<div class="card">'+BACK+'<div class="meta"><span>⏱️ Stop the Clock: '+(ri+1)+' of '+rs.length+'</span><span>Score: '+score+'</span></div>'+
+      root.innerHTML='<div class="card">'+BACK+'<div class="meta"><span>Stop the Clock: '+(ri+1)+' of '+rs.length+'</span><span>Score: '+score+'</span></div>'+
         '<span class="tag">How many days of antibiotics?</span><p class="q">'+esc(r.q)+'</p>'+
         '<div class="bw" style="background:#fff"><canvas class="bc" style="height:120px;cursor:pointer"></canvas></div>'+
-        '<button class="btn stop">⏹ STOP</button><div class="fb"></div></div>';
+        '<button class="btn stop">Stop</button><div class="fb"></div></div>';
       wireBack();cv=$('.bc');ctx=cv.getContext('2d');size();
       $('.stop').onclick=stop;cv.onclick=stop;
       running=true;last=performance.now();raf=requestAnimationFrame(loop);
@@ -621,15 +688,260 @@
       if(stopped||!running)return;stopped=true;running=false;cancelAnimationFrame(raf);
       var r=rs[ri],d=pos<r.lo?r.lo-pos:pos>r.hi?pos-r.hi:0,pts=Math.max(0,Math.round(100-d*40));score+=pts;draw();
       $('.stop').disabled=true;$('.meta span:last-child').textContent='Score: '+score;
-      $('.fb').innerHTML='<div class="exp"><b class="'+(pts>=80?'ok">🎯 Bullseye!':pts>0?'ok">Close!':'bad">Missed!')+'</b> You stopped at '+pos.toFixed(1)+' days. Target: <b>'+r.lo+(r.hi>r.lo?'–'+r.hi:'')+' days</b>. +'+pts+
+      $('.fb').innerHTML='<div class="exp"><b class="'+(pts>=80?'ok">On target.':pts>0?'ok">Close.':'bad">Off target.')+'</b> You stopped at '+pos.toFixed(1)+' days. Target: <b>'+r.lo+(r.hi>r.lo?'–'+r.hi:'')+' days</b>. +'+pts+
         '<br>'+esc(r.e)+'<span class="src">Source: '+esc(r.s)+'</span></div><button class="btn nx">'+(ri<rs.length-1?'Next →':'See results')+'</button>';
       if(pts>=80)confetti();
-      $('.nx').onclick=function(){ri++;if(ri<rs.length)round();else{root.innerHTML=finish('⏱️ Stop the Clock',score,rs.length*100,MSGS,award('clock',score>=420,'Score 420+',score));wireBack();$('.again').onclick=clock;$('.home').onclick=menu;if(score>=rs.length*70)confetti()}};
+      $('.nx').onclick=function(){ri++;if(ri<rs.length)round();else{root.innerHTML=finish('Stop the Clock',score,rs.length*100,MSGS,award('clock',score>=420,'Score 420+',score));wireBack();$('.again').onclick=clock;$('.home').onclick=menu;if(score>=rs.length*70)confetti()}};
     }
     function key(e){if((e.key===' '||e.key==='Enter')&&running){e.preventDefault();stop()}}
     document.addEventListener('keydown',key);window.addEventListener('resize',size);
     cleanup=function(){running=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',key);window.removeEventListener('resize',size)};
     round();
+  }
+
+  /* ---------- INSTRUCTIONS SCREEN (shown before every game) ---------- */
+  function intro(g){
+    if(cleanup){cleanup();cleanup=null}
+    var steps=g.how.map(function(s){return '<li>'+esc(s)+'</li>'}).join('');
+    root.innerHTML='<div class="card intro">'+BACK+'<div class="ic">'+g.ic+'</div><h2>'+esc(g.name)+'</h2><p class="sub">Estimated time: '+esc(g.time)+'</p>'+
+      '<h3>What you will practice</h3><p>'+esc(g.learn)+'</p>'+
+      '<h3>How to play</h3><ol>'+steps+'</ol>'+
+      '<button class="btn begin">Start</button><button class="btn ghost home">All games</button></div>';
+    wireBack();$('.home').onclick=menu;
+    $('.begin').onclick=function(){track('start',g.id);g.fn()};
+  }
+
+  /* ---------- ANTIBIOTIC RUNNER ---------- */
+  /* Edit the coverage lists below to match your local antibiogram and teaching points */
+  var RUN_DRUGS=[
+    {n:'Cefazolin',c:'#27ae60',cov:['MSSA','S. pyogenes','E. coli','Klebsiella']},
+    {n:'Ceftriaxone',c:'#2d9cdb',cov:['MSSA','S. pyogenes','S. pneumoniae','E. coli','Klebsiella']},
+    {n:'Vancomycin',c:'#e67e22',cov:['MRSA','MSSA','S. pyogenes','S. pneumoniae','E. faecalis']},
+    {n:'Linezolid',c:'#d35400',cov:['MRSA','MSSA','S. pyogenes','S. pneumoniae','E. faecalis']},
+    {n:'Pip-tazo',c:'#9b51e0',cov:['MSSA','S. pyogenes','S. pneumoniae','E. coli','Klebsiella','Pseudomonas','E. faecalis','B. fragilis']},
+    {n:'Meropenem',c:'#c62828',cov:['MSSA','S. pyogenes','S. pneumoniae','E. coli','Klebsiella','ESBL E. coli','Pseudomonas','B. fragilis']},
+    {n:'Metronidazole',c:'#16a085',cov:['B. fragilis']}
+  ];
+  var RUN_BUGS=[{n:'MSSA',col:'#f2c94c'},{n:'MRSA',col:'#eb5757'},{n:'S. pyogenes',col:'#e67e22'},{n:'S. pneumoniae',col:'#2d9cdb'},{n:'E. coli',col:'#27ae60'},
+    {n:'Klebsiella',col:'#16a085'},{n:'ESBL E. coli',col:'#9b51e0'},{n:'Pseudomonas',col:'#7fb800'},{n:'E. faecalis',col:'#d35400'},{n:'B. fragilis',col:'#8e6e53'}];
+  function runner(){
+    var NEED=15,LEN=60;
+    var tbl='<table class="abg"><thead><tr><th>Antibiotic</th>'+RUN_BUGS.map(function(b){return '<th>'+esc(b.n)+'</th>'}).join('')+'</tr></thead><tbody>'+
+      RUN_DRUGS.map(function(d){return '<tr><td class="dn" style="color:'+d.c+'">'+esc(d.n)+'</td>'+RUN_BUGS.map(function(b){return d.cov.indexOf(b.n)>=0?'<td class="y">✓</td>':'<td class="n">–</td>'}).join('')+'</tr>'}).join('')+'</tbody></table>';
+    root.innerHTML='<div class="card">'+BACK+'<h2>Antibiotic Runner</h2>'+
+      '<div class="meta"><span>Score: <b class="rs">0</b></span><span>Time: <b class="rt">0</b> of '+LEN+' s</span><span>Speed: <b class="rspd">1.0×</b></span><span>Lives: <b class="rl">3</b></span></div>'+
+      '<div class="meta"><span>Current antibiotic: <b class="rd">–</b></span></div>'+
+      '<div class="bw"><canvas class="bc" style="height:290px;cursor:pointer"></canvas></div>'+
+      '<p class="sub bm" style="margin:8px 0 0;min-height:2.8em">Press Space or the Up arrow, or tap the game area, to jump.</p>'+
+      '<details class="ref"><summary>Coverage reference</summary><div class="tw">'+tbl+'</div></details></div>';
+    wireBack();
+    var cv=$('.bc'),ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,w=0,h=0,gy=240,PX=80,bugs=[],fx=[],score=0,lives=3,el=0,spawn=1,scroll=0,z=0,vz=0,drug=null,banner=0,earned=false,spdTier=0,running=false,raf=null,last=0;
+    function size(){var r=cv.getBoundingClientRect();w=Math.max(280,Math.floor(r.width||cv.clientWidth||680));h=Math.max(220,Math.floor(r.height||cv.clientHeight||290));cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);gy=h-44;PX=Math.min(90,w*.18);draw()}
+    function msg(t){var m=$('.bm');if(m)m.innerHTML=t}
+    function hud(){$('.rs').textContent=score;$('.rl').textContent=Math.max(0,lives);$('.rd').textContent=drug?drug.n:'–';$('.rt').textContent=Math.floor(el);$('.rspd').textContent=(1+spdTier*.15).toFixed(2).replace(/0$/,'')+'×'}
+    function covers(d,bn){return d&&d.cov.indexOf(bn)>=0}
+    function pickDrug(){var o=RUN_DRUGS.filter(function(d){return d!==drug});return o[Math.floor(Math.random()*o.length)]}
+    function point(){score++;if(score%5===0){drug=pickDrug();banner=1.8;spawn=Math.max(spawn,1.15);msg('<b>New antibiotic: '+esc(drug.n)+'.</b> Consider which organisms it covers.')}hud()}
+    function lose(){lives--;hud();if(lives<=0)over('All three lives used.')}
+    function addFx(t,x,y,c){fx.push({t:t,x:x,y:y,vy:50,life:1,c:c})}
+    function start(){
+      if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+      bugs=[];fx=[];score=0;lives=3;el=0;spawn=.85;scroll=0;z=0;vz=0;banner=0;earned=false;spdTier=0;
+      drug=RUN_DRUGS[Math.floor(Math.random()*RUN_DRUGS.length)];running=true;last=performance.now();overlay(null);size();hud();
+      msg('Your antibiotic is <b>'+esc(drug.n)+'</b>. Make contact with organisms it covers and jump over those it does not.');
+      if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);
+    }
+    function jump(){if(running&&z<=0)vz=700+spdTier*18}
+    function spawnBug(){
+      var cov=RUN_BUGS.filter(function(b){return covers(drug,b.n)}),unc=RUN_BUGS.filter(function(b){return !covers(drug,b.n)});
+      var pool=(Math.random()<.5&&cov.length)?cov:(unc.length?unc:cov),b=pool[Math.floor(Math.random()*pool.length)];
+      bugs.push({n:b.n,col:b.col,x:w+40,r:22});
+    }
+    function loop(t){
+      if(!running)return;
+      var dt=Math.min(.05,(t-last)/1000);last=t;el+=dt;spawn-=dt;
+      if(el>=LEN){el=LEN;hud();return over('Time complete.')}
+      var tier=Math.floor(el/10);if(tier>spdTier){spdTier=tier;addFx('Speed increased',w/2,105,'#b45309')}
+      if(!earned&&el>=NEED)earned=true;
+      hud();
+      var v=Math.min(680,250+el*3+spdTier*34);scroll+=v*dt;
+      if(z>0||vz>0){vz-=(1900+spdTier*85)*dt;z+=vz*dt;if(z<=0){z=0;vz=0}}
+      if(banner>0)banner-=dt;
+      if(spawn<=0){spawnBug();spawn=Math.max(.82,1.85-el*.01-spdTier*.09)+Math.random()*.6}
+      for(var i=bugs.length-1;i>=0;i--){
+        var b=bugs[i];b.x-=v*dt;var c=covers(drug,b.n);
+        if(Math.abs(b.x-PX)<b.r+24&&z<2*b.r-10){
+          bugs.splice(i,1);
+          if(c){addFx('+1',b.x,gy-60,'#2e7d32');msg('Correct: <b>'+esc(drug.n)+'</b> covers <b>'+esc(b.n)+'</b>.');point()}
+          else{addFx('Not covered',b.x,gy-60,'#c62828');msg('Incorrect: <b>'+esc(drug.n)+'</b> does not cover <b>'+esc(b.n)+'</b>. Jump over organisms your antibiotic does not cover.');lose();if(!running)return}
+        }else if(b.x+b.r<PX-24){
+          bugs.splice(i,1);
+          if(c){addFx('Missed',PX,gy-80,'#c62828');msg('Incorrect: <b>'+esc(drug.n)+'</b> covers <b>'+esc(b.n)+'</b>, so it should not have been skipped.');lose();if(!running)return}
+          else{addFx('+1',PX,gy-80,'#2e7d32');msg('Correct: <b>'+esc(drug.n)+'</b> does not cover <b>'+esc(b.n)+'</b>.');point()}
+        }
+      }
+      fx.forEach(function(f){f.life-=dt;f.y-=f.vy*dt});fx=fx.filter(function(f){return f.life>0});
+      draw();raf=requestAnimationFrame(loop);
+    }
+    function draw(){
+      if(!w||!h)return;ctx.clearRect(0,0,w,h);
+      ctx.fillStyle='rgba(235,87,87,.10)';
+      for(var i=0;i<7;i++){var cx=(((i*190-scroll*.25)%(w+80))+(w+80))%(w+80)-40;ctx.beginPath();ctx.arc(cx,50+(i*47)%110,18+(i%3)*6,0,6.283);ctx.fill()}
+      ctx.fillStyle='#f3dede';ctx.fillRect(0,gy,w,h-gy);ctx.fillStyle='#c98f8f';ctx.fillRect(0,gy,w,2);
+      for(var x=-(scroll%48);x<w;x+=48)ctx.fillRect(x,gy+14,22,2);
+      ctx.textAlign='center';
+      bugs.forEach(function(b){
+        var y=gy-b.r;ctx.strokeStyle=b.col;ctx.lineWidth=2;
+        for(var j=0;j<10;j++){var a=j/10*6.283+scroll*.004;ctx.beginPath();ctx.moveTo(b.x+Math.cos(a)*b.r,y+Math.sin(a)*b.r);ctx.lineTo(b.x+Math.cos(a)*(b.r+7),y+Math.sin(a)*(b.r+7));ctx.stroke()}
+        ctx.beginPath();ctx.arc(b.x,y,b.r,0,6.283);ctx.fillStyle=b.col;ctx.fill();
+        ctx.font='bold 12px system-ui,sans-serif';ctx.lineWidth=3;ctx.strokeStyle='rgba(255,255,255,.9)';ctx.strokeText(b.n,b.x,gy-2*b.r-14);ctx.fillStyle='#1d2a33';ctx.fillText(b.n,b.x,gy-2*b.r-14);
+      });
+      if(drug){
+        var py=gy-z-13;ctx.save();ctx.translate(PX,py);ctx.rotate(Math.max(-.4,Math.min(.4,-vz/1800)));
+        ctx.fillStyle=drug.c;ctx.beginPath();if(ctx.roundRect)ctx.roundRect(-28,-13,56,26,13);else ctx.rect(-28,-13,56,26);ctx.fill();
+        ctx.fillStyle='rgba(255,255,255,.35)';ctx.beginPath();if(ctx.roundRect)ctx.roundRect(-22,-9,44,6,3);else ctx.rect(-22,-9,44,6);ctx.fill();ctx.restore();
+        ctx.font='bold 12px system-ui,sans-serif';ctx.lineWidth=3;ctx.strokeStyle='rgba(255,255,255,.9)';ctx.strokeText(drug.n,PX,py-24);ctx.fillStyle=drug.c;ctx.fillText(drug.n,PX,py-24);
+      }
+      if(banner>0&&drug){ctx.globalAlpha=Math.min(1,banner);ctx.font='bold 20px system-ui,sans-serif';ctx.fillStyle='#1f6f8b';ctx.fillText('Now: '+drug.n,w/2,40);ctx.globalAlpha=1}
+      fx.forEach(function(f){ctx.globalAlpha=Math.max(0,f.life);ctx.font='bold 15px system-ui,sans-serif';ctx.fillStyle=f.c;ctx.fillText(f.t,f.x,f.y);ctx.globalAlpha=1});
+    }
+    function over(why){
+      running=false;if(raf)cancelAnimationFrame(raf);draw();
+      overlay('<h2>'+(el>=LEN?'Time complete':'Game over')+'</h2><p>'+why+'</p><div class="big">'+score+'</div><p class="sub">You lasted '+Math.floor(el)+' seconds.</p>'+award('run',earned,'Last '+NEED+' seconds or more',score)+AGAIN,start);
+      if(earned)confetti();
+    }
+    function kd(e){if(running&&(e.code==='Space'||e.key===' '||e.key==='ArrowUp')){e.preventDefault();jump()}}
+    function pd(e){if(!running)return;if(e.button===0||e.pointerType==='touch'||e.pointerType==='pen'){e.preventDefault();jump()}}
+    cv.addEventListener('pointerdown',pd);document.addEventListener('keydown',kd);window.addEventListener('resize',size);
+    cleanup=function(){running=false;if(raf)cancelAnimationFrame(raf);document.removeEventListener('keydown',kd);window.removeEventListener('resize',size)};
+    requestAnimationFrame(size);
+    overlay('<h2>Antibiotic Runner</h2><p class="sub">Select Start when you are ready.</p><button class="btn go">Start</button>',start);
+  }
+
+  /* ---------- ALLERGY DETECTIVE ---------- */
+  var AD_CASES=[
+    {title:'Case 1',
+     brief:'A 64-year-old patient is admitted with sepsis and empirically started on cefepime and vancomycin. Blood cultures grow ampicillin-susceptible Enterococcus faecalis. The team would like to narrow therapy to ampicillin, but the chart lists a penicillin allergy.',
+     infection:'E. faecalis bacteremia',
+     clues:[['What reaction occurred?','The patient recalls a flat, red rash while taking amoxicillin.'],['How old was the patient?','The reaction occurred around age 12.'],['When did it happen?','The reaction occurred more than 50 years ago.'],['Was medical treatment required?','No treatment, emergency visit, or hospitalization was needed.'],['Any severe features?','No blistering, mucosal lesions, facial swelling, breathing difficulty, or organ involvement.'],['What happened after the reaction?','The patient does not recall any subsequent penicillin exposure or allergy evaluation.']],
+     risk:{q:"Using the modified PEN-FAST clinical decision rule, what is the patient's score?",correct:0,why:'The reported reaction is rash/hives/itching without a severe delayed or organ-specific reaction (+0). It occurred more than 5 years ago (+0), was not characterized by anaphylaxis/angioedema (+0), and did not require treatment or hospitalization (+0). Total = 0. Follow the hospital pathway and confirm eligibility before any challenge.'},
+     pathway:{q:'What is a reasonable evaluation pathway for this selected patient?',opts:['Direct oral amoxicillin challenge under an established protocol, if eligible','Penicillin skin testing is mandatory for every penicillin label','Remove the label without documenting or evaluating the history','Avoid all beta-lactams indefinitely'],correct:0,why:'A low score can help identify patients who may be candidates for direct oral challenge. Use the established institutional protocol and confirm there are no contraindications or history details that change risk.'},
+     drug:{q:'The patient tolerates the supervised amoxicillin challenge. What is the best stewardship action for the susceptible E. faecalis bacteremia?',opts:['Continue cefepime plus vancomycin','Narrow to ampicillin, assuming no other contraindication','Continue vancomycin because of the historical label','Switch to meropenem for broader coverage'],correct:1,why:'For ampicillin-susceptible E. faecalis bacteremia, ampicillin is generally the preferred targeted therapy when clinically appropriate. After a tolerated evaluation and appropriate documentation, remove/update the inaccurate allergy label and narrow empiric cefepime plus vancomycin.'},
+     takeaway:'A remote, uncomplicated rash with no treatment has a modified PEN-FAST score of 0. In this case, successful evaluation allows the team to use ampicillin for susceptible E. faecalis bacteremia rather than continuing broader empiric therapy.'},
+    {title:'Case 2',
+     brief:'A 58-year-old patient is admitted with a serious infection. The chart lists a penicillin allergy, and the team needs to select an appropriate beta-lactam regimen.',
+     infection:'Serious bacterial infection',
+     clues:[['What happened?','The patient reports hives, throat tightness, wheezing, and dizziness after taking amoxicillin.'],['What treatment was needed?','The patient was treated in the emergency department with epinephrine.'],['How long ago?','The reaction occurred about three years ago.'],['Any severe delayed features?','No blistering, mucosal lesions, or delayed organ injury were reported.'],['Any cephalosporin tolerance?','No known cephalosporin exposure since the reaction.']],
+     risk:{q:"Using the modified PEN-FAST clinical decision rule, what is the patient's score?",correct:6,why:'The reported phenotype is rash/hives/itching (+0 for item 2). The reaction occurred within the past 5 years (+2), was characterized by anaphylaxis/angioedema (+3), and required treatment (+1). Total = 6. This is not a low-risk history for routine direct oral challenge; follow the hospital evaluation pathway.'},
+     pathway:{q:'What is the best next step for evaluating the penicillin allergy?',opts:['Give an unsupervised amoxicillin dose','Remove the label because the reaction was three years ago','Use an appropriate specialist/evaluation pathway; do not perform a routine direct challenge','Use a routine direct oral challenge pathway because the reaction was not within the past year'],correct:2,why:'A convincing recent anaphylaxis history warrants an appropriate allergy evaluation pathway. Do not use an unsupervised or routine direct oral challenge. The history should be evaluated appropriately rather than treated as a low-risk label.'},
+     drug:{q:'The patient is found to have MSSA bacteremia. Which statement is most accurate regarding definitive therapy?',opts:['Avoid cefazolin and continue vancomycin because the patient has a history of penicillin anaphylaxis','Cefazolin can still be used in many patients with penicillin anaphylaxis because it has a distinct R1 side chain, provided the clinical context and applicable guidance support its use','All beta-lactams should be avoided because penicillin anaphylaxis predicts class-wide cross-reactivity','Use a carbapenem because it is the only beta-lactam class that can be considered'],correct:1,why:"Cefazolin has a distinct R1 side chain and very low cross-reactivity with penicillins. A history of penicillin anaphylaxis alone does not automatically preclude cefazolin, particularly in the absence of a severe delayed reaction such as SCAR. For MSSA bacteremia, cefazolin is an appropriate definitive-therapy option when otherwise clinically appropriate. Consider the patient's specific history, clinical context, and applicable allergy guidance."},
+     takeaway:'A modified PEN-FAST score of 6 indicates a higher-risk history. Avoid routine direct penicillin challenge and use an appropriate allergy evaluation pathway. A penicillin anaphylaxis history does not automatically prohibit cefazolin; its distinct R1 side chain supports use in many patients when clinical context and guidance are considered.'},
+    {title:'Case 3',
+     brief:'A 47-year-old patient is admitted with an infection for which a beta-lactam would ordinarily be preferred. The allergy list reports a severe reaction to a penicillin.',
+     infection:'Serious bacterial infection',
+     clues:[['What did the skin reaction look like?','The patient recalls painful skin, blistering, and peeling.'],['Was there mucosal involvement?','Yes. The mouth and eyes were affected.'],['Was hospitalization needed?','Yes. The patient required hospitalization and specialist care.'],['Was an organ injury identified?','The patient recalls being told the reaction was severe; records mention possible liver involvement.'],['Which medication was implicated?','The patient believes it was amoxicillin, although the original records should be reviewed.']],
+     risk:{q:"Using the modified PEN-FAST clinical decision rule, what is the patient's score?",correct:5,why:'The reported reaction is a severe cutaneous adverse reaction (SJS/TEN-type features), which adds 4 points. It occurred more than 5 years ago (+0), was not described as anaphylaxis/angioedema (+0), and required hospitalization/treatment (+1). Total = 5. Crucially, the score does not make this patient eligible for a routine challenge: severe delayed or organ-specific reactions are outside the scope of the usual beta-lactam allergy algorithms.'},
+     pathway:{q:'What should you do with this history?',opts:['Perform a direct oral amoxicillin challenge','Remove the label because the reaction was delayed','Avoid routine challenge to the implicated drug and obtain specialist guidance / clarify records','Give a test dose on the ward without further review'],correct:2,why:'Drug allergy guidelines note that standard beta-lactam allergy risk-stratification and challenge algorithms do not apply to patients with a history of severe delayed immunologic or organ-specific reactions. These include SCARs, hemolytic anemia, drug-induced liver injury, and acute interstitial nephritis. Avoid routine challenge and obtain specialist guidance.'},
+     drug:{q:'How should the team approach beta-lactam selection?',opts:['Assume all beta-lactams are automatically safe','Ignore the history because it is uncertain','Avoid the suspected culprit and seek specialist-guided assessment of related beta-lactams; use an appropriate alternative when needed','Perform an oral challenge to determine whether the label is real'],correct:2,why:'With suspected SCAR, do not apply the usual low-risk delabeling or cefazolin-anaphylaxis logic. Standard beta-lactam allergy algorithms and challenge pathways do not apply to severe delayed immunologic or organ-specific reactions, including SCARs, hemolytic anemia, drug-induced liver injury, and acute interstitial nephritis. The culprit and potentially related drugs require careful specialist assessment.'},
+     takeaway:'The modified PEN-FAST score is 5, but the score does not determine challenge eligibility in this case. Drug allergy guidelines state that standard beta-lactam allergy algorithms do not apply to severe delayed immunologic or organ-specific reactions, including SCARs, hemolytic anemia, drug-induced liver injury, and acute interstitial nephritis. These histories require a separate, specialist-guided approach.'},
+    {title:'Case 4',
+     brief:'A 72-year-old patient is admitted with community-acquired pneumonia. The chart lists penicillin allergy, and the team is considering broader therapy because of the label.',
+     infection:'Community-acquired pneumonia',
+     clues:[['What reaction occurred?','The patient reports nausea and loose stools while taking amoxicillin.'],['Any rash or hives?','No rash, hives, swelling, or itching occurred.'],['Any breathing or circulatory symptoms?','No breathing difficulty, throat symptoms, or dizziness.'],['Was treatment required?','No. Symptoms resolved after the medication was stopped.'],['Has the patient taken related drugs since?','The patient has tolerated cephalexin without difficulty.'],['What does the patient think the allergy means?','The patient says they were told to avoid penicillin because it upset their stomach.']],
+     risk:{q:'Using the modified PEN-FAST clinical decision rule, what score applies to this history?',correct:0,why:'The history describes gastrointestinal intolerance only, not one of the listed allergic reaction phenotypes. The patient has no listed severe delayed/organ-specific reaction (+0), no reaction within 5 years (+0), no anaphylaxis/angioedema (+0), and no treatment or hospitalization (+0). Total = 0. Document the history as intolerance rather than immune-mediated allergy, consistent with local policy.'},
+     pathway:{q:'What is the most appropriate documentation action?',opts:['Keep an anaphylaxis label','Clarify and correct the record to describe intolerance rather than allergy, following local policy','Add an allergy to every beta-lactam','Refer every patient with nausea for skin testing'],correct:1,why:'The record should accurately distinguish intolerance from allergy. Follow local procedures for correcting the label and communicate the history to the treating team.'},
+     drug:{q:'What is the stewardship opportunity?',opts:['Use broader therapy indefinitely','Avoid all beta-lactams','Choose the guideline-concordant antibiotic without treating intolerance as an IgE allergy','Use vancomycin for all infections'],correct:2,why:'An inaccurate allergy label can drive broader or less effective therapy. Correcting the record can help preserve first-line treatment options.'},
+     takeaway:'GI intolerance alone is not an immune-mediated allergy. Correct documentation can prevent unnecessary broad-spectrum alternatives.'}
+  ];
+  function detective(){
+    var cases=AD_CASES,state;
+    root.innerHTML='<div class="card ad">'+BACK+'<div class="ad-screen"></div></div>';
+    wireBack();
+    var screen=$('.ad-screen');
+    function start(){state={caseIndex:0,score:0,caseScores:[],clues:[],answers:{}};renderHome()}
+    function renderHome(){
+      var done=state.caseScores.length;
+      screen.innerHTML='<div class="hero"><div class="eyebrow" style="color:#bfe3ee">Antibiotic Awareness Week</div><h1>Allergy Detective</h1><p>Review four patient cases with a reported penicillin allergy. Gather the history, assess the risk, choose an evaluation pathway, and make the antibiotic decision.</p></div>'+
+        '<div class="row"><span class="pill">4 PATIENT CASES</span><span class="muted">'+done+' of 4 completed</span></div>'+
+        '<div class="stats"><div class="stat"><strong>4</strong><span>Patient cases</span></div><div class="stat"><strong>5–8 min</strong><span>Estimated time</span></div><div class="stat"><strong>'+state.score+'</strong><span>Points earned</span></div></div>'+
+        '<div class="case-list">'+cases.map(function(c,i){var d=state.caseScores[i]!==undefined;return '<div class="case-tile '+(d?'done':'')+'"><strong>'+(d?'✓ ':'')+esc(c.title)+'</strong><span>Patient case</span></div>'}).join('')+'</div>'+
+        '<div class="notice"><strong>Clinical note:</strong> This activity is for education only. Evaluation eligibility and antibiotic selection must follow current practice parameters, patient-specific factors, and local institutional protocols.</div>'+
+        '<div class="actions"><button class="btn" id="ad-begin">'+(done?'Continue':'Begin first case')+'</button></div>';
+      screen.querySelector('#ad-begin').onclick=function(){state.caseIndex=Math.min(done,3);beginCase()};
+    }
+    function beginCase(){state.clues=[];state.answers={};renderBrief()}
+    function header(step){
+      return '<div class="row"><span class="pill">CASE '+(state.caseIndex+1)+' OF 4</span><span class="muted">Score: '+state.score+'</span></div>'+
+        '<div class="progress"><span style="width:'+(step/4*100)+'%"></span></div><div class="meta"><span>Patient case</span><span>Step '+step+' of 4</span></div>';
+    }
+    function renderBrief(){
+      var c=cases[state.caseIndex];
+      screen.innerHTML=header(0)+'<div class="case-intro"><span class="eyebrow">PATIENT BRIEFING</span><h2>'+esc(c.title)+'</h2><p>'+esc(c.brief)+'</p><p class="muted"><strong>Clinical problem:</strong> '+esc(c.infection)+'</p></div>'+
+        '<h3>Your task</h3><p>Evaluate the allergy label before recommending a treatment plan. Start by reviewing the patient\'s history.</p>'+
+        '<div class="actions"><button class="btn" id="ad-inv">Review the history</button><button class="btn secondary" id="ad-quit">Back to case list</button></div>';
+      screen.querySelector('#ad-inv').onclick=renderClues;screen.querySelector('#ad-quit').onclick=renderHome;
+    }
+    function renderClues(){
+      var c=cases[state.caseIndex],opened=state.clues.length;
+      screen.innerHTML=header(1)+'<h2>Step 1: Review the allergy history</h2><p class="sub">Select each question to reveal the patient\'s response. Review all of them to continue.</p>'+
+        '<div class="clue-grid">'+c.clues.map(function(cl,i){var seen=state.clues.indexOf(i)!==-1;
+          return '<button class="clue '+(seen?'revealed':'')+'" data-clue="'+i+'" '+(seen?'disabled':'')+'><span class="symbol">'+(seen?'✓':'+')+'</span><span class="clue-text"><strong>'+esc(cl[0])+'</strong><small>'+(seen?esc(cl[1]):'Select to reveal the response')+'</small></span></button>'}).join('')+'</div>'+
+        '<p class="muted" style="margin-top:10px">'+opened+' of '+c.clues.length+' responses reviewed</p>'+
+        '<div class="actions"><button class="btn" id="ad-risk" '+(opened<c.clues.length?'disabled':'')+'>Assess the reaction</button><button class="btn secondary" id="ad-back">Back</button></div>';
+      Array.prototype.forEach.call(screen.querySelectorAll('[data-clue]'),function(b){b.onclick=function(){var i=+b.getAttribute('data-clue');if(state.clues.indexOf(i)<0){state.clues.push(i);state.score+=2}renderClues()}});
+      screen.querySelector('#ad-risk').onclick=function(){renderQuestion('risk')};screen.querySelector('#ad-back').onclick=renderBrief;
+    }
+    function renderQuestion(key){
+      var c=cases[state.caseIndex],q=c[key],step=key==='risk'?2:key==='pathway'?3:4,answer=state.answers[key];
+      var penfast='<div class="case-intro"><h3 style="margin-bottom:8px">Modified PEN-FAST Clinical Decision Rule</h3>'+
+        '<p class="muted">Use the criteria below to calculate the score. The first question identifies who is reporting the history and does not add points.</p><div class="choices">'+
+        '<div><strong>1. Who is reporting the penicillin allergy?</strong><p class="muted">Patient, family, or other caregiver (no points)</p></div>'+
+        '<div><strong>2. Was the allergy ever reported as one of the following?</strong><ul class="muted"><li>Rash, hives, itching: 0 points</li><li>Serum sickness / drug-induced fever: +4</li><li>DRESS / AGEP: +4</li><li>Interstitial nephritis / drug-induced liver injury: +4</li><li>SJS / TEN: +4</li><li>Unknown or none of the above: 0 points</li></ul></div>'+
+        '<div class="row"><strong>3. Reaction within the past 5 years?</strong><span class="pill">Yes +2 • No 0 • Unknown +1</span></div>'+
+        '<div class="row"><strong>4. Anaphylaxis or angioedema?</strong><span class="pill">Yes +3 • No 0 • Unknown +1</span></div>'+
+        '<div class="row"><strong>5. Did the reaction require treatment or hospitalization?</strong><span class="pill">Yes +1 • No 0 • Unknown (no points specified)</span></div></div>'+
+        '<p class="muted" style="margin:10px 0 0">Add the applicable points. Severe delayed or organ-specific reactions are an important exception: do not use a calculated score to send these patients through routine challenge algorithms.</p></div>';
+      var opts=key==='risk'?Array.apply(null,{length:11}).map(function(_,n){return 'Modified PEN-FAST score: '+n}):q.opts;
+      screen.innerHTML=header(step)+(key==='risk'?'<span class="eyebrow">STEP 2: RISK ASSESSMENT</span>'+penfast:'<span class="eyebrow">'+(key==='pathway'?'STEP 3: EVALUATION PATHWAY':'STEP 4: ANTIBIOTIC DECISION')+'</span>')+
+        '<h2>'+esc(q.q)+'</h2><div class="choices">'+opts.map(function(o,i){var cls='';if(answer!==undefined){if(i===q.correct)cls='correct';else if(i===answer)cls='incorrect'}
+          return '<button class="answer '+cls+'" data-answer="'+i+'" '+(answer!==undefined?'disabled':'')+'>'+esc(String(o))+'</button>'}).join('')+'</div>'+
+        (answer!==undefined?
+          '<div class="feedback '+(answer===q.correct?'good':'warn')+'"><strong>'+(answer===q.correct?'Correct':'Incorrect. Review the rationale.')+'</strong>'+esc(q.why)+'</div>'+
+          '<div class="actions"><button class="btn" id="ad-next">'+(key==='risk'?'Choose an evaluation pathway':key==='pathway'?'Make the antibiotic decision':'Complete this case')+'</button><button class="btn secondary" id="ad-back">Back to history</button></div>':
+          '<p class="muted" style="margin-top:12px">'+(key==='risk'?'Use the criteria above to calculate the total, then select the score. You can go back to review the history.':'Select the best answer. Feedback appears before you continue.')+'</p>'+
+          '<div class="actions"><button class="btn secondary" id="ad-back">Back to history</button></div>');
+      if(answer===undefined){Array.prototype.forEach.call(screen.querySelectorAll('[data-answer]'),function(b){b.onclick=function(){var n=+b.getAttribute('data-answer');state.answers[key]=n;if(n===q.correct)state.score+=10;renderQuestion(key)}})}
+      else screen.querySelector('#ad-next').onclick=function(){if(key==='risk')renderQuestion('pathway');else if(key==='pathway')renderQuestion('drug');else completeCase()};
+      screen.querySelector('#ad-back').onclick=renderClues;
+    }
+    function completeCase(){
+      var c=cases[state.caseIndex],correct=['risk','pathway','drug'].filter(function(k){return state.answers[k]===c[k].correct}).length;
+      state.caseScores[state.caseIndex]=correct;
+      screen.innerHTML=header(4)+'<div class="case-intro"><span class="eyebrow">CASE COMPLETE</span><h2>'+esc(c.title)+'</h2><p>'+esc(c.takeaway)+'</p></div>'+
+        '<div class="stats"><div class="stat"><strong>'+correct+'/3</strong><span>Decisions correct</span></div><div class="stat"><strong>+'+(state.clues.length*2+correct*10)+'</strong><span>Case points</span></div><div class="stat"><strong>'+state.score+'</strong><span>Total score</span></div></div>'+
+        '<div class="actions"><button class="btn" id="ad-nextcase">'+(state.caseIndex===3?'View final results':'Next case')+'</button><button class="btn secondary" id="ad-board">Case list</button></div>';
+      screen.querySelector('#ad-nextcase').onclick=function(){if(state.caseIndex===3)renderFinal();else{state.caseIndex++;beginCase()}};
+      screen.querySelector('#ad-board').onclick=renderHome;
+    }
+    function renderFinal(){
+      var total=state.caseScores.reduce(function(a,b){return a+b},0);
+      screen.innerHTML='<div class="hero"><div class="eyebrow" style="color:#bfe3ee">ALL CASES COMPLETE</div><h1>Allergy Detective: results</h1><p>You have completed all four patient cases.</p></div>'+
+        '<div class="score">'+state.score+' points</div><p class="sub">Clinical decisions correct: '+total+' of 12</p>'+
+        award('allergy',true,'Complete all four cases',state.score)+
+        '<div class="case-list">'+cases.map(function(c,i){var n=state.caseScores[i]||0;return '<div class="case-tile '+(n===3?'done':'')+'"><strong>'+esc(c.title)+'</strong><span>'+n+' of 3 decisions correct</span></div>'}).join('')+'</div>'+
+        '<div class="case-intro"><span class="eyebrow">KEY TAKEAWAYS</span><h2>Putting penicillin allergy assessment into practice</h2>'+
+        '<p><strong>1. Use PEN-FAST to help assess risk.</strong><br>The modified PEN-FAST clinical decision rule can help risk-stratify patients with reported penicillin allergies and identify patients who may be appropriate for further evaluation. However, clinical history remains essential. Standard risk-stratification and challenge algorithms do not apply to patients with severe delayed immunologic or organ-specific reactions, such as SCARs, hemolytic anemia, drug-induced liver injury, or acute interstitial nephritis.</p>'+
+        '<p><strong>2. Penicillin and cephalosporin cross-reactivity is not a class-wide phenomenon.</strong><br>Cross-reactivity is primarily related to similarities in beta-lactam side chains, particularly the R1 side chain, rather than simply the shared beta-lactam ring. Cefazolin has a unique R1 side chain and can generally be used in many patients with a history of penicillin allergy, including those with prior penicillin anaphylaxis, when there is no history of a severe delayed reaction and the clinical context supports its use.</p>'+
+        '<p style="margin-bottom:0"><strong>3. Accurate allergy assessment supports antimicrobial stewardship.</strong><br>Clarifying and appropriately evaluating allergy labels can preserve access to preferred first-line antibiotics, reduce unnecessary use of alternative agents, and support more targeted antimicrobial therapy.</p></div>'+
+        '<div class="case-intro refs"><span class="eyebrow">REFERENCES</span>'+
+        '<p>1. Khan DA, Banerji A, Blumenthal KG, et al. Drug allergy: A 2022 practice parameter update. <em>J Allergy Clin Immunol</em>. 2022;150(6):1333-1393. doi:10.1016/j.jaci.2022.08.028.</p>'+
+        '<p>2. Copaescu AM, Vogrin S, James F, et al. Efficacy of a Clinical Decision Rule to Enable Direct Oral Challenge in Patients With Low-Risk Penicillin Allergy: The PALACE Randomized Clinical Trial. <em>JAMA Intern Med</em>. 2023;183(9):944-952. doi:10.1001/jamainternmed.2023.2986.</p>'+
+        '<p>3. Hoffmann WJ, Patel S, Lee EJ, et al. Implementation and performance of a nurse administered modified PEN-FAST clinical decision rule in the electronic health record. <em>Antimicrob Steward Healthc Epidemiol</em>. 2025;5(1):e159. doi:10.1017/ash.2025.10066.</p></div>'+
+        '<div class="notice"><strong>Clinical reminder:</strong> This educational activity does not replace patient-specific assessment, specialist consultation, or institutional allergy-evaluation protocols.</div>'+
+        '<div class="actions"><button class="btn" id="ad-again">Play again</button><button class="btn secondary" id="ad-home">All games</button></div>';
+      screen.querySelector('#ad-again').onclick=start;screen.querySelector('#ad-home').onclick=menu;
+    }
+    start();
   }
 
   menu();
