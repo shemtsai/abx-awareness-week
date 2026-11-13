@@ -1,6 +1,6 @@
 <!--
   Antibiotic Awareness Week Arcade
-  Created by Shemual Tsai, PharmD. Questions, issues, or ideas: shemual@gmail.com
+  Created by Shemual Tsai, PharmD, ID/Stewardship pharmacist. Questions, issues, or ideas: shemual@gmail.com
   Source: https://github.com/shemtsai/abx-awareness-week
 
   This is a self-contained HTML block. Paste the whole thing into any page that allows custom HTML,
@@ -142,7 +142,7 @@
       (chips?'<div style="margin-top:6px">'+chips+'</div>':'')+
       (FORM_URL?'<div style="margin-top:8px"><a href="'+FORM_URL+'" target="_blank" rel="noopener" style="color:var(--c);font-weight:700">Submit your codes →</a></div>':'')+
       '<div class="sub" style="margin:6px 0 0">Codes aren\'t saved when you leave or refresh the page, so write them down!</div></div>';
-    root.innerHTML=h+'<p class="sub aaw-credit" style="margin:14px 0 0">Created by Shemual Tsai, PharmD. Questions or issues? <a href="mailto:shemual@gmail.com" style="color:var(--c)">shemual@gmail.com</a></p></div>';
+    root.innerHTML=h+'<p class="sub aaw-credit" style="margin:14px 0 0">Created by Shemual Tsai, PharmD, ID/Stewardship pharmacist. Questions or issues? <a href="mailto:shemual@gmail.com" style="color:var(--c)">shemual@gmail.com</a></p></div>';
     $$('.tile').forEach(function(b){b.onclick=function(){var g=GAMES[+b.dataset.i];track('start',g.id);g.fn()}});
   }
 
