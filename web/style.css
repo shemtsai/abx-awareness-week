@@ -3,6 +3,7 @@
   --teal: #0F3D45;      /* culture-room teal: hero, headings */
   --teal-2: #1F6F8B;    /* arcade accent, links */
   --agar: #F1DFAE;      /* Mueller-Hinton agar */
+  --agar-lt: #FAF1D6;
   --disk: #FBFAF6;      /* antibiotic disk white */
   --paper: #EEF2F1;     /* page background */
   --ink: #17282D;
@@ -95,20 +96,62 @@ h2 { font-family: var(--display); font-weight: 700; letter-spacing: -.01em; colo
 }
 .steps strong { display: block; color: var(--ink); font-size: 1.02rem; }
 
-/* ---------- Submission ---------- */
-.submit {
-  margin-top: 28px;
-  background: var(--disk);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 26px 26px 22px;
+/* ---------- Player bar ---------- */
+.player {
+  margin-top: 24px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px;
+  background: var(--teal); color: var(--disk);
+  border-radius: 14px; padding: 16px 20px;
 }
-.submit-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.submit h2 { margin: 0; font-size: 1.5rem; }
-.tally { margin: 0; font-size: .92rem; color: var(--muted); }
-.tally span { font: 800 1.15rem var(--display); color: var(--s); }
+.player-id { display: flex; align-items: center; gap: 14px; }
+.player .disk { width: 34px; height: 34px; border-radius: 50%; background: var(--disk); box-shadow: 0 0 0 7px var(--agar-lt, #FAF1D6), 0 0 0 8px #E2C98A; margin: 0 6px; flex: none; }
+.playing-as { margin: 0; font-size: 1.05rem; }
+.playing-as strong { font-family: var(--display); font-weight: 800; font-size: 1.2rem; letter-spacing: -.01em; }
+.player .muted { margin: 0; color: #B9CFCD; font-size: .88rem; }
+.player .muted.ok { color: #9FE0C1; }
+.player .muted.bad { color: #F4B6A8; }
+.player .link { color: var(--agar); }
+#rename-form[hidden] { display: none; }
+#rename-form { display: flex; gap: 8px; flex-wrap: wrap; width: 100%; grid-template-columns: none; }
+#rename-form input { flex: 1 1 200px; }
+#rename-form button[type="submit"] { grid-column: auto; background: var(--agar); color: var(--teal); }
+button.link { background: none; border: 0; padding: 4px 0; font: 700 .95rem var(--body); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* ---------- Leaderboard ---------- */
+.board { margin-top: 16px; background: var(--disk); border: 1px solid var(--line); border-radius: 14px; padding: 22px 22px 18px; }
+.board-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.board h2 { margin: 0; font-size: 1.5rem; }
+.board .muted { margin: 0; }
+.tabs { display: flex; gap: 6px; overflow-x: auto; padding: 2px 2px 10px; margin: 0 -2px 6px; scrollbar-width: thin; }
+.tabs button {
+  flex: none; font: 700 .86rem var(--body); cursor: pointer;
+  padding: 7px 14px; border-radius: 999px;
+  border: 1.5px solid var(--line); background: #fff; color: var(--muted);
+}
+.tabs button:hover { border-color: var(--teal-2); color: var(--teal); }
+.tabs button[aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: var(--disk); }
+#board-list { list-style: none; margin: 0; padding: 0; }
+#board-list li.score-row { grid-template-columns: 2.2rem minmax(0, 1fr) auto; }
+#board-list li.score-row .count { font-size: 1rem; white-space: nowrap; }
+#board-list li { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto 2rem; align-items: center; gap: 12px; padding: 10px 8px; border-bottom: 1px solid var(--line); }
+#board-list li:last-child { border-bottom: 0; }
+#board-list li.me { background: #FAF1D6; border-radius: 10px; border-bottom-color: transparent; }
+#board-list li.empty { display: block; color: var(--muted); padding: 14px 4px; }
+.rank { font: 800 1.05rem var(--display); color: var(--muted); text-align: center; }
+#board-list li:nth-child(-n+3) .rank { color: var(--teal); }
+.who { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.who em { font-style: normal; font-weight: 400; color: var(--muted); }
+.dots { display: flex; gap: 4px; }
+.dots i { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid #D6C79D; background: transparent; }
+.dots i.on { background: var(--agar); border-color: #C9A85C; }
+.count { font: 800 1.1rem var(--display); color: var(--teal); text-align: right; font-variant-numeric: tabular-nums; }
+.me-row { margin: 10px 4px 0; font-weight: 700; color: var(--teal); }
+
+.manual { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 12px; }
+.manual summary { cursor: pointer; font-weight: 700; color: var(--teal-2); }
+.manual form { margin-top: 12px; grid-template-columns: 1fr; }
 .muted { color: var(--muted); font-size: .95rem; margin: 6px 0 18px; max-width: 62ch; }
-form { display: grid; grid-template-columns: 1fr 1.4fr; gap: 14px 16px; align-items: start; }
+form { display: grid; gap: 14px 16px; align-items: start; }
 label { display: grid; gap: 5px; font-weight: 700; font-size: .92rem; }
 input, textarea {
   font: inherit; font-weight: 400;
@@ -120,14 +163,14 @@ input:focus, textarea:focus { outline: none; border-color: var(--teal-2); box-sh
 textarea { text-transform: uppercase; resize: vertical; min-height: 46px; }
 textarea::placeholder { text-transform: none; }
 form button {
-  grid-column: 1 / -1; justify-self: start;
+  justify-self: start;
   font: 700 1rem var(--body);
-  padding: 12px 26px; border: 0; border-radius: 999px;
+  padding: 11px 24px; border: 0; border-radius: 999px;
   background: var(--teal); color: var(--disk); cursor: pointer;
 }
 form button:hover { background: var(--teal-2); }
 form button:disabled { opacity: .5; cursor: default; }
-#submit-result { margin-top: 14px; font-weight: 700; }
+#submit-result { margin-top: 12px; font-weight: 700; }
 #submit-result:empty { display: none; }
 #submit-result.ok { color: var(--s); }
 #submit-result.bad { color: var(--r); }
@@ -147,7 +190,8 @@ form button:disabled { opacity: .5; cursor: default; }
 #arcade #aaw-hub .tile { border-radius: 10px; }
 #arcade #aaw-hub .tile h3 { font-family: var(--display); font-weight: 700; }
 #arcade .aaw-credit { display: none; }             /* credit is in the About section here */
-#arcade .pp a[target="_blank"] { display: none; }  /* the form above replaces the arcade's own submit link */
+#arcade .pp a[target="_blank"] { display: none; }  /* the leaderboard replaces the arcade's own submit link */
+#arcade .pp > div:last-child { display: none; }    /* "codes aren't saved" isn't true here: this site remembers them */
 
 /* ---------- Small screens ---------- */
 @media (max-width: 760px) {
@@ -157,8 +201,11 @@ form button:disabled { opacity: .5; cursor: default; }
   .steps ol { grid-template-columns: 1fr; gap: 16px; padding: 28px 0; }
   .steps li { display: grid; grid-template-columns: 34px 1fr; column-gap: 14px; }
   .steps li::before { margin: 0; grid-row: span 2; }
-  form, .about-grid { grid-template-columns: 1fr; }
-  .submit { padding: 22px 18px 18px; }
+  .about-grid { grid-template-columns: 1fr; }
+  .board { padding: 18px 14px 14px; }
+  #board-list li { grid-template-columns: 1.8rem minmax(0, 1fr) 1.6rem; gap: 10px; }
+  #board-list li.score-row { grid-template-columns: 1.8rem minmax(0, 1fr) auto; }
+  .dots { display: none; }
 }
 
 /* ---------- Admin page ---------- */

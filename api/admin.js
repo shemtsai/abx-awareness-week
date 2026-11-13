@@ -1,5 +1,5 @@
 // GET /api/admin  (header x-admin-key)  -> leaderboard + game activity for the admin page
-import { codes, db, json } from './_lib.js';
+import { codes, db, json, players } from './_lib.js';
 
 export async function GET(request) {
   const key = process.env.ADMIN_KEY;
@@ -8,19 +8,7 @@ export async function GET(request) {
 
   try {
     const sql = await db();
-    const subs = await sql`SELECT name, name_key, codes, created_at FROM submissions ORDER BY created_at`;
-    const people = new Map();
-    for (const s of subs) {
-      const p = people.get(s.name_key) || { name: s.name, codes: new Set(), last: s.created_at };
-      s.codes.split(' ').filter(Boolean).forEach(c => p.codes.add(c));
-      p.name = s.name; // show the most recent spelling
-      p.last = s.created_at;
-      people.set(s.name_key, p);
-    }
-    // Most codes first; ties go to whoever got there first
-    const leaders = [...people.values()]
-      .map(p => ({ name: p.name, count: p.codes.size, codes: [...p.codes].sort(), last: p.last }))
-      .sort((a, b) => b.count - a.count || new Date(a.last) - new Date(b.last));
+    const leaders = (await players(sql)).filter(p => p.codes.length).map(p => ({ name: p.name, count: p.codes.length, codes: p.codes, last: p.last }));
 
     const ev = await sql`SELECT game, type, COUNT(*)::int AS n, COUNT(*) FILTER (WHERE unlocked)::int AS u FROM events GROUP BY game, type`;
     const [{ visits }] = await sql`SELECT COUNT(DISTINCT session)::int AS visits FROM events`;

@@ -65,35 +65,55 @@
         <ol>
           <li><strong>Play any game.</strong> Quizzes, an arcade shooter, a wheel puzzle, and more.</li>
           <li><strong>Hit the target score.</strong> Each game unlocks its own secret code word.</li>
-          <li><strong>Submit your codes.</strong> Whoever collects the most by the end of the week is recognized.</li>
+          <li><strong>Climb the leaderboard.</strong> Codes you unlock are added for you. Most codes by the end of the week wins.</li>
         </ol>
       </section>
 
       <!-- The arcade from standalone/aaw-arcade.html is placed here -->
       <div id="arcade"></div>
 
-      <section class="submit" id="submit" aria-labelledby="submit-title">
-        <div class="submit-head">
-          <h2 id="submit-title">Submit your code words</h2>
-          <p class="tally"><span id="tally-n">0</span> unlocked on this visit</p>
+      <section class="player" aria-label="Your player name">
+        <div class="player-id">
+          <span class="disk" aria-hidden="true"></span>
+          <div>
+            <p class="playing-as">Playing as <strong id="player-name"></strong></p>
+            <p class="muted" id="player-status">Codes you unlock here go on the leaderboard automatically.</p>
+          </div>
         </div>
-        <p class="muted">Codes you unlock on this page fill in automatically. You can submit more than once; everything you've earned is kept together under your name.</p>
-        <form id="submit-form">
-          <label>Your name or initials
-            <input name="name" maxlength="60" placeholder="Jane Smith or JS" required />
-          </label>
-          <label>Code words
-            <textarea name="codes" rows="2" placeholder="Separate with commas or spaces"></textarea>
-          </label>
-          <button type="submit">Submit codes</button>
+        <button type="button" class="link" id="rename-btn">Change name</button>
+        <form id="rename-form" hidden>
+          <label for="rename-input" class="visually-hidden">New name</label>
+          <input id="rename-input" maxlength="30" autocomplete="off" required />
+          <button type="submit">Save name</button>
+          <button type="button" class="link" id="rename-cancel">Cancel</button>
         </form>
-        <div id="submit-result" role="status"></div>
+      </section>
+
+      <section class="board" aria-labelledby="board-title">
+        <div class="board-head">
+          <h2 id="board-title">Leaderboard</h2>
+          <p class="muted" id="board-meta"></p>
+        </div>
+        <div class="tabs" id="board-tabs" role="group" aria-label="Choose a leaderboard"></div>
+        <ol id="board-list" aria-live="polite"></ol>
+        <p class="me-row" id="board-me" hidden></p>
+
+        <details class="manual">
+          <summary>Earned code words somewhere else? Add them here</summary>
+          <form id="submit-form">
+            <label>Code words
+              <textarea name="codes" rows="2" placeholder="Separate with commas or spaces"></textarea>
+            </label>
+            <button type="submit">Add codes</button>
+          </form>
+          <div id="submit-result" role="status"></div>
+        </details>
       </section>
 
       <section class="about" aria-labelledby="about-title">
         <h2 id="about-title">About</h2>
         <div class="about-grid">
-          <p>Created by <strong>Shemual Tsai, PharmD</strong>, an infectious diseases and antimicrobial stewardship pharmacist. Questions, issues, or ideas for new games? Email <a href="mailto:shemual@gmail.com">shemual@gmail.com</a>.</p>
+          <p>This arcade was built with AI tools. Questions, issues, or ideas for new games? Reach out to <strong>Shemual Tsai, PharmD</strong>, at <a href="mailto:shemual@gmail.com">shemual@gmail.com</a>.</p>
           <p>Want to run this for your own team? The arcade is a single HTML file you can paste into any page that allows custom HTML. Everything is on <a href="https://github.com/shemtsai/abx-awareness-week">GitHub</a>.</p>
           <p class="fine">For education only. Content reflects published guidelines and trials at the time of writing; follow your local guidelines and clinical judgment for patient care.</p>
         </div>

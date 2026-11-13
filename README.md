@@ -6,7 +6,7 @@ Ten short, evidence-based games that teach antimicrobial stewardship, built for 
 
 No download or sign-up needed. It works on phones and computers.
 
-Created by **Shemual Tsai, PharmD**. Questions, issues, or ideas: [shemual@gmail.com](mailto:shemual@gmail.com)
+This project was built with AI tools. Questions, issues, or ideas? Reach out to **Shemual Tsai, PharmD**, at [shemual@gmail.com](mailto:shemual@gmail.com).
 
 ![The website: an agar plate hero above the game menu](docs/screenshot.png)
 
@@ -32,8 +32,11 @@ Every answer explains the reasoning and cites its source: IDSA, ATS/IDSA, IDSA/S
 **1. The standalone file.** [`standalone/aaw-arcade.html`](standalone/aaw-arcade.html) is the whole arcade in one self-contained HTML block. It has no dependencies and no outside requests. Paste it into any page that accepts custom HTML (an intranet, LMS, or SharePoint-style site), or just open it in a browser.
 
 **2. The website.** The [live site](https://abx-awareness-week.vercel.app/) loads that same file and adds:
-- a code word submission form, with codes filled in automatically as players unlock them
-- a private admin page (`/admin`) with the leaderboard, a CSV export, and per-game play and unlock counts
+- a player name for everyone, starting as a random antibiotic ("Mighty Meropenem") that players can change
+- a live public leaderboard: code words are added automatically as players unlock them, and only the counts are shown, never the words
+- a leaderboard for each game, showing every player's best score
+- a form for adding code words earned in another copy of the arcade
+- a private admin page (`/admin`) with the full leaderboard, a CSV export, and per-game play and unlock counts
 
 ## Run it for your own team
 
@@ -54,7 +57,7 @@ Every answer explains the reasoning and cites its source: IDSA, ATS/IDSA, IDSA/S
 ```
 standalone/aaw-arcade.html   all games, questions, code words, and arcade styles
 web/                         the website around the arcade (page, form, admin page)
-api/                         serverless functions: submit codes, log plays, admin data
+api/                         serverless functions: submit codes, leaderboard, log plays, admin data
 docs/                        README images
 ```
 
@@ -67,13 +70,13 @@ Corrections, new questions, and new games are welcome. Open an issue or email [s
 To make changes:
 1. Create a branch and edit `standalone/aaw-arcade.html` (for games) or `web/` (for the website).
 2. Open a pull request. Vercel comments a preview link to play-test.
-3. Keep the standalone file self-contained: no imports, no outside scripts. If you add a game, give it a code word in `CODES`. Leave the `track(...)` calls in place; the website uses them.
+3. Keep the standalone file self-contained: no imports, no outside scripts. If you add a game, give it a code word in `CODES`. Leave the `track(...)` calls and the score passed to `award(...)` in place; the website uses them for tracking and the per-game leaderboards.
 
 To run the website locally (Node.js 22+): `npm install`, then `npm run dev`. Submissions need the deployed site or `vercel dev`.
 
 ## Data and privacy
 
-The website stores only what players type when they submit (a name or initials, plus code words) and anonymous play events (which game was started or finished, tagged with a random per-visit ID). There are no accounts, cookies, or third-party analytics, and fonts are served from the site itself. The standalone file stores nothing.
+The website stores a player name (a random antibiotic unless the player changes it), the code words they unlock, and anonymous play events (which game was started or finished, tagged with a random per-visit ID). Each browser keeps a random player ID and its codes in local storage so progress survives a reload. There are no accounts, cookies, or third-party analytics, and fonts are served from the site itself. Player names appear on the public leaderboard. The standalone file stores nothing.
 
 Note that the code words are visible in the source of this public repo. Change them if you run a contest of your own.
 
@@ -83,4 +86,4 @@ For education only. Content reflects published guidelines and trials at the time
 
 ## Citing
 
-If you use or adapt this work in teaching or research, please credit the author. Citation details are in [`CITATION.cff`](CITATION.cff); GitHub's "Cite this repository" button reads that file.
+If you use or adapt this work in teaching or research, please cite it. Citation details are in [`CITATION.cff`](CITATION.cff); GitHub's "Cite this repository" button reads that file.
