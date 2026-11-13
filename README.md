@@ -35,8 +35,7 @@ Every answer explains the reasoning and cites its source: IDSA, ATS/IDSA, IDSA/S
 
 **2. The website.** The [live site](https://abx-awareness-week.vercel.app/) loads that same file and adds:
 - a player name for everyone, starting as a random antibiotic ("Mighty Meropenem") that players can change
-- a live public leaderboard of games completed, updated automatically as players hit each game's target score
-- a leaderboard for each game, showing every player's best score
+- a live leaderboard in a side panel (the button in the corner): games completed overall, plus each player's best score in every game, listed in the same order as the arcade
 - a private admin page (`/admin`) with the full leaderboard, a CSV export, and per-game play and unlock counts
 
 ## Run it for your own team

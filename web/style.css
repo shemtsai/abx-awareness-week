@@ -125,19 +125,42 @@ h2 { font-family: var(--display); font-weight: 700; letter-spacing: -.01em; colo
 #rename-form button[type="submit"] { grid-column: auto; background: var(--agar); color: var(--teal); }
 button.link { background: none; border: 0; padding: 4px 0; font: 700 .95rem var(--body); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 
-/* ---------- Leaderboard ---------- */
-.board { margin-top: 16px; background: var(--disk); border: 1px solid var(--line); border-radius: 14px; padding: 22px 22px 18px; }
-.board-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
-.board h2 { margin: 0; font-size: 1.5rem; }
-.board .muted { margin: 0; }
-.tabs { display: flex; gap: 6px; overflow-x: auto; padding: 2px 2px 10px; margin: 0 -2px 6px; scrollbar-width: thin; }
-.tabs button {
-  flex: none; font: 700 .86rem var(--body); cursor: pointer;
-  padding: 7px 14px; border-radius: 999px;
-  border: 1.5px solid var(--line); background: #fff; color: var(--muted);
+/* ---------- Leaderboard: side panel ---------- */
+.board-toggle {
+  position: fixed; right: 20px; bottom: 20px; z-index: 40;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 12px 20px; border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--agar); color: var(--teal); font: 700 1rem var(--body);
+  box-shadow: 0 0 0 2px var(--teal), 0 6px 20px rgba(15, 61, 69, .3);
+  transition: opacity .2s, transform .2s;
 }
-.tabs button:hover { border-color: var(--teal-2); color: var(--teal); }
-.tabs button[aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: var(--disk); }
+.board-toggle:hover { background: var(--agar-lt); }
+.board-toggle.playing { opacity: 0; transform: translateY(20px); pointer-events: none; }
+.board-toggle .trophy { width: 14px; height: 14px; border-radius: 50%; background: var(--disk); box-shadow: 0 0 0 3px var(--teal); }
+.board-toggle.nudge { animation: nudge .6s ease 2; }
+@keyframes nudge { 50% { transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .board-toggle.nudge { animation: none; } }
+.board-backdrop { position: fixed; inset: 0; z-index: 45; background: rgba(15, 30, 34, .35); }
+.board-backdrop[hidden] { display: none; }
+.board {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 50;
+  width: min(440px, 100vw); overflow-y: auto;
+  background: var(--disk); border-left: 1px solid var(--line);
+  box-shadow: -8px 0 30px rgba(15, 61, 69, .18);
+  padding: 22px 22px 28px;
+  transform: translateX(100%); visibility: hidden;
+  transition: transform .25s ease, visibility 0s linear .25s;
+}
+.board.open { transform: none; visibility: visible; transition: transform .25s ease; }
+@media (prefers-reduced-motion: reduce) { .board, .board.open { transition: none; } }
+.board-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+.board h2 { margin: 0; font-size: 1.5rem; }
+.board-close { background: none; border: 0; font-size: 1.8rem; line-height: 1; color: var(--muted); cursor: pointer; padding: 0 4px; }
+.board-close:hover { color: var(--teal); }
+.board-pick { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--muted); }
+.board-pick select { flex: 1; font: 700 .95rem var(--body); color: var(--teal); padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; }
+.board .muted { margin: 10px 0 6px; font-size: .88rem; }
+.steps button.link { font: inherit; color: var(--teal-2); padding: 0; }
 #board-list { list-style: none; margin: 0; padding: 0; }
 #board-list li.score-row { grid-template-columns: 2.2rem minmax(0, 1fr) auto; }
 #board-list li.score-row .count { font-size: 1rem; white-space: nowrap; }
@@ -191,8 +214,6 @@ form button:disabled { opacity: .5; cursor: default; }
 #arcade #aaw-hub .tile { border-radius: 10px; }
 #arcade #aaw-hub .tile h3 { font-family: var(--display); font-weight: 700; }
 #arcade .aaw-credit { display: none; }             /* credit is in the About section here */
-#arcade .pp a[target="_blank"] { display: none; }  /* the leaderboard replaces the arcade's own submit link */
-#arcade .pp > div:last-child { display: none; }    /* "codes aren't saved" isn't true here: this site remembers them */
 
 /* ---------- Small screens ---------- */
 @media (max-width: 760px) {
@@ -203,7 +224,8 @@ form button:disabled { opacity: .5; cursor: default; }
   .steps li { display: grid; grid-template-columns: 34px 1fr; column-gap: 14px; }
   .steps li::before { margin: 0; grid-row: span 2; }
   .about-grid { grid-template-columns: 1fr; }
-  .board { padding: 18px 14px 14px; }
+  .board { padding: 18px 14px 24px; }
+  .board-toggle { right: 14px; bottom: 14px; padding: 11px 16px; }
   #board-list li { grid-template-columns: 1.8rem minmax(0, 1fr) 1.6rem; gap: 10px; }
   #board-list li.score-row { grid-template-columns: 1.8rem minmax(0, 1fr) auto; }
   .dots { display: none; }

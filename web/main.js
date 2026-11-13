@@ -96,14 +96,15 @@ async function submit(codes, name = me.name) {
 const DOTS = 10;
 const pts = n => n.toLocaleString() + ' pts';
 const correct = n => n + ' correct';
+// Same order as the games in the arcade
 const BOARDS = [
   { id: 'overall', label: 'Games completed' },
-  { id: 'wheel', label: 'Stewardship Wheel', fmt: n => '$' + n.toLocaleString() },
   { id: 'blast', label: 'Bug Blaster', fmt: pts },
   { id: 'run', label: 'Antibiotic Runner', fmt: pts },
+  { id: 'clock', label: 'Stop the Clock', fmt: pts },
   { id: 'whack', label: 'Order Whack', fmt: pts },
   { id: 'catch', label: 'Stewardship Catch', fmt: pts },
-  { id: 'clock', label: 'Stop the Clock', fmt: pts },
+  { id: 'wheel', label: 'Stewardship Wheel', fmt: n => '$' + n.toLocaleString() },
   { id: 'allergy', label: 'Allergy Detective', fmt: pts },
   { id: 'myth', label: 'Myth or Fact', fmt: correct },
   { id: 'match', label: 'Bug–Drug Match', fmt: pts },
@@ -113,14 +114,38 @@ const BOARDS = [
 ];
 let current = 'overall';
 let lastData = null;
-$('board-tabs').innerHTML = BOARDS.map(b => `<button type="button" data-b="${b.id}" aria-pressed="${b.id === current}">${b.label}</button>`).join('');
-$('board-tabs').addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  current = btn.dataset.b;
-  $('board-tabs').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === btn));
+const pickEl = $('board-pick');
+pickEl.innerHTML = `<option value="overall">Games completed (overall)</option><optgroup label="Best score by game">` +
+  BOARDS.slice(1).map(b => `<option value="${b.id}">${b.label}</option>`).join('') + '</optgroup>';
+function showBoard(id) {
+  current = id;
+  pickEl.value = id;
   if (lastData) render(lastData);
-});
+}
+pickEl.addEventListener('change', () => showBoard(pickEl.value));
+
+// The leaderboard opens as a side panel from the button in the corner
+const panel = $('board');
+const toggle = $('board-toggle');
+function openBoard(open) {
+  panel.classList.toggle('open', open);
+  panel.setAttribute('aria-hidden', !open);
+  panel.inert = !open;
+  $('board-backdrop').hidden = !open;
+  toggle.setAttribute('aria-expanded', open);
+  if (open) { loadBoard(); pickEl.focus(); } else toggle.focus();
+}
+toggle.onclick = () => openBoard(!panel.classList.contains('open'));
+$('board-close').onclick = () => openBoard(false);
+$('board-backdrop').onclick = () => openBoard(false);
+document.querySelectorAll('.open-board').forEach(b => { b.onclick = () => openBoard(true); });
+// Tuck the button away mid-game so it never covers game controls; it returns on the menu or results screen
+const arcadeEl = $('arcade');
+new MutationObserver(() => {
+  if (arcadeEl.querySelector('.menu, .again')) toggle.classList.remove('playing');
+}).observe(arcadeEl, { childList: true, subtree: true });
+document.addEventListener('aaw', e => { if (e.detail.type === 'start') toggle.classList.add('playing'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.classList.contains('open')) openBoard(false); });
 
 function render(data) {
   if (current !== 'overall') {
@@ -188,7 +213,11 @@ document.addEventListener('aaw', e => {
   const body = JSON.stringify({ session, player: me.id, name: me.name, type, game, unlocked: !!unlocked, score });
   navigator.sendBeacon?.('/api/event', body) || fetch('/api/event', { method: 'POST', body, keepalive: true }).catch(() => {});
 
-  if (type === 'finish' && score != null) setTimeout(loadBoard, 1000); // show the new score
+  if (type === 'finish' && score != null) {
+    if (BOARDS.some(b => b.id === game)) showBoard(game); // the panel opens on this game's scores
+    toggle.classList.remove('nudge'); void toggle.offsetWidth; toggle.classList.add('nudge');
+    setTimeout(loadBoard, 1000); // show the new score
+  }
 
   if (code && !earned.has(code)) {
     earned.add(code);

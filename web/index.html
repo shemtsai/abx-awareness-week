@@ -67,7 +67,7 @@
         <ol>
           <li><strong>Play any game.</strong> Quizzes, an arcade shooter, a wheel puzzle, and more.</li>
           <li><strong>Hit the target score.</strong> Reach it to complete the game.</li>
-          <li><strong>Climb the leaderboard.</strong> Your progress and scores are added for you. Most games completed by the end of the week wins.</li>
+          <li><strong>Climb the <button type="button" class="link open-board">leaderboard</button>.</strong> Your progress and scores are added for you. Most games completed by the end of the week wins.</li>
         </ol>
       </section>
 
@@ -91,15 +91,22 @@
         </form>
       </section>
 
-      <section class="board" aria-labelledby="board-title">
+      <button type="button" class="board-toggle" id="board-toggle" aria-controls="board" aria-expanded="false">
+        <span class="trophy" aria-hidden="true"></span>Leaderboard
+      </button>
+      <div class="board-backdrop" id="board-backdrop" hidden></div>
+      <aside class="board" id="board" aria-labelledby="board-title" aria-hidden="true" inert>
         <div class="board-head">
           <h2 id="board-title">Leaderboard</h2>
-          <p class="muted" id="board-meta"></p>
+          <button type="button" class="board-close" id="board-close" aria-label="Close leaderboard">&times;</button>
         </div>
-        <div class="tabs" id="board-tabs" role="group" aria-label="Choose a leaderboard"></div>
+        <label class="board-pick">Show
+          <select id="board-pick"></select>
+        </label>
+        <p class="muted" id="board-meta"></p>
         <ol id="board-list" aria-live="polite"></ol>
         <p class="me-row" id="board-me" hidden></p>
-      </section>
+      </aside>
 
       <section class="about" aria-labelledby="about-title">
         <h2 id="about-title">About</h2>
