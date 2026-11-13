@@ -2,12 +2,17 @@
 import { neon } from '@neondatabase/serverless';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // The real code words are read straight from the standalone arcade file, so there's only one list to keep up to date.
 let codesCache;
 export function codes() {
   if (!codesCache) {
-    const html = readFileSync(join(process.cwd(), 'standalone', 'aaw-arcade.html'), 'utf8');
+    // Look next to this file first (works no matter which folder the server runs from), then the project root
+    const paths = [fileURLToPath(new URL('../standalone/aaw-arcade.html', import.meta.url)), join(process.cwd(), 'standalone', 'aaw-arcade.html')];
+    let html;
+    for (const p of paths) { try { html = readFileSync(p, 'utf8'); break; } catch { /* try the next path */ } }
+    if (!html) throw new Error('Could not find standalone/aaw-arcade.html on the server');
     const block = html.match(/var CODES\s*=\s*\{([^}]*)\}/);
     if (!block) throw new Error('Could not find CODES in standalone/aaw-arcade.html');
     codesCache = Object.fromEntries([...block[1].matchAll(/(\w+)\s*:\s*['"]([A-Z]+)['"]/g)].map(m => [m[1], m[2]]));

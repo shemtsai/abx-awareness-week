@@ -6,7 +6,9 @@ const TYPES = new Set(['start', 'finish']);
 export async function POST(request) {
   const b = await request.json().catch(() => ({}));
   // Only accept known games and event types, so junk can't pile up
-  if (!TYPES.has(b.type) || !(b.game in codes())) return new Response(null, { status: 400 });
+  let known;
+  try { known = codes(); } catch (err) { console.error(err); return new Response(null, { status: 500 }); }
+  if (!TYPES.has(b.type) || !(b.game in known)) return new Response(null, { status: 400 });
   const finish = b.type === 'finish';
   const score = finish && Number.isFinite(+b.score) ? Math.max(-100000, Math.min(1000000, Math.round(+b.score))) : null;
   try {

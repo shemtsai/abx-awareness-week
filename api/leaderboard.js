@@ -17,6 +17,6 @@ export async function GET(request) {
     return json({ top, me: i >= 0 ? row(all[i], i) : null, players: all.length, of: Object.keys(codes()).length, games });
   } catch (err) {
     console.error(err);
-    return json({ error: 'Leaderboard is unavailable right now.' }, 500);
+    return json({ error: 'Leaderboard is unavailable right now.', detail: err.message }, 500);
   }
 }

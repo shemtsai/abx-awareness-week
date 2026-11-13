@@ -8,7 +8,9 @@ export async function POST(request) {
   if (!name) return json({ error: 'Please enter a name or initials.' }, 400);
   const player = cleanPlayer(body.player);
 
-  const valid = new Set(Object.values(codes()));
+  let valid;
+  try { valid = new Set(Object.values(codes())); }
+  catch (err) { console.error(err); return json({ error: 'Your codes were not saved. Try again in a minute.', detail: err.message }, 500); }
   const submitted = [...new Set(String(body.codes || '').toUpperCase().split(/[^A-Z]+/).filter(Boolean))].slice(0, 30);
   const accepted = submitted.filter(c => valid.has(c));
   const rejected = submitted.filter(c => !valid.has(c));
@@ -24,6 +26,6 @@ export async function POST(request) {
     return json({ accepted, rejected, total: me ? me.codes.length : 0, of: valid.size });
   } catch (err) {
     console.error(err);
-    return json({ error: 'Your codes were not saved. Try again in a minute.' }, 500);
+    return json({ error: 'Your codes were not saved. Try again in a minute.', detail: err.message }, 500);
   }
 }
