@@ -221,3 +221,14 @@ table { width: 100%; border-collapse: collapse; font-size: .93rem; }
 th, td { text-align: left; padding: 9px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { color: var(--muted); font-weight: 700; }
 td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- Learn more page ---------- */
+.learn-top { background: var(--teal); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px max(20px, calc((100vw - 900px) / 2)); }
+.learn-home { color: var(--disk); font-family: var(--display); font-weight: 800; font-size: 1.15rem; text-decoration: none; }
+.learn-play { color: var(--teal); background: var(--agar); font-weight: 700; text-decoration: none; padding: 8px 18px; border-radius: 999px; }
+.learn-play:hover { background: var(--disk); }
+.learn-main { max-width: 900px; padding-top: 24px; }
+
+/* Secondary hero link to the Learn more page */
+.cta-alt { background: transparent; color: var(--agar); box-shadow: inset 0 0 0 2px var(--agar); margin: 10px 0 0 10px; }
+.cta-alt:hover { background: rgba(250, 241, 214, .12); }

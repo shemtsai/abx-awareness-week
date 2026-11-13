@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     outDir: '../dist',
     emptyOutDir: true,
-    rollupOptions: { input: { main: 'web/index.html', admin: 'web/admin.html' } },
+    rollupOptions: { input: { main: 'web/index.html', learn: 'web/learn.html', admin: 'web/admin.html' } },
   },
   server: { fs: { allow: ['..'] } }, // lets the site load ../standalone/aaw-arcade.html
 });

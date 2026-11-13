@@ -1,6 +1,6 @@
 # Antibiotic Awareness Week Arcade
 
-Ten short, evidence-based games that teach antimicrobial stewardship, built for Antibiotic Awareness Week. Players unlock a secret code word in each game and submit them for recognition.
+Twelve short, evidence-based games that teach antimicrobial stewardship, built for Antibiotic Awareness Week. Players unlock a secret code word in each game and submit them for recognition.
 
 ## 🎮 [Play it here: Antibiotic Awareness Week](https://abx-awareness-week.vercel.app/)
 
@@ -16,16 +16,18 @@ This project was built with AI tools. Questions, issues, or ideas? Reach out to 
 |---|---|
 | Stewardship Wheel | Core stewardship principles, as word puzzles |
 | Bug Blaster | Picking the narrowest drug that covers each organism |
+| Antibiotic Runner | Spectrum of activity: what common antibiotics do and do not cover |
 | Order Whack | Spotting inappropriate antibiotic orders |
 | Stewardship Catch | Good practices vs. common pitfalls |
 | Stop the Clock | Evidence-based treatment durations |
+| Allergy Detective | Penicillin allergy evaluation with the modified PEN-FAST rule, across four patient cases |
 | Myth or Fact | Penicillin allergy, asymptomatic bacteriuria, C. difficile testing, MRSA nares |
 | Bug–Drug Match | Targeted therapy for common pathogens |
 | De-escalation Dash | Narrowing therapy once cultures return |
 | Duration Station | Short-course trials (PTC, STOP-IT, Yahav et al.) |
 | Stewardship Scramble | Stewardship vocabulary |
 
-Every answer explains the reasoning and cites its source: IDSA, ATS/IDSA, IDSA/SHEA, and ACP guidance, plus key trials such as MERINO, STOP-IT, and PTC.
+Every answer explains the reasoning and cites its source: IDSA, ATS/IDSA, IDSA/SHEA, and ACP guidance, plus key trials such as MERINO, STOP-IT, PTC, BALANCE, and SNAP.
 
 ## Two ways to use it
 

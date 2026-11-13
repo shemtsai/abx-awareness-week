@@ -59,8 +59,11 @@ async function submit(codes, name = me.name) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ player: me.id, name, codes: [...codes].join(' ') }),
   });
-  const data = await res.json().catch(() => ({ error: 'The leaderboard only works on the live site.' }));
-  if (!res.ok) throw new Error(data.error || 'Your codes were not saved. Try again in a minute.');
+  const data = await res.json().catch(() => ({ error: 'The leaderboard only works on the live site.', detail: 'HTTP ' + res.status + ' (not JSON)' }));
+  if (!res.ok) {
+    console.warn('Code submission failed:', res.status, data.detail || data.error); // shows the real cause in the browser console
+    throw new Error(data.error || 'Your codes were not saved. Try again in a minute.');
+  }
   return data;
 }
 
@@ -72,9 +75,11 @@ const BOARDS = [
   { id: 'overall', label: 'Code words' },
   { id: 'wheel', label: 'Stewardship Wheel', fmt: n => '$' + n.toLocaleString() },
   { id: 'blast', label: 'Bug Blaster', fmt: pts },
+  { id: 'run', label: 'Antibiotic Runner', fmt: pts },
   { id: 'whack', label: 'Order Whack', fmt: pts },
   { id: 'catch', label: 'Stewardship Catch', fmt: pts },
   { id: 'clock', label: 'Stop the Clock', fmt: pts },
+  { id: 'allergy', label: 'Allergy Detective', fmt: pts },
   { id: 'myth', label: 'Myth or Fact', fmt: correct },
   { id: 'match', label: 'Bug–Drug Match', fmt: pts },
   { id: 'dash', label: 'De-escalation Dash', fmt: correct },
@@ -123,7 +128,7 @@ async function loadBoard() {
   try {
     const res = await fetch('/api/leaderboard?player=' + encodeURIComponent(me.id));
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error);
+    if (!res.ok) { console.warn('Leaderboard failed:', res.status, data.detail || data.error); throw new Error(data.error); }
     lastData = data;
     render(data);
   } catch {
@@ -131,7 +136,11 @@ async function loadBoard() {
   }
 }
 loadBoard();
-setInterval(() => { if (!document.hidden) loadBoard(); }, 30000);
+setInterval(() => {
+  if (document.hidden) return;
+  loadBoard();
+  if (pending.size) save([]).then(() => status('Your saved code words were added to the leaderboard.', 'ok')).catch(() => {}); // keep retrying unsaved codes
+}, 30000);
 
 // Save codes, retrying later if the network or server hiccups
 function save(codes) {
@@ -162,7 +171,7 @@ document.addEventListener('aaw', e => {
     status(`Adding ${code} to the leaderboard…`);
     save([code])
       .then(d => status(`${code} added. You have ${d.total} of ${d.of} code words.`, 'ok'))
-      .catch(() => status(`${code} is saved in this browser and will be added to the leaderboard when the connection is back.`, 'bad'));
+      .catch(() => status(`${code} is saved in this browser. It will be added to the leaderboard automatically once the leaderboard is reachable.`, 'bad'));
   }
 });
 
