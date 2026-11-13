@@ -6,7 +6,7 @@ Ten short, evidence-based games that teach antimicrobial stewardship, built for 
 
 No download or sign-up needed. It works on phones and computers.
 
-This project was built with AI tools. Questions, issues, or ideas? Reach out to **Shemual Tsai, PharmD**, at [shemual@gmail.com](mailto:shemual@gmail.com).
+This project was built with AI tools. Questions, issues, or ideas? Reach out to **Shemual Tsai, PharmD, ID/Stewardship pharmacist**, at [shemual@gmail.com](mailto:shemual@gmail.com).
 
 ![The website: an agar plate hero above the game menu](docs/screenshot.png)
 
