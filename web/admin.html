@@ -21,13 +21,24 @@
       <section class="card" id="leaders" hidden>
         <div class="row"><h2>Leaderboard</h2><button type="button" class="ghost" id="csv">Download CSV</button></div>
         <p class="muted" id="leader-note"></p>
-        <table><thead><tr><th>#</th><th>Name / initials</th><th class="num">Codes</th><th>Code words</th><th>Last submitted</th></tr></thead><tbody></tbody></table>
+        <table><thead><tr><th>#</th><th>Name / initials</th><th class="num">Games completed</th><th>Games</th><th>Last completed</th></tr></thead><tbody></tbody></table>
       </section>
 
       <section class="card" id="games" hidden>
         <h2>Game activity</h2>
         <p class="muted" id="games-note"></p>
-        <table><thead><tr><th>Game</th><th class="num">Started</th><th class="num">Finished</th><th class="num">Unlocked code</th><th class="num">Unlock rate</th></tr></thead><tbody></tbody></table>
+        <table><thead><tr><th>Game</th><th class="num">Started</th><th class="num">Finished</th><th class="num">Hit target</th><th class="num">Target rate</th></tr></thead><tbody></tbody></table>
+      </section>
+      <section class="card" id="feedback" hidden>
+        <h2>Private feedback</h2>
+        <p class="muted" id="feedback-note"></p>
+        <table><thead><tr><th>When</th><th>From</th><th>Feedback</th></tr></thead><tbody></tbody></table>
+      </section>
+
+      <section class="card" id="comments" hidden>
+        <h2>Public comments</h2>
+        <p class="muted" id="comments-note"></p>
+        <table><thead><tr><th>When</th><th>From</th><th>Comment</th><th></th></tr></thead><tbody></tbody></table>
       </section>
     </main>
     <script type="module" src="./admin.js"></script>

@@ -21,13 +21,15 @@ This project was built with AI tools. Questions, issues, or ideas? Reach out to 
 | Stewardship Catch | Good practices vs. common pitfalls |
 | Stop the Clock | Evidence-based treatment durations |
 | Allergy Detective | Penicillin allergy evaluation with the modified PEN-FAST rule, across four patient cases |
-| Myth or Fact | Penicillin allergy, asymptomatic bacteriuria, C. difficile testing, MRSA nares |
+| Myth or Fact | Common misconceptions about antibiotics, allergy labels, side effects and resistance (falling cards) |
 | Bug–Drug Match | Targeted therapy for common pathogens |
-| De-escalation Dash | Narrowing therapy once cultures return |
-| Duration Station | Short-course trials (PTC, STOP-IT, Yahav et al.) |
-| Stewardship Scramble | Stewardship vocabulary |
+| De-escalation Dash | Narrowing, stopping and switching to oral once cultures return (lane runner) |
+| Test or Rest | Diagnostic stewardship: which cultures and tests to send or hold (conveyor) |
+| Stewardship Scramble | Stewardship vocabulary (bouncing letters) |
 
-Every answer explains the reasoning and cites its source: IDSA, ATS/IDSA, IDSA/SHEA, and ACP guidance, plus key trials such as MERINO, STOP-IT, PTC, BALANCE, and SNAP.
+Every game except Allergy Detective has a Normal/Hard switch on its instructions screen. Hard is faster and draws more of the harder questions, and its scores count 1.5×. Each game pulls from a larger question bank, so replays are different.
+
+Every answer explains the reasoning and cites its source: IDSA, ATS, IDSA/SHEA, CDC, IWGDF/IDSA and ACP guidance, plus key trials such as MERINO, STOP-IT, PTC, BALANCE, SNAP and PALACE.
 
 ## Two ways to use it
 
@@ -36,7 +38,8 @@ Every answer explains the reasoning and cites its source: IDSA, ATS/IDSA, IDSA/S
 **2. The website.** The [live site](https://abx-awareness-week.vercel.app/) loads that same file and adds:
 - a player name for everyone, starting as a random antibiotic ("Mighty Meropenem") that players can change
 - a live leaderboard in a side panel (the button in the corner): your own progress across all twelve games, the overall standings, and every game's top scores on one scrollable page, in the same order as the arcade, with a Play button on each game
-- a private admin page (`/admin`) with the full leaderboard, a CSV export, and per-game play and unlock counts
+- a Comments & feedback panel: public comments about ID, stewardship and Antibiotic Awareness Week (posted right away), and private feedback that only the organizer sees
+- a private admin page (`/admin`) with the full leaderboard, a CSV export, per-game play counts, private feedback, and Hide/Show buttons for public comments
 
 ## Run it for your own team
 
@@ -57,7 +60,7 @@ Every answer explains the reasoning and cites its source: IDSA, ATS/IDSA, IDSA/S
 ```
 standalone/aaw-arcade.html   all games, questions, code words, and arcade styles
 web/                         the website around the arcade (page, form, admin page)
-api/                         serverless functions: submit codes, leaderboard, log plays, admin data
+api/                         serverless functions: save progress, leaderboard, log plays, comments & feedback, admin data
 docs/                        README images
 ```
 
@@ -76,9 +79,9 @@ To run the website locally (Node.js 22+): `npm install`, then `npm run dev`. Sub
 
 ## Data and privacy
 
-The website stores a player name (a random antibiotic unless the player changes it), the code words they unlock, and anonymous play events (which game was started or finished, tagged with a random per-visit ID). Each browser keeps a random player ID and its codes in local storage so progress survives a reload. There are no accounts, cookies, or third-party analytics, and fonts are served from the site itself. Player names appear on the public leaderboard. The standalone file stores nothing.
+The website stores a player name (a random antibiotic unless the player changes it), which games they have completed, their scores, any comments or feedback they choose to send, and anonymous play events (which game was started or finished, tagged with a random per-visit ID). Each browser keeps a random player ID and its progress in local storage so progress survives a reload. There are no accounts, cookies, or third-party analytics, and fonts are served from the site itself. Player names appear on the public leaderboard and on public comments (unless the player posts without their name). Private feedback is visible only on the admin page. The standalone file stores nothing.
 
-Note that the code words are visible in the source of this public repo. Change them if you run a contest of your own.
+Note that the hidden game keys that mark a game as completed are visible in the source of this public repo. Change them if you run a contest of your own.
 
 ## Disclaimer
 
