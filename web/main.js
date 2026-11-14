@@ -94,7 +94,6 @@ async function submit(codes, name = me.name) {
 
 // --- Leaderboard panel: your progress, overall standings, and every game's top scores in one scroll ---
 const pts = n => n.toLocaleString() + ' pts';
-const correct = n => n + ' correct';
 // Same order as the games in the arcade
 const GAMES = [
   { id: 'blast', label: 'Bug Blaster', fmt: pts },
@@ -104,39 +103,105 @@ const GAMES = [
   { id: 'catch', label: 'Stewardship Catch', fmt: pts },
   { id: 'wheel', label: 'Stewardship Wheel', fmt: n => '$' + n.toLocaleString() },
   { id: 'allergy', label: 'Allergy Detective', fmt: pts },
-  { id: 'myth', label: 'Myth or Fact', fmt: correct },
+  { id: 'myth', label: 'Myth or Fact', fmt: pts },
   { id: 'match', label: 'Bug–Drug Match', fmt: pts },
-  { id: 'dash', label: 'De-escalation Dash', fmt: correct },
-  { id: 'dur', label: 'Duration Station', fmt: correct },
-  { id: 'scr', label: 'Stewardship Scramble', fmt: correct },
+  { id: 'dash', label: 'De-escalation Dash', fmt: pts },
+  { id: 'dur', label: 'Test or Rest', fmt: pts },
+  { id: 'scr', label: 'Stewardship Scramble', fmt: pts },
 ];
 let lastData = null;
 let focusGame = null; // the game just played: its card is highlighted and scrolled into view
 const done = new Set(store.get('done') || []); // games completed in this browser, shown before the server answers
 
-// The leaderboard opens as a side panel from the button in the corner
-const panel = $('board');
+// Side panels (leaderboard; comments & feedback) open from the buttons in the corner, one at a time
 const toggle = $('board-toggle');
-function openBoard(open) {
-  panel.classList.toggle('open', open);
-  panel.setAttribute('aria-hidden', !open);
-  panel.inert = !open;
+const panels = {
+  board: { el: $('board'), btn: toggle, onOpen: () => { loadBoard(); scrollToGame(focusGame); } },
+  talk: { el: $('talk'), btn: $('talk-toggle'), onOpen: () => loadComments() },
+};
+function openPanel(name, open) {
+  Object.entries(panels).forEach(([n, p]) => {
+    const on = open && n === name;
+    if (!on && !p.el.classList.contains('open')) return;
+    p.el.classList.toggle('open', on);
+    p.el.setAttribute('aria-hidden', !on);
+    p.el.inert = !on;
+    p.btn.setAttribute('aria-expanded', on);
+  });
   $('board-backdrop').hidden = !open;
-  toggle.setAttribute('aria-expanded', open);
-  if (open) { loadBoard(); $('board-close').focus(); scrollToGame(focusGame); } else toggle.focus();
+  const p = panels[name];
+  if (open) { p.onOpen(); p.el.querySelector('.board-close').focus(); } else p.btn.focus();
 }
-toggle.onclick = () => openBoard(!panel.classList.contains('open'));
-$('board-close').onclick = () => openBoard(false);
-$('board-backdrop').onclick = () => openBoard(false);
+const isOpen = name => panels[name].el.classList.contains('open');
+const openBoard = open => openPanel('board', open);
+Object.entries(panels).forEach(([name, p]) => {
+  p.btn.onclick = () => openPanel(name, !isOpen(name));
+  p.el.querySelector('.board-close').onclick = () => openPanel(name, false);
+});
+$('board-backdrop').onclick = () => Object.keys(panels).forEach(n => isOpen(n) && openPanel(n, false));
 document.querySelectorAll('.open-board').forEach(b => { b.onclick = () => openBoard(true); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.classList.contains('open')) openBoard(false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') Object.keys(panels).forEach(n => isOpen(n) && openPanel(n, false)); });
 
-// Tuck the button away mid-game so it never covers game controls; it returns on the menu or results screen
+// Tuck the buttons away mid-game so they never cover game controls; they return on the menu or results screen
 const arcadeEl = $('arcade');
+const corner = $('corner-btns');
 new MutationObserver(() => {
-  if (arcadeEl.querySelector('.menu, .again')) toggle.classList.remove('playing');
+  if (arcadeEl.querySelector('.menu, .again, .ov .go')) corner.classList.remove('playing');
 }).observe(arcadeEl, { childList: true, subtree: true });
-document.addEventListener('aaw', e => { if (e.detail.type === 'start') toggle.classList.add('playing'); });
+document.addEventListener('aaw', e => { if (e.detail.type === 'start') corner.classList.add('playing'); });
+
+// --- Comments & feedback ---
+const talkForm = $('talk-form');
+const kindOf = () => talkForm.elements.kind.value;
+function talkMode() {
+  const fb = kindOf() === 'feedback';
+  $('talk-send').textContent = fb ? 'Send private feedback' : 'Post comment';
+  talkForm.querySelector('.talk-anon').hidden = fb;
+  $('talk-text').placeholder = fb ? 'What would make these games better?' : 'For example, a stewardship win you are proud of, or thanks to your ID and pharmacy teams.';
+}
+talkForm.addEventListener('change', talkMode);
+$('talk-text').addEventListener('input', () => { $('talk-left').textContent = (500 - $('talk-text').value.length) + ' left'; });
+talkMode();
+const ago = t => {
+  const m = Math.round((Date.now() - new Date(t)) / 60000);
+  return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : new Date(t).toLocaleDateString([], { month: 'short', day: 'numeric' });
+};
+async function loadComments() {
+  try {
+    const res = await fetch('/api/comments');
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || data.error);
+    $('talk-list').innerHTML = data.comments.length
+      ? data.comments.map(c => `<li><p>${esc(c.text)}</p><small>${esc(c.name)} · ${ago(c.at)}</small></li>`).join('')
+      : '<li class="empty">No comments yet. Be the first to share something.</li>';
+  } catch (err) {
+    console.warn('Comments failed:', err.message);
+    $('talk-list').innerHTML = '<li class="empty">Comments will appear on the live site.</li>';
+  }
+}
+talkForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  const text = $('talk-text').value.trim();
+  const st = $('talk-status');
+  if (text.length < 3) { st.className = 'talk-status bad'; st.textContent = 'Please write a little more.'; return; }
+  const kind = kindOf();
+  $('talk-send').disabled = true;
+  st.className = 'talk-status'; st.textContent = 'Sending…';
+  try {
+    const res = await fetch('/api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ player: me.id, name: me.name, kind, text, anonymous: talkForm.elements.anonymous.checked }) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Your message could not be sent.');
+    talkForm.reset(); talkMode(); $('talk-left').textContent = '500 left';
+    st.className = 'talk-status ok';
+    st.textContent = kind === 'feedback' ? 'Thank you. Your feedback was sent privately.' : 'Thank you. Your comment is posted below.';
+    if (kind === 'comment') loadComments();
+  } catch (err) {
+    st.className = 'talk-status bad'; st.textContent = err.message;
+  } finally {
+    $('talk-send').disabled = false;
+  }
+});
 
 function scrollToGame(id) {
   const card = id && $('gc-' + id);
@@ -152,7 +217,7 @@ function play(id) {
   tile?.click();
   arcadeEl.scrollIntoView({ behavior: 'smooth' });
 }
-panel.addEventListener('click', e => {
+panels.board.el.addEventListener('click', e => {
   const btn = e.target.closest('[data-play], [data-jump]');
   if (!btn) return;
   if (btn.dataset.play) play(btn.dataset.play);

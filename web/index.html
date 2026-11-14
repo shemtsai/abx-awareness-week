@@ -91,11 +91,16 @@
         </form>
       </section>
 
-      <button type="button" class="board-toggle" id="board-toggle" aria-controls="board" aria-expanded="false">
-        <span class="trophy" aria-hidden="true"></span>Leaderboard
-      </button>
+      <div class="corner-btns" id="corner-btns">
+        <button type="button" class="board-toggle talk-toggle" id="talk-toggle" aria-controls="talk" aria-expanded="false">
+          <span class="bubble" aria-hidden="true"></span>Comments &amp; feedback
+        </button>
+        <button type="button" class="board-toggle" id="board-toggle" aria-controls="board" aria-expanded="false">
+          <span class="trophy" aria-hidden="true"></span>Leaderboard
+        </button>
+      </div>
       <div class="board-backdrop" id="board-backdrop" hidden></div>
-      <aside class="board" id="board" aria-labelledby="board-title" aria-hidden="true" inert>
+      <aside class="sidepanel" id="board" aria-labelledby="board-title" aria-hidden="true" inert>
         <div class="board-head">
           <h2 id="board-title">Leaderboard</h2>
           <button type="button" class="board-close" id="board-close" aria-label="Close leaderboard">&times;</button>
@@ -106,6 +111,32 @@
         <ol class="ranks" id="board-overall" aria-live="polite"></ol>
         <h3 class="board-sub">Top scores by game</h3>
         <div id="board-games"></div>
+      </aside>
+
+      <aside class="sidepanel" id="talk" aria-labelledby="talk-title" aria-hidden="true" inert>
+        <div class="board-head">
+          <h2 id="talk-title">Comments &amp; feedback</h2>
+          <button type="button" class="board-close" id="talk-close" aria-label="Close comments and feedback">&times;</button>
+        </div>
+        <form id="talk-form" novalidate>
+          <fieldset class="talk-kind">
+            <legend class="visually-hidden">What would you like to send?</legend>
+            <label><input type="radio" name="kind" value="comment" checked />
+              <span><b>Public comment</b>Share something positive about infectious diseases, antimicrobial stewardship, or Antibiotic Awareness Week. It appears below right away.</span></label>
+            <label><input type="radio" name="kind" value="feedback" />
+              <span><b>Private feedback</b>Ideas, problems, or suggestions for these games. Only the organizer sees it.</span></label>
+          </fieldset>
+          <label for="talk-text" class="visually-hidden">Your message</label>
+          <textarea id="talk-text" name="text" maxlength="500" rows="4" required></textarea>
+          <div class="talk-row">
+            <label class="talk-anon"><input type="checkbox" name="anonymous" /> Post without my name</label>
+            <span class="talk-left" id="talk-left">500 left</span>
+          </div>
+          <button type="submit" id="talk-send">Post comment</button>
+          <p class="talk-status" id="talk-status" role="status"></p>
+        </form>
+        <h3 class="board-sub">What people are saying</h3>
+        <ul class="talk-list" id="talk-list" aria-live="polite"></ul>
       </aside>
 
       <section class="about" aria-labelledby="about-title">

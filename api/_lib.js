@@ -35,6 +35,9 @@ export function db() {
     await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS player_id TEXT`;
     await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS name TEXT`;
     await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS score INTEGER`;
+    await sql`CREATE TABLE IF NOT EXISTS comments (
+      id SERIAL PRIMARY KEY, player_id TEXT, name TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL,
+      hidden BOOLEAN NOT NULL DEFAULT false, created_at TIMESTAMPTZ DEFAULT now())`;
   })().catch(err => { ready = null; throw err; });
   return ready.then(() => sql);
 }
