@@ -18,6 +18,24 @@
         <p id="status" class="muted"></p>
       </section>
 
+      <section class="card" id="traffic" hidden>
+        <h2>Site traffic</h2>
+        <div class="stats" id="stats"></div>
+        <p class="muted" id="traffic-note"></p>
+      </section>
+
+      <section class="card" id="heat" hidden>
+        <h2>When people visit</h2>
+        <p class="muted">Visits per hour over the last 14 days, Central time. Darker means busier.</p>
+        <div class="heat-wrap"><table class="heat" id="heat-hours"></table></div>
+      </section>
+
+      <section class="card" id="heat-games-card" hidden>
+        <h2>Games played by day</h2>
+        <p class="muted">Game starts over the last 14 days, Central time.</p>
+        <div class="heat-wrap"><table class="heat" id="heat-games"></table></div>
+      </section>
+
       <section class="card" id="leaders" hidden>
         <div class="row"><h2>Leaderboard</h2><button type="button" class="ghost" id="csv">Download CSV</button></div>
         <p class="muted" id="leader-note"></p>
@@ -27,7 +45,7 @@
       <section class="card" id="games" hidden>
         <h2>Game activity</h2>
         <p class="muted" id="games-note"></p>
-        <table><thead><tr><th>Game</th><th class="num">Started</th><th class="num">Finished</th><th class="num">Hit target</th><th class="num">Target rate</th></tr></thead><tbody></tbody></table>
+        <table><thead><tr><th>Game</th><th class="num">Started</th><th class="num">Players</th><th class="num">Finished</th><th class="num">Hit target</th><th class="num">Target rate</th></tr></thead><tbody></tbody></table>
       </section>
       <section class="card" id="feedback" hidden>
         <h2>Private feedback</h2>

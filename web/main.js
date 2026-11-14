@@ -66,7 +66,7 @@ const store = {
   get(k) { try { return JSON.parse(localStorage.getItem('aaw.' + k)); } catch { return null; } },
   set(k, v) { try { localStorage.setItem('aaw.' + k, JSON.stringify(v)); } catch { /* private browsing: works for this visit only */ } },
 };
-const me = store.get('player') || { id: crypto.randomUUID(), name: randomName() };
+const me = store.get('player') || { id: store.get('visitor') || crypto.randomUUID(), name: randomName() };
 store.set('player', me);
 const earned = new Set(store.get('codes') || []);   // games completed in this browser (stored as each game's hidden key)
 const pending = new Set(store.get('pending') || []); // unlocked but not yet saved on the server
@@ -299,12 +299,14 @@ function save(codes) {
 if (pending.size) save([]).catch(() => {});
 
 // --- Game events: tracking + automatic progress saving ---
-const session = crypto.randomUUID(); // one random ID per visit, used only to count plays
+const session = crypto.randomUUID(); // one random ID per visit, used only to count visits and plays
+function beacon(body) { navigator.sendBeacon?.('/api/event', body) || fetch('/api/event', { method: 'POST', body, keepalive: true }).catch(() => {}); }
+beacon(JSON.stringify({ session, player: me.id, type: 'visit', game: 'home' }));
 document.addEventListener('aaw', e => {
   const { type, game, unlocked, code } = e.detail;
   const { score } = e.detail;
   const body = JSON.stringify({ session, player: me.id, name: me.name, type, game, unlocked: !!unlocked, score });
-  navigator.sendBeacon?.('/api/event', body) || fetch('/api/event', { method: 'POST', body, keepalive: true }).catch(() => {});
+  beacon(body);
 
   if (type === 'finish' && score != null) {
     if (GAMES.some(g => g.id === game)) focusGame = game; // the panel opens on this game's scores
