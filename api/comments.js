@@ -1,4 +1,4 @@
-// GET  /api/comments?player=ID  -> public comments (newest first; hidden ones left out); "mine" marks the asker's own
+// GET  /api/comments?player=ID  -> public comments, newest first, with no timestamps (hidden ones left out); "mine" marks the asker's own
 // POST /api/comments  { player, name, kind: 'comment' | 'feedback', text }
 //   comment  = public note about ID/stewardship or Antibiotic Awareness Week, shown on the site right away
 //   feedback = private note for the organizer, shown only on the admin page
@@ -9,9 +9,9 @@ export async function GET(request) {
   const player = cleanPlayer(new URL(request.url).searchParams.get('player'));
   try {
     const sql = await db();
-    const rows = await sql`SELECT id, name, body, created_at, player_id FROM comments
+    const rows = await sql`SELECT id, name, body, player_id FROM comments
                            WHERE kind = 'comment' AND NOT hidden ORDER BY created_at DESC LIMIT 60`;
-    return json({ comments: rows.map(r => ({ id: r.id, name: r.name, text: r.body, at: r.created_at, mine: !!player && r.player_id === player })) });
+    return json({ comments: rows.map(r => ({ id: r.id, name: r.name, text: r.body, mine: !!player && r.player_id === player })) });
   } catch (err) {
     console.error(err);
     return json({ error: 'Comments are unavailable right now.', detail: err.message }, 500);

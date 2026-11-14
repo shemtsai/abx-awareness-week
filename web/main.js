@@ -162,17 +162,13 @@ function talkMode() {
 talkForm.addEventListener('change', talkMode);
 $('talk-text').addEventListener('input', () => { $('talk-left').textContent = (500 - $('talk-text').value.length) + ' left'; });
 talkMode();
-const ago = t => {
-  const m = Math.round((Date.now() - new Date(t)) / 60000);
-  return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : new Date(t).toLocaleDateString([], { month: 'short', day: 'numeric' });
-};
 async function loadComments() {
   try {
     const res = await fetch('/api/comments?player=' + encodeURIComponent(me.id));
     const data = await res.json();
     if (!res.ok) throw new Error(data.detail || data.error);
     $('talk-list').innerHTML = data.comments.length
-      ? data.comments.map(c => `<li${c.mine ? ' class="mine"' : ''}><p>${esc(c.text)}</p><small>${esc(c.name)} · ${ago(c.at)}` +
+      ? data.comments.map(c => `<li${c.mine ? ' class="mine"' : ''}><p>${esc(c.text)}</p><small>${esc(c.name)}` +
           (c.mine ? ` · <button type="button" class="link del" data-id="${c.id}">Delete</button>` : '') + '</small></li>').join('')
       : '<li class="empty">No comments yet. Be the first to share something.</li>';
   } catch (err) {
