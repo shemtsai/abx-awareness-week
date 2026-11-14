@@ -1130,6 +1130,8 @@
   }
 
   menu();
+  /* On a new screen (game, instructions, results), bring the top of the arcade back into view if the page is scrolled past it, e.g. after tapping a tile low on a phone */
+  if(window.MutationObserver)new MutationObserver(function(){var t=root.getBoundingClientRect().top;if(t<0)window.scrollBy(0,t-12)}).observe(root,{childList:true});
 })();
 //]]></script>
 </div>

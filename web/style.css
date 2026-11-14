@@ -104,7 +104,7 @@ h2 { font-family: var(--display); font-weight: 700; letter-spacing: -.01em; colo
 }
 .steps strong { display: block; color: var(--ink); font-size: 1.02rem; }
 
-/* ---------- Player bar ---------- */
+/* ---------- Player bar (in the header, under the buttons) ---------- */
 .player {
   margin-top: 24px;
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px;
@@ -112,6 +112,8 @@ h2 { font-family: var(--display); font-weight: 700; letter-spacing: -.01em; colo
   border-radius: 14px; padding: 16px 20px;
 }
 .player-id { display: flex; align-items: center; gap: 14px; }
+header.hero .player .muted { color: #CFE1DE; }
+header.hero .player { margin-top: 22px; background: rgba(250, 241, 214, .08); box-shadow: inset 0 0 0 1px rgba(250, 241, 214, .25); }
 .player .disk { width: 34px; height: 34px; border-radius: 50%; background: var(--disk); box-shadow: 0 0 0 7px var(--agar-lt, #FAF1D6), 0 0 0 8px #E2C98A; margin: 0 6px; flex: none; }
 .playing-as { margin: 0; font-size: 1.05rem; }
 .playing-as strong { font-family: var(--display); font-weight: 800; font-size: 1.2rem; letter-spacing: -.01em; }
@@ -267,7 +269,10 @@ form button:disabled { opacity: .5; cursor: default; }
 /* ---------- Small screens ---------- */
 @media (max-width: 760px) {
   header.hero { grid-template-columns: 1fr; text-align: left; }
-  .plate { width: min(58%, 230px); order: -1; justify-self: start; }
+  .plate { width: min(36%, 150px); order: -1; justify-self: start; }
+  header.hero .player { margin-top: 16px; padding: 12px 14px; }
+  header.hero .player .disk { display: none; }
+  header.hero .cta-alt { margin: 10px 0 0; }
   .plate figcaption { display: none; }
   .steps ol { grid-template-columns: 1fr; gap: 16px; padding: 28px 0; }
   .steps li { display: grid; grid-template-columns: 34px 1fr; column-gap: 14px; }

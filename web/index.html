@@ -25,6 +25,23 @@
         <p class="lede">Twelve short games on using antibiotics well, from picking the narrowest drug to knowing when to stop. Most take a minute or two, and every answer cites the guideline or trial behind it.</p>
         <a class="cta" href="#arcade">Start playing</a>
         <a class="cta cta-alt" href="/learn.html">Learn about the week</a>
+
+        <section class="player" aria-label="Your player name">
+          <div class="player-id">
+            <span class="disk" aria-hidden="true"></span>
+            <div>
+              <p class="playing-as">Playing as <strong id="player-name"></strong></p>
+              <p class="muted" id="player-status">Your progress and scores go on the leaderboard automatically.</p>
+            </div>
+          </div>
+          <button type="button" class="link" id="rename-btn">Change name</button>
+          <form id="rename-form" hidden>
+            <label for="rename-input" class="visually-hidden">New name</label>
+            <input id="rename-input" maxlength="30" autocomplete="off" required />
+            <button type="submit">Save name</button>
+            <button type="button" class="link" id="rename-cancel">Cancel</button>
+          </form>
+        </section>
       </div>
 
       <figure class="plate" aria-hidden="true">
@@ -73,23 +90,6 @@
 
       <!-- The arcade from standalone/aaw-arcade.html is placed here -->
       <div id="arcade"></div>
-
-      <section class="player" aria-label="Your player name">
-        <div class="player-id">
-          <span class="disk" aria-hidden="true"></span>
-          <div>
-            <p class="playing-as">Playing as <strong id="player-name"></strong></p>
-            <p class="muted" id="player-status">Your progress and scores go on the leaderboard automatically.</p>
-          </div>
-        </div>
-        <button type="button" class="link" id="rename-btn">Change name</button>
-        <form id="rename-form" hidden>
-          <label for="rename-input" class="visually-hidden">New name</label>
-          <input id="rename-input" maxlength="30" autocomplete="off" required />
-          <button type="submit">Save name</button>
-          <button type="button" class="link" id="rename-cancel">Cancel</button>
-        </form>
-      </section>
 
       <div class="corner-btns" id="corner-btns">
         <button type="button" class="board-toggle talk-toggle" id="talk-toggle" aria-controls="talk" aria-expanded="false">
