@@ -168,17 +168,29 @@ const ago = t => {
 };
 async function loadComments() {
   try {
-    const res = await fetch('/api/comments');
+    const res = await fetch('/api/comments?player=' + encodeURIComponent(me.id));
     const data = await res.json();
     if (!res.ok) throw new Error(data.detail || data.error);
     $('talk-list').innerHTML = data.comments.length
-      ? data.comments.map(c => `<li><p>${esc(c.text)}</p><small>${esc(c.name)} · ${ago(c.at)}</small></li>`).join('')
+      ? data.comments.map(c => `<li${c.mine ? ' class="mine"' : ''}><p>${esc(c.text)}</p><small>${esc(c.name)} · ${ago(c.at)}` +
+          (c.mine ? ` · <button type="button" class="link del" data-id="${c.id}">Delete</button>` : '') + '</small></li>').join('')
       : '<li class="empty">No comments yet. Be the first to share something.</li>';
   } catch (err) {
     console.warn('Comments failed:', err.message);
     $('talk-list').innerHTML = '<li class="empty">Comments will appear on the live site.</li>';
   }
 }
+// People can delete comments they posted from this browser (the server checks the browser's player ID)
+$('talk-list').addEventListener('click', async e => {
+  const btn = e.target.closest('.del');
+  if (!btn || !confirm('Delete this comment?')) return;
+  btn.disabled = true;
+  const res = await fetch('/api/comments', { method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ player: me.id, id: +btn.dataset.id }) }).catch(() => null);
+  const st = $('talk-status');
+  if (res && res.ok) { st.className = 'talk-status ok'; st.textContent = 'Your comment was deleted.'; loadComments(); }
+  else { btn.disabled = false; st.className = 'talk-status bad'; st.textContent = 'That comment could not be deleted. Please try again.'; }
+});
 talkForm.addEventListener('submit', async e => {
   e.preventDefault();
   const text = $('talk-text').value.trim();

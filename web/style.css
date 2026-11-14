@@ -318,3 +318,5 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .admin .stat { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px; text-align: center; }
 .admin .stat strong { display: block; font: 800 1.6rem var(--display); color: var(--teal); }
 .admin .stat span { font-size: .82rem; color: var(--muted); }
+.talk-list .del { font: inherit; font-size: .8rem; color: #A63A24; padding: 0; background: none; border: 0; cursor: pointer; text-decoration: underline; }
+.talk-list li.mine { border-color: var(--teal-2); }

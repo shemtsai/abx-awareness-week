@@ -1,15 +1,17 @@
-// GET  /api/comments  -> public comments (newest first; hidden ones left out)
+// GET  /api/comments?player=ID  -> public comments (newest first; hidden ones left out); "mine" marks the asker's own
 // POST /api/comments  { player, name, kind: 'comment' | 'feedback', text }
 //   comment  = public note about ID/stewardship or Antibiotic Awareness Week, shown on the site right away
 //   feedback = private note for the organizer, shown only on the admin page
+// DELETE /api/comments  { player, id }  -> deletes a comment, but only one posted from that same browser
 import { db, json, cleanName, cleanPlayer } from './_lib.js';
 
-export async function GET() {
+export async function GET(request) {
+  const player = cleanPlayer(new URL(request.url).searchParams.get('player'));
   try {
     const sql = await db();
-    const rows = await sql`SELECT id, name, body, created_at FROM comments
+    const rows = await sql`SELECT id, name, body, created_at, player_id FROM comments
                            WHERE kind = 'comment' AND NOT hidden ORDER BY created_at DESC LIMIT 60`;
-    return json({ comments: rows.map(r => ({ id: r.id, name: r.name, text: r.body, at: r.created_at })) });
+    return json({ comments: rows.map(r => ({ id: r.id, name: r.name, text: r.body, at: r.created_at, mine: !!player && r.player_id === player })) });
   } catch (err) {
     console.error(err);
     return json({ error: 'Comments are unavailable right now.', detail: err.message }, 500);
@@ -37,5 +39,20 @@ export async function POST(request) {
   } catch (err) {
     console.error(err);
     return json({ error: 'Your message could not be saved. Please try again.', detail: err.message }, 500);
+  }
+}
+
+export async function DELETE(request) {
+  const b = await request.json().catch(() => ({}));
+  const player = cleanPlayer(b.player);
+  if (!player || !Number.isInteger(b.id)) return json({ error: 'Missing comment.' }, 400);
+  try {
+    const sql = await db();
+    const gone = await sql`DELETE FROM comments WHERE id = ${b.id} AND player_id = ${player} AND kind = 'comment' RETURNING id`;
+    if (!gone.length) return json({ error: 'You can only delete your own comments.' }, 403);
+    return json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    return json({ error: 'The comment could not be deleted. Please try again.', detail: err.message }, 500);
   }
 }

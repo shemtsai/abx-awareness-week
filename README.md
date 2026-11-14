@@ -38,7 +38,7 @@ Every answer explains the reasoning and cites its source: IDSA, ATS, IDSA/SHEA, 
 **2. The website.** The [live site](https://abx-awareness-week.vercel.app/) loads that same file and adds:
 - a player name for everyone, starting as a random antibiotic ("Mighty Meropenem") that players can change
 - a live leaderboard in a side panel (the button in the corner): your own progress across all twelve games, the overall standings, and every game's top scores on one scrollable page, in the same order as the arcade, with a Play button on each game
-- a Comments & feedback panel: public comments about ID, stewardship and Antibiotic Awareness Week (posted right away), and private feedback that only the organizer sees
+- a Comments & feedback panel: public comments about ID, stewardship and Antibiotic Awareness Week (posted right away; people can delete their own from the same browser), and private feedback that only the organizer sees
 - a private admin page (`/admin`) with engagement totals (unique visitors, visits, players, games played, comments), the full leaderboard, a CSV export, per-game play counts, private feedback, and Hide/Show buttons for public comments
 
 ## Run it for your own team
