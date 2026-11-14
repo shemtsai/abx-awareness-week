@@ -39,7 +39,7 @@ Every answer explains the reasoning and cites its source: IDSA, ATS, IDSA/SHEA, 
 - a player name for everyone, starting as a random antibiotic ("Mighty Meropenem") that players can change
 - a live leaderboard in a side panel (the button in the corner): your own progress across all twelve games, the overall standings, and every game's top scores on one scrollable page, in the same order as the arcade, with a Play button on each game
 - a Comments & feedback panel: public comments about ID, stewardship and Antibiotic Awareness Week (posted right away), and private feedback that only the organizer sees
-- a private admin page (`/admin`) with unique visitors, total visits, heatmaps of when people visit and which games they play, the full leaderboard, a CSV export, per-game play counts, private feedback, and Hide/Show buttons for public comments
+- a private admin page (`/admin`) with engagement totals (unique visitors, visits, players, games played, comments), the full leaderboard, a CSV export, per-game play counts, private feedback, and Hide/Show buttons for public comments
 
 ## Run it for your own team
 
@@ -79,7 +79,7 @@ To run the website locally (Node.js 22+): `npm install`, then `npm run dev`. Sub
 
 ## Data and privacy
 
-The website stores a player name (a random antibiotic unless the player changes it), which games they have completed, their scores, any comments or feedback they choose to send, and anonymous visit and play events (which page was opened and which game was started or finished, tagged with a random per-visit ID and the browser's random player ID). These power the traffic summary and heatmaps on the admin page. Each browser keeps a random player ID and its progress in local storage so progress survives a reload. There are no accounts, cookies, or third-party analytics, and fonts are served from the site itself. Player names appear on the public leaderboard and on public comments (unless the player posts without their name). Private feedback is visible only on the admin page. The standalone file stores nothing.
+The website stores a player name (a random antibiotic unless the player changes it), which games they have completed, their scores, any comments or feedback they choose to send, and anonymous visit and play events (which page was opened and which game was started or finished, tagged with a random per-visit ID and the browser's random player ID). These power the engagement totals on the admin page. Each browser keeps a random player ID and its progress in local storage so progress survives a reload. There are no accounts, cookies, or third-party analytics, and fonts are served from the site itself. Player names appear on the public leaderboard and on public comments (unless the player posts without their name). Private feedback is visible only on the admin page. The standalone file stores nothing.
 
 Note that the hidden game keys that mark a game as completed are visible in the source of this public repo. Change them if you run a contest of your own.
 

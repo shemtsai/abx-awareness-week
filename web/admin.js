@@ -1,4 +1,4 @@
-// Admin page: site traffic and heatmaps, leaderboard, game activity, private feedback and public comments (hide/show).
+// Admin page: engagement summary, leaderboard, game activity, private feedback and public comments (hide/show).
 // Needs the ADMIN_KEY you set in Vercel. Only anonymous random IDs are counted: no IP addresses, locations or cookies.
 import './style.css';
 import '@fontsource/atkinson-hyperlegible/400.css';
@@ -29,34 +29,17 @@ async function load() {
 
   // Traffic summary
   const t = data.totals;
-  const tile = (n, label) => `<div class="stat"><strong>${Number(n).toLocaleString()}</strong><span>${label}</span></div>`;
-  document.getElementById('stats').innerHTML = tile(t.visitors, 'Unique visitors') + tile(t.visits, 'Total visits') + tile(t.today, 'Visits today') +
-    tile(t.players, 'People who played') + tile(t.plays, 'Games started') + tile(t.finishes, 'Games finished');
+  const tile = (n, label) => `<div class="stat"><strong>${typeof n === 'number' ? n.toLocaleString() : n}</strong><span>${label}</span></div>`;
+  const pct = (a, b) => b ? Math.round(a / b * 100) + '%' : '–';
+  const visible = data.comments.filter(c => !c.hidden).length;
+  document.getElementById('stats').innerHTML = tile(t.visitors, 'Unique visitors') + tile(t.visits, 'Total visits') +
+    tile(t.players, 'People who played') + tile(pct(t.players, t.visitors), 'Visitors who played') +
+    tile(t.plays, 'Games started') + tile(t.finishes, 'Games finished') +
+    tile(t.players ? (t.plays / t.players).toFixed(1) : '–', 'Games per player') + tile(t.completers, 'People who hit a target') +
+    tile(visible, 'Public comments') + tile(data.feedback.length, 'Feedback messages');
   const pv = Object.fromEntries(data.pages.map(p => [p.page, p.n]));
   document.getElementById('traffic-note').textContent = `Page views: ${pv.home || 0} on the game page, ${pv.learn || 0} on the Learn more page. ` +
-    'Visitors are counted per browser, so one person on two devices counts twice. Visits before Nov 14 were only counted if a game was played.';
-
-  // Heatmaps: one row per day (newest first)
-  const days = [...new Set(data.byDay.map(d => d.day))].sort().reverse();
-  const dayLabel = d => new Date(d + 'T12:00:00').toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
-  const shade = (n, max) => n ? `style="background:rgba(31,111,139,${(0.12 + 0.88 * n / max).toFixed(2)});color:${n / max > .55 ? '#fff' : 'inherit'}"` : '';
-  const hourMax = Math.max(1, ...data.byHour.map(r => r.n));
-  const cell = Object.fromEntries(data.byHour.map(r => [r.day + '|' + r.hour, r.n]));
-  const hourLabel = h => (h % 12 || 12) + (h < 12 ? 'a' : 'p');
-  document.getElementById('heat-hours').innerHTML = days.length
-    ? `<thead><tr><th></th>${[...Array(24).keys()].map(h => `<th>${hourLabel(h)}</th>`).join('')}<th class="num">Visits</th><th class="num">Visitors</th></tr></thead><tbody>` +
-      days.map(d => { const tot = data.byDay.find(x => x.day === d);
-        return `<tr><th>${dayLabel(d)}</th>${[...Array(24).keys()].map(h => { const n = cell[d + '|' + h] || 0; return `<td ${shade(n, hourMax)} title="${n} visits">${n || ''}</td>`; }).join('')}` +
-          `<td class="num">${tot.visits}</td><td class="num">${tot.visitors}</td></tr>`; }).join('') + '</tbody>'
-    : '<tbody><tr><td>No visits in the last 14 days.</td></tr></tbody>';
-  const gMax = Math.max(1, ...data.playsByDay.map(r => r.n));
-  const gc = Object.fromEntries(data.playsByDay.map(r => [r.game + '|' + r.day, r.n]));
-  const gdays = [...new Set(data.playsByDay.map(r => r.day))].sort();
-  document.getElementById('heat-games').innerHTML = gdays.length
-    ? `<thead><tr><th></th>${gdays.map(d => `<th>${dayLabel(d).replace(/^\w+, /, '')}</th>`).join('')}<th class="num">Total</th></tr></thead><tbody>` +
-      Object.keys(GAME_NAMES).map(g => { const row = gdays.map(d => gc[g + '|' + d] || 0);
-        return `<tr><th>${gname(g)}</th>${row.map(n => `<td ${shade(n, gMax)}>${n || ''}</td>`).join('')}<td class="num">${row.reduce((a, b) => a + b, 0)}</td></tr>`; }).join('') + '</tbody>'
-    : '<tbody><tr><td>No games played in the last 14 days.</td></tr></tbody>';
+    'Visitors are counted per browser (one person on two devices counts twice). Visits before Nov 14 were only counted if a game was played.';
 
   document.querySelector('#games-note').textContent = 'All-time counts. Players = different browsers that started the game.';
   document.querySelector('#games tbody').innerHTML = data.games.map(g =>
@@ -91,5 +74,5 @@ async function load() {
     };
   });
 
-  ['traffic', 'heat', 'heat-games-card', 'leaders', 'games', 'feedback', 'comments'].forEach(id => { document.getElementById(id).hidden = false; });
+  ['traffic', 'leaders', 'games', 'feedback', 'comments'].forEach(id => { document.getElementById(id).hidden = false; });
 }

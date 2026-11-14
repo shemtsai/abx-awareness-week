@@ -38,20 +38,11 @@ export async function GET(request) {
                          COUNT(DISTINCT player_id)::int AS p FROM events WHERE type <> 'visit' GROUP BY game, type`;
     const [{ visits }] = await sql`SELECT COUNT(DISTINCT session)::int AS visits FROM events`;
     // Site traffic. Visits = one per page load (random per-visit ID); visitors = one per browser (random ID kept in that browser).
-    const TZ = 'America/Chicago';
     const [totals] = await sql`SELECT COUNT(DISTINCT session)::int AS visits, COUNT(DISTINCT player_id)::int AS visitors,
         COUNT(DISTINCT player_id) FILTER (WHERE type = 'start')::int AS players, COUNT(*) FILTER (WHERE type = 'start')::int AS plays,
         COUNT(*) FILTER (WHERE type = 'finish')::int AS finishes,
-        COUNT(DISTINCT session) FILTER (WHERE (created_at AT TIME ZONE ${TZ})::date = (now() AT TIME ZONE ${TZ})::date)::int AS today
+        COUNT(DISTINCT player_id) FILTER (WHERE type = 'finish' AND unlocked)::int AS completers
       FROM events`;
-    const byHour = await sql`SELECT to_char(created_at AT TIME ZONE ${TZ}, 'YYYY-MM-DD') AS day,
-        EXTRACT(HOUR FROM created_at AT TIME ZONE ${TZ})::int AS hour, COUNT(DISTINCT session)::int AS n
-      FROM events WHERE created_at > now() - interval '14 days' GROUP BY 1, 2`;
-    const byDay = await sql`SELECT to_char(created_at AT TIME ZONE ${TZ}, 'YYYY-MM-DD') AS day,
-        COUNT(DISTINCT session)::int AS visits, COUNT(DISTINCT player_id)::int AS visitors
-      FROM events WHERE created_at > now() - interval '14 days' GROUP BY 1`;
-    const playsByDay = await sql`SELECT game, to_char(created_at AT TIME ZONE ${TZ}, 'YYYY-MM-DD') AS day, COUNT(*)::int AS n
-      FROM events WHERE type = 'start' AND created_at > now() - interval '14 days' GROUP BY 1, 2`;
     const pages = await sql`SELECT game AS page, COUNT(*)::int AS n FROM events WHERE type = 'visit' GROUP BY 1`;
     const games = Object.keys(codes()).map(game => {
       const start = ev.find(r => r.game === game && r.type === 'start');
@@ -61,7 +52,7 @@ export async function GET(request) {
 
     const notes = await sql`SELECT id, name, kind, body, hidden, created_at FROM comments ORDER BY created_at DESC LIMIT 500`;
     const note = r => ({ id: r.id, name: r.name, text: r.body, hidden: r.hidden, at: r.created_at });
-    return json({ leaders, games, visits, totals, byHour, byDay, playsByDay, pages, totalCodes: Object.keys(codes()).length,
+    return json({ leaders, games, visits, totals, pages, totalCodes: Object.keys(codes()).length,
       comments: notes.filter(r => r.kind === 'comment').map(note), feedback: notes.filter(r => r.kind === 'feedback').map(note) });
   } catch (err) {
     console.error(err);

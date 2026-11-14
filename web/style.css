@@ -313,13 +313,8 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .cta-alt:hover { background: rgba(250, 241, 214, .12); }
 .talk-anon[hidden] { display: none; }
 
-/* Admin traffic tiles and heatmaps */
+/* Admin engagement tiles */
 .admin .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 6px 0 10px; }
 .admin .stat { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px; text-align: center; }
 .admin .stat strong { display: block; font: 800 1.6rem var(--display); color: var(--teal); }
 .admin .stat span { font-size: .82rem; color: var(--muted); }
-.admin .heat-wrap { overflow-x: auto; }
-.admin table.heat { border-collapse: separate; border-spacing: 2px; font-size: .78rem; width: auto; }
-.admin table.heat th { font-weight: 700; color: var(--muted); white-space: nowrap; padding: 2px 6px; text-align: left; }
-.admin table.heat td { min-width: 26px; height: 24px; text-align: center; border-radius: 4px; background: #eef3f2; padding: 0 4px; }
-.admin table.heat td.num { background: none; font-weight: 700; }
