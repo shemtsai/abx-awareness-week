@@ -241,7 +241,7 @@
      how:['Practices fall for 60 seconds. They all look the same, so read each one: some are good stewardship and some are practices to avoid.','Move the paddle by dragging within the game area or by using the left and right arrow keys.','Each good practice caught earns 50 points, with a multiplier for consecutive catches. Catching a practice to avoid costs one of three lives.']},
     {ic:'🎡',name:'Stewardship Wheel',d:'Solve word puzzles built around key stewardship principles.',fn:wheel,f:1,id:'wheel',hard:'Two strikes end a puzzle instead of three.',time:'About 2 minutes',
      learn:'Core antimicrobial stewardship principles and terminology.',
-     how:['Select Spin to land on a dollar value.','Choose a consonant. You earn that value for each time it appears (for example, $500 \u00d7 3 R\'s = $1,500).','Buy a vowel for $250, or select Solve when you know the phrase. Solving earns a $500 bonus plus $100 for every letter still hidden, so solving early pays.','Landing on Lose a Turn, or choosing a consonant that is not in the puzzle, counts as a strike. Three strikes end the puzzle.','There are two puzzles, each followed by a brief teaching point.']},
+     how:['Select Spin to land on a dollar value.','Choose a consonant. You earn that value for each time it appears (for example, $500 \u00d7 3 R\'s = $1,500).','Buy a vowel for $500, or select Solve when you know the phrase. Solving earns a $500 bonus plus $100 for every letter still hidden, so solving early pays.','Landing on Lose a Turn, or choosing a consonant that is not in the puzzle, counts as a strike. Three strikes end the puzzle: you keep your letter money but miss the solve bonus. Bankrupt wipes out only the current puzzle\'s money.','There are two puzzles, each followed by a brief teaching point.']},
     {ic:'🔍',name:'Allergy Detective',d:'Evaluate penicillin allergy labels in four patient cases.',fn:detective,f:1,id:'allergy',time:'5 to 8 minutes',
      learn:'Evaluating penicillin allergy histories and how allergy labels affect antibiotic selection.',
      how:['Work through four patient cases with a reported penicillin allergy.','In each case, review the allergy history, calculate the modified PEN-FAST score, choose an evaluation pathway, and make an antibiotic decision.','Feedback with the rationale follows each decision, and key takeaways and references appear at the end.']},
@@ -548,32 +548,32 @@
   var PUZ=[{"l": 1, "c": "Slogan", "p": "NARROW IS THE NEW BROAD", "e": "Use the narrowest agent that covers the likely or confirmed pathogen."}, {"l": 1, "c": "Phrase", "p": "SHORTER IS SMARTER", "e": "Short courses work as well as longer ones for many infections, including CAP, cellulitis, complicated UTI and many bloodstream infections."}, {"l": 1, "c": "Best practice", "p": "CULTURES BEFORE ANTIBIOTICS", "e": "Cultures drawn before the first dose make de-escalation possible later."}, {"l": 1, "c": "Phrase", "p": "DON'T TREAT THE URINE", "e": "Asymptomatic bacteriuria usually shouldn't be treated, except in pregnancy or before urologic procedures that cause mucosal trauma."}, {"l": 1, "c": "Best practice", "p": "IV TO PO CONVERSION", "e": "Many antibiotics are highly bioavailable orally. Switching cuts line days and can shorten length of stay."}, {"l": 2, "c": "Thing", "p": "PENICILLIN ALLERGY DELABELING", "e": "Fewer than 1% of people are truly allergic to penicillin, though about 10% report it (CDC)."}, {"l": 2, "c": "Phrase", "p": "RIGHT DRUG RIGHT DOSE RIGHT DURATION", "e": "The core of antimicrobial stewardship."}, {"l": 1, "c": "Event", "p": "ANTIBIOTIC TIME OUT", "e": "Reassess at 48 to 72 hours: still needed, right drug, ready to narrow, switch to oral or stop?"}, {"l": 1, "c": "Campaign", "p": "BE ANTIBIOTICS AWARE", "e": "CDC's national campaign to improve antibiotic prescribing and use."}, {"l": 2, "c": "Phrase", "p": "TREAT THE PATIENT NOT THE CULTURE", "e": "A positive culture without signs of infection often reflects colonization."}, {"l": 2, "c": "Phrase", "p": "COLONIZATION IS NOT INFECTION", "e": "Bacteria can be present without causing disease."}, {"l": 1, "c": "Best practice", "p": "DOCUMENT THE INDICATION", "e": "An indication and planned duration on every order makes reassessment easier."}, {"l": 2, "c": "Thing", "p": "ANTIMICROBIAL RESISTANCE", "e": "CDC estimates about 9.7 million drug-resistant infections each year in the U.S. (2026 report)."}, {"l": 1, "c": "Phrase", "p": "VIRUSES DON'T NEED ANTIBIOTICS", "e": "Colds, flu and most bronchitis are viral."}, {"l": 2, "c": "Thing", "p": "DIAGNOSTIC STEWARDSHIP", "e": "Ordering the right test for the right patient, so results lead to the right treatment."}, {"l": 1, "c": "Best practice", "p": "KNOW YOUR ANTIBIOGRAM", "e": "Local susceptibility data guides empiric choices."}];
   function wheel(){
     var SEG=[300,500,'BANKRUPT',400,600,700,'LOSE A TURN',800,250,900,350,1000],COL=['#1f6f8b','#27ae60','#eb5757','#9b51e0','#2d9cdb','#e67e22','#16a085'];
-    var ps=pick(PUZ,2),pi=0,total=0,solved=0,bank,strikes,val,phase,used,rot=0,spinning,done,dead=false,VOW='AEIOU',MAXS=HARD?2:3;
+    var ps=pick(PUZ,2),pi=0,total=0,solved=0,bank,strikes,val,phase,used,rot=0,spinning,done,dead=false,VOW='AEIOU',MAXS=HARD?2:3,VCOST=500;
     cleanup=function(){dead=true};
     function letters(){return ps[pi].p.replace(/[^A-Z]/g,'')}
     function left(v){return letters().split('').filter(function(L){return !used[L]&&(VOW.indexOf(L)>=0)===v}).length}
     function say(t){$('.fb').innerHTML='<div class="exp">'+t+'</div>'}
     function round(){
       bank=0;strikes=0;val=0;phase='spin';used={};spinning=false;done=false;
-      root.innerHTML='<div class="card">'+BACK+'<div class="meta"><span>Puzzle '+(pi+1)+' of '+ps.length+'</span><span>Total: $<b class="wt">'+total+'</b></span></div>'+
+      root.innerHTML='<div class="card">'+BACK+'<div class="meta"><span>Puzzle '+(pi+1)+' of '+ps.length+'</span><span>Total: <b class="wt">$0</b></span></div>'+
         '<span class="tag">Category: '+esc(ps[pi].c)+'</span><div class="wboard"></div>'+
-        '<div class="meta"><span>This round: $<b class="wb">0</b></span><span class="ws"></span></div>'+
+        '<div class="meta"><span>This puzzle: <b class="wb">$0</b> <small>(locked in when you solve)</small></span><span class="ws"></span></div>'+
         '<div class="whw"><div class="ptr"></div><canvas class="wc" width="560" height="560"></canvas></div>'+
-        '<div class="wctl"><button class="btn sp">Spin</button><button class="btn ghost bv">Buy a vowel ($250)</button><button class="btn ghost so">Solve</button></div>'+
+        '<div class="wctl"><button class="btn sp">Spin</button><button class="btn ghost bv">Buy a vowel ($'+VCOST+')</button><button class="btn ghost so">Solve</button></div>'+
         '<div class="kb"></div><div class="slv"></div><div class="fb"></div></div>';
       wireBack();
       var kb='';for(var i=0;i<26;i++){var L=String.fromCharCode(65+i);kb+='<button class="key" data-l="'+L+'">'+L+'</button>'}
       $('.kb').innerHTML=kb;
       $$('.key').forEach(function(k){k.onclick=function(){guess(k.dataset.l)}});
       $('.sp').onclick=spin;
-      $('.bv').onclick=function(){if(bank<250)return say('You need $250 in this round to buy a vowel.');bank-=250;phase='vowel';ui();say('Pick a vowel.')};
+      $('.bv').onclick=function(){if(bank<VCOST)return say('You need $'+VCOST+' in this puzzle to buy a vowel.');bank-=VCOST;phase='vowel';ui();say('Pick a vowel.')};
       $('.so').onclick=solveBox;
       drawW();ui();say('Select Spin to begin. Each consonant you find earns the value you land on, for every time it appears. '+(MAXS===2?'Two':'Three')+' strikes end the puzzle.');
     }
     function ui(){
       var b='';
       ps[pi].p.split(' ').forEach(function(wd){b+='<span class="wd">';wd.split('').forEach(function(ch){var isL=/[A-Z]/.test(ch);b+='<span class="lt'+(isL?'':' pn')+'">'+(!isL||used[ch]||done?ch:'')+'</span>'});b+='</span>'});
-      $('.wboard').innerHTML=b;$('.wt').textContent=total;$('.wb').textContent=bank;
+      $('.wboard').innerHTML=b;$('.wt').textContent='$'+(total+bank).toLocaleString();$('.wb').textContent='$'+bank.toLocaleString(); /* Total = locked-in money + this puzzle's money */
       $('.ws').textContent='Strikes: '+strikes+' of '+MAXS;
       $$('.key').forEach(function(k){var L=k.dataset.l,v=VOW.indexOf(L)>=0;k.disabled=done||!!used[L]||!((phase==='guess'&&!v)||(phase==='vowel'&&v));k.classList.toggle('used',!!used[L])});
       var busy=done||spinning||phase!=='spin';
@@ -616,7 +616,7 @@
     }
     function strike(m){
       strikes++;
-      if(strikes>=MAXS){done=true;bank=0;ui();say(m+' That\'s '+MAXS+' strikes, so this puzzle earns $0. The answer was <b>'+esc(ps[pi].p)+'</b>.<span class="src">'+esc(ps[pi].e)+'</span>'+nextBtn());wireNext()}
+      if(strikes>=MAXS){done=true;total+=bank;var kept=bank;bank=0;ui();say(m+' That\'s '+MAXS+' strikes. '+(kept?'You keep the $'+kept.toLocaleString()+' you earned from letters, but miss the solve bonus.':'This puzzle earns $0.')+' The answer was <b>'+esc(ps[pi].p)+'</b>.<span class="src">'+esc(ps[pi].e)+'</span>'+nextBtn());wireNext()}
       else{ui();say(m+' Strike '+strikes+' of '+MAXS+'.')}
     }
     function solveBox(){
@@ -633,7 +633,7 @@
     function nextBtn(){return '<button class="btn nx">'+(pi<ps.length-1?'Next puzzle →':'See results')+'</button>'}
     function wireNext(){$('.nx').onclick=function(){
       pi++;if(pi<ps.length)return round();
-      root.innerHTML='<div class="card center">'+BACK+'<h2>Final total</h2><div class="big">$'+total+'</div><p>'+(solved?'Thank you for participating.':'Thank you for participating. Review the phrases and try again.')+'</p><p class="sub">Puzzles solved: '+solved+' of '+ps.length+'</p>'+award('wheel',solved>=2,'Solve both puzzles',total)+'<button class="btn again">Play again</button><button class="btn ghost home">More games</button></div>';
+      root.innerHTML='<div class="card center">'+BACK+'<h2>Final total</h2><div class="big">$'+total.toLocaleString()+'</div><p>'+(solved?'Thank you for participating.':'Thank you for participating. Review the phrases and try again.')+'</p><p class="sub">Puzzles solved: '+solved+' of '+ps.length+'</p>'+award('wheel',solved>=2,'Solve both puzzles',total)+'<button class="btn again">Play again</button><button class="btn ghost home">More games</button></div>';
       wireBack();$('.again').onclick=wheel;$('.home').onclick=menu;if(total>0)confetti();
     }}
     round();
