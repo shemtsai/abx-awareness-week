@@ -38,6 +38,9 @@ export function db() {
     await sql`CREATE TABLE IF NOT EXISTS comments (
       id SERIAL PRIMARY KEY, player_id TEXT, name TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL,
       hidden BOOLEAN NOT NULL DEFAULT false, created_at TIMESTAMPTZ DEFAULT now())`;
+    await sql`ALTER TABLE comments ADD COLUMN IF NOT EXISTS parent_id INTEGER`; // set on replies
+    await sql`CREATE TABLE IF NOT EXISTS reactions (
+      comment_id INTEGER NOT NULL, player_id TEXT NOT NULL, emoji TEXT NOT NULL, PRIMARY KEY (comment_id, player_id, emoji))`;
   })().catch(err => { ready = null; throw err; });
   return ready.then(() => sql);
 }

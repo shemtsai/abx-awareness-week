@@ -320,3 +320,17 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .admin .stat span { font-size: .82rem; color: var(--muted); }
 .talk-list .del { font: inherit; font-size: .8rem; color: #A63A24; padding: 0; background: none; border: 0; cursor: pointer; text-decoration: underline; }
 .talk-list li.mine { border-color: var(--teal-2); }
+.talk-list .reacts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
+.talk-list .react { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: .9rem; cursor: pointer; line-height: 1.4; }
+.talk-list .react span { font-size: .78rem; font-weight: 700; color: var(--muted); }
+.talk-list .react.on { border-color: var(--teal-2); background: var(--agar-lt); }
+.talk-list .react.on span { color: var(--teal); }
+.talk-list .rep { font: 700 .8rem var(--body); color: var(--teal-2); background: none; border: 0; padding: 0 4px; cursor: pointer; }
+.talk-list .replies { list-style: none; margin: 10px 0 0; padding: 0 0 0 12px; border-left: 3px solid var(--line); display: grid; gap: 8px; }
+.talk-list .replies li { padding: 10px 12px; background: var(--paper); }
+.reply-form { margin-top: 10px; }
+.reply-form textarea { width: 100%; font: 400 .95rem var(--body); padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 10px; resize: vertical; background: #fff; color: var(--ink); }
+.reply-form .talk-row { margin: 6px 0 0; }
+.reply-form .reply-send { padding: 6px 14px; border: 0; border-radius: 999px; background: var(--teal); color: var(--disk); font: 700 .85rem var(--body); cursor: pointer; }
+.reply-form .reply-send:disabled { opacity: .6; }
+.reply-form .cancel { font: inherit; font-size: .85rem; color: var(--muted); background: none; border: 0; cursor: pointer; text-decoration: underline; }

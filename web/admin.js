@@ -63,7 +63,7 @@ async function load() {
   const shown = data.comments.filter(c => !c.hidden).length;
   document.querySelector('#comments-note').textContent = `${shown} showing on the site, ${data.comments.length - shown} hidden.`;
   document.querySelector('#comments tbody').innerHTML = data.comments.map(c =>
-    `<tr class="${c.hidden ? 'is-hidden' : ''}"><td>${when(c.at)}</td><td>${esc(c.name)}</td><td class="note">${esc(c.text)}</td>` +
+    `<tr class="${c.hidden ? 'is-hidden' : ''}"><td>${when(c.at)}</td><td>${esc(c.name)}</td><td class="note"><small class="muted">${c.parent ? 'Reply to #' + c.parent : '#' + c.id}</small><br>${esc(c.text)}</td>` +
     `<td><button type="button" class="ghost" data-id="${c.id}" data-hide="${!c.hidden}">${c.hidden ? 'Show' : 'Hide'}</button></td></tr>`).join('');
   document.querySelectorAll('#comments [data-id]').forEach(b => {
     b.onclick = async () => {

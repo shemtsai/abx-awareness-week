@@ -162,30 +162,73 @@ function talkMode() {
 talkForm.addEventListener('change', talkMode);
 $('talk-text').addEventListener('input', () => { $('talk-left').textContent = (500 - $('talk-text').value.length) + ' left'; });
 talkMode();
+// One comment (or reply) with its reactions; replies sit under their comment, one level deep
+function commentHTML(c, isReply) {
+  const reacts = c.reactions.map(r => `<button type="button" class="react${r.mine ? ' on' : ''}" data-id="${c.id}" data-e="${r.emoji}" aria-pressed="${r.mine}"` +
+    ` aria-label="${r.emoji} reaction, ${r.n}">${r.emoji}${r.n ? `<span>${r.n}</span>` : ''}</button>`).join('');
+  return `<li class="${c.mine ? 'mine' : ''}${isReply ? ' reply' : ''}"><p>${esc(c.text)}</p><small>${esc(c.name)}` +
+    (c.mine ? ` · <button type="button" class="link del" data-id="${c.id}" data-replies="${isReply ? 0 : c.replies.length}">Delete</button>` : '') + '</small>' +
+    `<div class="reacts">${reacts}${isReply ? '' : `<button type="button" class="link rep" data-id="${c.id}">Reply</button>`}</div>` +
+    (!isReply && c.replies.length ? `<ul class="replies">${c.replies.map(r => commentHTML(r, true)).join('')}</ul>` : '') + '</li>';
+}
 async function loadComments() {
   try {
     const res = await fetch('/api/comments?player=' + encodeURIComponent(me.id));
     const data = await res.json();
     if (!res.ok) throw new Error(data.detail || data.error);
     $('talk-list').innerHTML = data.comments.length
-      ? data.comments.map(c => `<li${c.mine ? ' class="mine"' : ''}><p>${esc(c.text)}</p><small>${esc(c.name)}` +
-          (c.mine ? ` · <button type="button" class="link del" data-id="${c.id}">Delete</button>` : '') + '</small></li>').join('')
+      ? data.comments.map(c => commentHTML(c, false)).join('')
       : '<li class="empty">No comments yet. Be the first to share something.</li>';
   } catch (err) {
     console.warn('Comments failed:', err.message);
     $('talk-list').innerHTML = '<li class="empty">Comments will appear on the live site.</li>';
   }
 }
-// People can delete comments they posted from this browser (the server checks the browser's player ID)
+const postJSON = (method, body) => fetch('/api/comments', { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+function talkStatus(ok, text) { const st = $('talk-status'); st.className = 'talk-status ' + (ok ? 'ok' : 'bad'); st.textContent = text; }
 $('talk-list').addEventListener('click', async e => {
+  // Reactions: tap to add, tap again to remove (updates right away, then saves)
+  const r = e.target.closest('.react');
+  if (r) {
+    const on = !r.classList.contains('on'), span = r.querySelector('span'), n = (span ? +span.textContent : 0) + (on ? 1 : -1);
+    r.classList.toggle('on', on); r.setAttribute('aria-pressed', on);
+    r.innerHTML = r.dataset.e + (n ? `<span>${n}</span>` : '');
+    const res = await postJSON('POST', { player: me.id, react: { id: +r.dataset.id, emoji: r.dataset.e } }).catch(() => null);
+    if (!res || !res.ok) { talkStatus(false, 'Your reaction could not be saved.'); loadComments(); }
+    return;
+  }
+  // Reply: open a small form under the comment
+  const rep = e.target.closest('.rep');
+  if (rep) {
+    $('talk-list').querySelectorAll('.reply-form').forEach(f => f.remove());
+    rep.closest('li').querySelector('.reacts').insertAdjacentHTML('afterend',
+      `<form class="reply-form" data-id="${rep.dataset.id}"><label class="visually-hidden" for="reply-text">Your reply</label>` +
+      `<textarea id="reply-text" maxlength="500" rows="2" placeholder="Write a reply"></textarea>` +
+      `<div class="talk-row"><label class="talk-anon"><input type="checkbox" name="anonymous" /> Post without my name</label>` +
+      `<span><button type="button" class="cancel">Cancel</button> <button type="submit" class="reply-send">Post reply</button></span></div></form>`);
+    $('reply-text').focus();
+    return;
+  }
+  if (e.target.closest('.cancel')) { e.target.closest('.reply-form').remove(); return; }
+  // Delete: only shown on this browser's own comments (the server checks too)
   const btn = e.target.closest('.del');
-  if (!btn || !confirm('Delete this comment?')) return;
+  if (!btn || !confirm(+btn.dataset.replies ? 'Delete this comment? Its replies will be deleted too.' : 'Delete this comment?')) return;
   btn.disabled = true;
-  const res = await fetch('/api/comments', { method: 'DELETE', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ player: me.id, id: +btn.dataset.id }) }).catch(() => null);
-  const st = $('talk-status');
-  if (res && res.ok) { st.className = 'talk-status ok'; st.textContent = 'Your comment was deleted.'; loadComments(); }
-  else { btn.disabled = false; st.className = 'talk-status bad'; st.textContent = 'That comment could not be deleted. Please try again.'; }
+  const res = await postJSON('DELETE', { player: me.id, id: +btn.dataset.id }).catch(() => null);
+  if (res && res.ok) { talkStatus(true, 'Your comment was deleted.'); loadComments(); }
+  else { btn.disabled = false; talkStatus(false, 'That comment could not be deleted. Please try again.'); }
+});
+$('talk-list').addEventListener('submit', async e => {
+  const f = e.target.closest('.reply-form');
+  if (!f) return;
+  e.preventDefault();
+  const text = f.querySelector('textarea').value.trim();
+  if (text.length < 3) { talkStatus(false, 'Please write a little more.'); return; }
+  const b = f.querySelector('.reply-send'); b.disabled = true;
+  const res = await postJSON('POST', { player: me.id, name: me.name, kind: 'comment', parent: +f.dataset.id, text, anonymous: f.elements.anonymous.checked }).catch(() => null);
+  const data = res ? await res.json().catch(() => ({})) : {};
+  if (res && res.ok) { talkStatus(true, 'Your reply is posted.'); loadComments(); }
+  else { b.disabled = false; talkStatus(false, data.error || 'Your reply could not be sent.'); }
 });
 talkForm.addEventListener('submit', async e => {
   e.preventDefault();

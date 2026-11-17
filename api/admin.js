@@ -50,8 +50,8 @@ export async function GET(request) {
       return { game, started: start?.n || 0, players: start?.p || 0, finished: fin?.n || 0, unlocked: fin?.u || 0 };
     }).sort((a, b) => b.started - a.started);
 
-    const notes = await sql`SELECT id, name, kind, body, hidden, created_at FROM comments ORDER BY created_at DESC LIMIT 500`;
-    const note = r => ({ id: r.id, name: r.name, text: r.body, hidden: r.hidden, at: r.created_at });
+    const notes = await sql`SELECT id, name, kind, body, hidden, created_at, parent_id FROM comments ORDER BY created_at DESC LIMIT 500`;
+    const note = r => ({ id: r.id, name: r.name, text: r.body, hidden: r.hidden, at: r.created_at, parent: r.parent_id });
     return json({ leaders, games, visits, totals, pages, totalCodes: Object.keys(codes()).length,
       comments: notes.filter(r => r.kind === 'comment').map(note), feedback: notes.filter(r => r.kind === 'feedback').map(note) });
   } catch (err) {
