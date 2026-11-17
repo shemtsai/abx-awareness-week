@@ -103,6 +103,7 @@ export async function gameBoards(sql, player, limit = 10) {
   const table = [...medals.values()]
     .map(m => ({ ...m, points: 5 * m.gold + 3 * m.silver + m.bronze }))
     .sort((a, b) => b.points - a.points || b.gold - a.gold || b.silver - a.silver)
-    .map((m, i) => ({ rank: i + 1, name: names.get(m.id) || 'Anonymous', gold: m.gold, silver: m.silver, bronze: m.bronze, points: m.points, me: !!player && m.id === player }));
+    .map((m, i, all) => ({ rank: all.findIndex(x => x.points === m.points && x.gold === m.gold && x.silver === m.silver) + 1, // full ties share a rank
+      name: names.get(m.id) || 'Anonymous', gold: m.gold, silver: m.silver, bronze: m.bronze, points: m.points, me: !!player && m.id === player }));
   return { boards, medals: { top: table.slice(0, limit), me: table.find(r => r.me) || null } };
 }

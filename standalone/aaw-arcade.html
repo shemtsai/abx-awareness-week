@@ -176,6 +176,31 @@
 #aaw-hub .ad .case-tile strong{display:block;color:#123f50}#aaw-hub .ad .case-tile span{font-size:.8em;color:#5a6b76}
 #aaw-hub .ad .case-tile.done{border-color:#8dbb91;background:#f1f8f1}
 #aaw-hub .ad .refs p{font-size:.84em;margin-bottom:8px}
+#aaw-hub .ad .clue.revealed .clue-text{animation:aaw-flip .35s ease}
+@keyframes aaw-flip{from{transform:rotateX(90deg);opacity:0}to{transform:none;opacity:1}}
+#aaw-hub .ad .notebook{background:#fffdf6;border:1px solid #e8dcb5;border-radius:10px;padding:10px 14px;margin:10px 0 14px;font-size:.9em}
+#aaw-hub .ad .notebook summary{cursor:pointer;font-weight:800;color:#6b5414}
+#aaw-hub .ad .notebook ul{margin:8px 0 0;padding-left:18px}#aaw-hub .ad .notebook li{margin:3px 0}
+#aaw-hub .ad .pf{display:grid;gap:12px}
+#aaw-hub .ad .pf-item{background:#fff;border:1px solid #d7e3ea;border-radius:10px;padding:12px}
+#aaw-hub .ad .pf-item strong{display:block;margin-bottom:8px;color:#123f50}
+#aaw-hub .ad .seg{display:flex;flex-wrap:wrap;gap:6px}
+#aaw-hub .ad .seg button{margin:0;padding:8px 12px;border:1.5px solid #c5d5de;background:#fff;color:#1d2b33;font-weight:600;font-size:.9em;border-radius:99px;cursor:pointer}
+#aaw-hub .ad .seg button em{font-style:normal;font-weight:800;color:var(--c);margin-left:6px;font-size:.85em}
+#aaw-hub .ad .seg button:hover:not(:disabled){border-color:var(--c)}
+#aaw-hub .ad .seg button.on{background:var(--c);border-color:var(--c);color:#fff}#aaw-hub .ad .seg button.on em{color:#cdeaf2}
+#aaw-hub .ad .seg button.exp{box-shadow:0 0 0 3px #8dcf95}
+#aaw-hub .ad .seg button.wrong{background:#ffebee;border-color:var(--bad);color:#8a1f1f}#aaw-hub .ad .seg button.wrong em{color:#8a1f1f}
+#aaw-hub .ad .seg button:disabled{cursor:default}
+#aaw-hub .ad .pf-total{display:flex;align-items:center;justify-content:space-between;background:#123f50;color:#fff;border-radius:10px;padding:12px 16px;margin-top:12px}
+#aaw-hub .ad .pf-total b{font-size:1.8em;line-height:1}
+#aaw-hub .ad .pf-total b.bump{animation:aaw-bump .3s ease}
+@keyframes aaw-bump{50%{transform:scale(1.35)}}
+#aaw-hub .ad .stamp{display:inline-block;border:3px solid #c62828;color:#c62828;font-weight:900;letter-spacing:.12em;padding:4px 14px;border-radius:6px;transform:rotate(-6deg);margin:4px 0 10px;animation:aaw-stamp .45s ease-out}
+@keyframes aaw-stamp{from{transform:rotate(-6deg) scale(2.2);opacity:0}to{transform:rotate(-6deg) scale(1);opacity:1}}
+#aaw-hub .ad .stars{font-size:1.5em;color:#e2a400;letter-spacing:.1em}#aaw-hub .ad .stars i{font-style:normal;color:#cfd8dc}
+#aaw-hub .ad .rank{display:inline-block;background:#fdecc8;color:#8a4b00;border-radius:99px;padding:5px 14px;font-weight:800;margin:6px 0 4px}
+@media(prefers-reduced-motion:reduce){#aaw-hub .ad .clue.revealed .clue-text,#aaw-hub .ad .pf-total b.bump,#aaw-hub .ad .stamp{animation:none}}
 @media(max-width:520px){#aaw-hub .ad .case-list{grid-template-columns:1fr}#aaw-hub .ad .stat{padding:8px 4px}}
 /*]]>*/</style>
 <script>//<![CDATA[
@@ -244,7 +269,7 @@
      how:['Select Spin to land on a dollar value.','Choose a consonant. You earn that value for each time it appears (for example, $500 \u00d7 3 R\'s = $1,500).','Buy a vowel for $500, or select Solve when you know the phrase. Solving earns a $500 bonus plus $100 for every letter still hidden, so solving early pays.','Landing on Lose a Turn, or choosing a consonant that is not in the puzzle, counts as a strike. Three strikes end the puzzle: you keep your letter money but miss the solve bonus. Bankrupt wipes out only the current puzzle\'s money.','There are two puzzles, each followed by a brief teaching point.']},
     {ic:'🔍',name:'Allergy Detective',d:'Evaluate penicillin allergy labels in four patient cases.',fn:detective,f:1,id:'allergy',time:'5 to 8 minutes',
      learn:'Evaluating penicillin allergy histories and how allergy labels affect antibiotic selection.',
-     how:['Work through four patient cases with a reported penicillin allergy.','In each case, review the allergy history, calculate the modified PEN-FAST score, choose an evaluation pathway, and make an antibiotic decision.','Feedback with the rationale follows each decision, and key takeaways and references appear at the end.']},
+     how:['Solve four patient cases with a reported penicillin allergy, in a new order each time.','Interview the patient: tap each question to reveal a clue for your notebook.','Build the modified PEN-FAST score by tapping the answer for each item, then lock it in.','Choose an evaluation pathway and make the antibiotic decision. Each case closes with up to three stars, and your final rank depends on how many decisions you get right.']},
     {ic:'🧠',name:'Myth or Fact',d:'Sort falling statements into Myth or Fact before they land.',fn:myth,f:1,id:'myth',hard:'Cards fall faster and harder statements appear more often.',time:'About 2 minutes',
      learn:'Common misconceptions about antibiotics, allergy labels, side effects and resistance.',
      how:['A statement falls toward two bins. Send it to Myth or Fact before it lands: tap a bin, swipe the card, or press ← / →.','Faster answers earn more points, and a streak of 3 or more multiplies them.','A wrong or missed card costs one of three lives and pauses on the explanation. There are ten cards.']},
@@ -1009,6 +1034,7 @@
      brief:'A 64-year-old patient is admitted with sepsis and empirically started on cefepime and vancomycin. Blood cultures grow ampicillin-susceptible Enterococcus faecalis. The team would like to narrow therapy to ampicillin, but the chart lists a penicillin allergy.',
      infection:'E. faecalis bacteremia',
      clues:[['What reaction occurred?','The patient recalls a flat, red rash while taking amoxicillin.'],['How old was the patient?','The reaction occurred around age 12.'],['When did it happen?','The reaction occurred more than 50 years ago.'],['Was medical treatment required?','No treatment, emergency visit, or hospitalization was needed.'],['Any severe features?','No blistering, mucosal lesions, facial swelling, breathing difficulty, or organ involvement.'],['What happened after the reaction?','The patient does not recall any subsequent penicillin exposure or allergy evaluation.']],
+     pf:{p:'rash',r:'no',a:'no',t:'no'},
      risk:{q:"Using the modified PEN-FAST clinical decision rule, what is the patient's score?",correct:0,why:'The reported reaction is rash/hives/itching without a severe delayed or organ-specific reaction (+0). It occurred more than 5 years ago (+0), was not characterized by anaphylaxis/angioedema (+0), and did not require treatment or hospitalization (+0). Total = 0. Follow the hospital pathway and confirm eligibility before any challenge.'},
      pathway:{q:'What is a reasonable evaluation pathway for this selected patient?',opts:['Direct oral amoxicillin challenge under an established protocol, if eligible','Penicillin skin testing is mandatory for every penicillin label','Remove the label without documenting or evaluating the history','Avoid all beta-lactams indefinitely'],correct:0,why:'A low score can help identify patients who may be candidates for direct oral challenge. Use the established institutional protocol and confirm there are no contraindications or history details that change risk.'},
      drug:{q:'The patient tolerates the supervised amoxicillin challenge. What is the best stewardship action for the susceptible E. faecalis bacteremia?',opts:['Continue cefepime plus vancomycin','Narrow to ampicillin, assuming no other contraindication','Continue vancomycin because of the historical label','Switch to meropenem for broader coverage'],correct:1,why:'For ampicillin-susceptible E. faecalis bacteremia, ampicillin is generally the preferred targeted therapy when clinically appropriate. After a tolerated evaluation and appropriate documentation, remove/update the inaccurate allergy label and narrow empiric cefepime plus vancomycin.'},
@@ -1017,6 +1043,7 @@
      brief:'A 58-year-old patient is admitted with a serious infection. The chart lists a penicillin allergy, and the team needs to select an appropriate beta-lactam regimen.',
      infection:'Serious bacterial infection',
      clues:[['What happened?','The patient reports hives, throat tightness, wheezing, and dizziness after taking amoxicillin.'],['What treatment was needed?','The patient was treated in the emergency department with epinephrine.'],['How long ago?','The reaction occurred about three years ago.'],['Any severe delayed features?','No blistering, mucosal lesions, or delayed organ injury were reported.'],['Any cephalosporin tolerance?','No known cephalosporin exposure since the reaction.']],
+     pf:{p:'rash',r:'yes',a:'yes',t:'yes'},
      risk:{q:"Using the modified PEN-FAST clinical decision rule, what is the patient's score?",correct:6,why:'The reported phenotype is rash/hives/itching (+0 for item 2). The reaction occurred within the past 5 years (+2), was characterized by anaphylaxis/angioedema (+3), and required treatment (+1). Total = 6. This is not a low-risk history for routine direct oral challenge; follow the hospital evaluation pathway.'},
      pathway:{q:'What is the best next step for evaluating the penicillin allergy?',opts:['Give an unsupervised amoxicillin dose','Remove the label because the reaction was three years ago','Use an appropriate specialist/evaluation pathway; do not perform a routine direct challenge','Use a routine direct oral challenge pathway because the reaction was not within the past year'],correct:2,why:'A convincing recent anaphylaxis history warrants an appropriate allergy evaluation pathway. Do not use an unsupervised or routine direct oral challenge. The history should be evaluated appropriately rather than treated as a low-risk label.'},
      drug:{q:'The patient is found to have MSSA bacteremia. Which statement is most accurate regarding definitive therapy?',opts:['Avoid cefazolin and continue vancomycin because the patient has a history of penicillin anaphylaxis','Cefazolin can still be used in many patients with penicillin anaphylaxis because it has a distinct R1 side chain, provided the clinical context and applicable guidance support its use','All beta-lactams should be avoided because penicillin anaphylaxis predicts class-wide cross-reactivity','Use a carbapenem because it is the only beta-lactam class that can be considered'],correct:1,why:"Cefazolin has a distinct R1 side chain and very low cross-reactivity with penicillins. A history of penicillin anaphylaxis alone does not automatically preclude cefazolin, particularly in the absence of a severe delayed reaction such as SCAR. For MSSA bacteremia, cefazolin is an appropriate definitive-therapy option when otherwise clinically appropriate. Consider the patient's specific history, clinical context, and applicable allergy guidance."},
@@ -1025,6 +1052,7 @@
      brief:'A 47-year-old patient is admitted with an infection for which a beta-lactam would ordinarily be preferred. The allergy list reports a severe reaction to a penicillin.',
      infection:'Serious bacterial infection',
      clues:[['What did the skin reaction look like?','The patient recalls painful skin, blistering, and peeling.'],['Was there mucosal involvement?','Yes. The mouth and eyes were affected.'],['Was hospitalization needed?','Yes. The patient required hospitalization and specialist care.'],['Was an organ injury identified?','The patient recalls being told the reaction was severe; records mention possible liver involvement.'],['Which medication was implicated?','The patient believes it was amoxicillin, although the original records should be reviewed.']],
+     pf:{p:'sjs',r:'no',a:'no',t:'yes'},
      risk:{q:"Using the modified PEN-FAST clinical decision rule, what is the patient's score?",correct:5,why:'The reported reaction is a severe cutaneous adverse reaction (SJS/TEN-type features), which adds 4 points. It occurred more than 5 years ago (+0), was not described as anaphylaxis/angioedema (+0), and required hospitalization/treatment (+1). Total = 5. Crucially, the score does not make this patient eligible for a routine challenge: severe delayed or organ-specific reactions are outside the scope of the usual beta-lactam allergy algorithms.'},
      pathway:{q:'What should you do with this history?',opts:['Perform a direct oral amoxicillin challenge','Remove the label because the reaction was delayed','Avoid routine challenge to the implicated drug and obtain specialist guidance / clarify records','Give a test dose on the ward without further review'],correct:2,why:'Drug allergy guidelines note that standard beta-lactam allergy risk-stratification and challenge algorithms do not apply to patients with a history of severe delayed immunologic or organ-specific reactions. These include SCARs, hemolytic anemia, drug-induced liver injury, and acute interstitial nephritis. Avoid routine challenge and obtain specialist guidance.'},
      drug:{q:'How should the team approach beta-lactam selection?',opts:['Assume all beta-lactams are automatically safe','Ignore the history because it is uncertain','Avoid the suspected culprit and seek specialist-guided assessment of related beta-lactams; use an appropriate alternative when needed','Perform an oral challenge to determine whether the label is real'],correct:2,why:'With suspected SCAR, do not apply the usual low-risk delabeling or cefazolin-anaphylaxis logic. Standard beta-lactam allergy algorithms and challenge pathways do not apply to severe delayed immunologic or organ-specific reactions, including SCARs, hemolytic anemia, drug-induced liver injury, and acute interstitial nephritis. The culprit and potentially related drugs require careful specialist assessment.'},
@@ -1033,76 +1061,99 @@
      brief:'A 72-year-old patient is admitted with community-acquired pneumonia. The chart lists penicillin allergy, and the team is considering broader therapy because of the label.',
      infection:'Community-acquired pneumonia',
      clues:[['What reaction occurred?','The patient reports nausea and loose stools while taking amoxicillin.'],['Any rash or hives?','No rash, hives, swelling, or itching occurred.'],['Any breathing or circulatory symptoms?','No breathing difficulty, throat symptoms, or dizziness.'],['Was treatment required?','No. Symptoms resolved after the medication was stopped.'],['Has the patient taken related drugs since?','The patient has tolerated cephalexin without difficulty.'],['What does the patient think the allergy means?','The patient says they were told to avoid penicillin because it upset their stomach.']],
+     pf:{p:'none',r:'no',a:'no',t:'no'},
      risk:{q:'Using the modified PEN-FAST clinical decision rule, what score applies to this history?',correct:0,why:'The history describes gastrointestinal intolerance only, not one of the listed allergic reaction phenotypes. The patient has no listed severe delayed/organ-specific reaction (+0), no reaction within 5 years (+0), no anaphylaxis/angioedema (+0), and no treatment or hospitalization (+0). Total = 0. Document the history as intolerance rather than immune-mediated allergy, consistent with local policy.'},
      pathway:{q:'What is the most appropriate documentation action?',opts:['Keep an anaphylaxis label','Clarify and correct the record to describe intolerance rather than allergy, following local policy','Add an allergy to every beta-lactam','Refer every patient with nausea for skin testing'],correct:1,why:'The record should accurately distinguish intolerance from allergy. Follow local procedures for correcting the label and communicate the history to the treating team.'},
      drug:{q:'What is the stewardship opportunity?',opts:['Use broader therapy indefinitely','Avoid all beta-lactams','Choose the guideline-concordant antibiotic without treating intolerance as an IgE allergy','Use vancomycin for all infections'],correct:2,why:'An inaccurate allergy label can drive broader or less effective therapy. Correcting the record can help preserve first-line treatment options.'},
      takeaway:'GI intolerance alone is not an immune-mediated allergy. Correct documentation can prevent unnecessary broad-spectrum alternatives.'}
   ];
   function detective(){
-    var cases=AD_CASES,state;
+    var cases=AD_CASES,state,lastTotal=0;
     root.innerHTML='<div class="card ad">'+BACK+'<div class="ad-screen"></div></div>';
     wireBack();
     var screen=$('.ad-screen');
-    function start(){state={caseIndex:0,score:0,caseScores:[],clues:[],answers:{}};renderHome()}
+    function start(){cases=shuffle(AD_CASES);state={caseIndex:0,score:0,caseScores:[],clues:[],answers:{}};renderHome()}
     function renderHome(){
       var done=state.caseScores.length;
       screen.innerHTML='<div class="hero"><div class="eyebrow" style="color:#bfe3ee">Antibiotic Awareness Week</div><h1>Allergy Detective</h1><p>Review four patient cases with a reported penicillin allergy. Gather the history, assess the risk, choose an evaluation pathway, and make the antibiotic decision.</p></div>'+
         '<div class="row"><span class="pill">4 PATIENT CASES</span><span class="muted">'+done+' of 4 completed</span></div>'+
         '<div class="stats"><div class="stat"><strong>4</strong><span>Patient cases</span></div><div class="stat"><strong>5–8 min</strong><span>Estimated time</span></div><div class="stat"><strong>'+state.score+'</strong><span>Points earned</span></div></div>'+
-        '<div class="case-list">'+cases.map(function(c,i){var d=state.caseScores[i]!==undefined;return '<div class="case-tile '+(d?'done':'')+'"><strong>'+(d?'✓ ':'')+esc(c.title)+'</strong><span>Patient case</span></div>'}).join('')+'</div>'+
+        '<div class="case-list">'+cases.map(function(c,i){var d=state.caseScores[i]!==undefined;return '<div class="case-tile '+(d?'done':'')+'"><strong>'+(d?'✓ ':'')+'Case '+(i+1)+'</strong><span>'+esc(c.infection)+'</span></div>'}).join('')+'</div>'+
         '<div class="notice"><strong>Clinical note:</strong> This activity is for education only. Evaluation eligibility and antibiotic selection must follow current practice parameters, patient-specific factors, and local institutional protocols.</div>'+
         '<div class="actions"><button class="btn" id="ad-begin">'+(done?'Continue':'Begin first case')+'</button></div>';
       screen.querySelector('#ad-begin').onclick=function(){state.caseIndex=Math.min(done,3);beginCase()};
     }
-    function beginCase(){state.clues=[];state.answers={};renderBrief()}
+    function beginCase(){state.clues=[];state.answers={};state.pf={};lastTotal=0;renderBrief()}
     function header(step){
       return '<div class="row"><span class="pill">CASE '+(state.caseIndex+1)+' OF 4</span><span class="muted">Score: '+state.score+'</span></div>'+
         '<div class="progress"><span style="width:'+(step/4*100)+'%"></span></div><div class="meta"><span>Patient case</span><span>Step '+step+' of 4</span></div>';
     }
     function renderBrief(){
       var c=cases[state.caseIndex];
-      screen.innerHTML=header(0)+'<div class="case-intro"><span class="eyebrow">PATIENT BRIEFING</span><h2>'+esc(c.title)+'</h2><p>'+esc(c.brief)+'</p><p class="muted"><strong>Clinical problem:</strong> '+esc(c.infection)+'</p></div>'+
+      screen.innerHTML=header(0)+'<div class="case-intro"><span class="eyebrow">PATIENT BRIEFING</span><h2>Case '+(state.caseIndex+1)+'</h2><p>'+esc(c.brief)+'</p><p class="muted"><strong>Clinical problem:</strong> '+esc(c.infection)+'</p></div>'+
         '<h3>Your task</h3><p>Evaluate the allergy label before recommending a treatment plan. Start by reviewing the patient\'s history.</p>'+
         '<div class="actions"><button class="btn" id="ad-inv">Review the history</button><button class="btn secondary" id="ad-quit">Back to case list</button></div>';
       screen.querySelector('#ad-inv').onclick=renderClues;screen.querySelector('#ad-quit').onclick=renderHome;
     }
     function renderClues(){
       var c=cases[state.caseIndex],opened=state.clues.length;
-      screen.innerHTML=header(1)+'<h2>Step 1: Review the allergy history</h2><p class="sub">Select each question to reveal the patient\'s response. Review all of them to continue.</p>'+
+      screen.innerHTML=header(1)+'<h2>Step 1: Interview the patient</h2><p class="sub">Tap each question to reveal the answer. Every clue goes into your notebook (+2 points each). Collect them all to continue.</p>'+
         '<div class="clue-grid">'+c.clues.map(function(cl,i){var seen=state.clues.indexOf(i)!==-1;
           return '<button class="clue '+(seen?'revealed':'')+'" data-clue="'+i+'" '+(seen?'disabled':'')+'><span class="symbol">'+(seen?'✓':'+')+'</span><span class="clue-text"><strong>'+esc(cl[0])+'</strong><small>'+(seen?esc(cl[1]):'Select to reveal the response')+'</small></span></button>'}).join('')+'</div>'+
-        '<p class="muted" style="margin-top:10px">'+opened+' of '+c.clues.length+' responses reviewed</p>'+
-        '<div class="actions"><button class="btn" id="ad-risk" '+(opened<c.clues.length?'disabled':'')+'>Assess the reaction</button><button class="btn secondary" id="ad-back">Back</button></div>';
+        '<p class="muted" style="margin-top:10px">🔍 '+opened+' of '+c.clues.length+' clues collected</p>'+
+        '<div class="actions"><button class="btn" id="ad-risk" '+(opened<c.clues.length?'disabled':'')+'>Build the PEN-FAST score</button><button class="btn secondary" id="ad-back">Back</button></div>';
       Array.prototype.forEach.call(screen.querySelectorAll('[data-clue]'),function(b){b.onclick=function(){var i=+b.getAttribute('data-clue');if(state.clues.indexOf(i)<0){state.clues.push(i);state.score+=2}renderClues()}});
-      screen.querySelector('#ad-risk').onclick=function(){renderQuestion('risk')};screen.querySelector('#ad-back').onclick=renderBrief;
+      screen.querySelector('#ad-risk').onclick=renderCalc;screen.querySelector('#ad-back').onclick=renderBrief;
+    }
+    /* Modified PEN-FAST items. The first item (who reports the allergy) adds no points, so it isn't scored here. */
+    var PF2=[['rash','Rash, hives or itching',0],['sick','Serum sickness or drug fever',4],['dress','DRESS or AGEP',4],['organ','Interstitial nephritis or drug-induced liver injury',4],['sjs','SJS or TEN',4],['none','Unknown or none of these',0]],
+      PFY=[['yes','Yes'],['no','No'],['unk','Unknown']],PFPTS={r:{yes:2,no:0,unk:1},a:{yes:3,no:0,unk:1},t:{yes:1,no:0,unk:0}};
+    function pfPts(k,v){return k==='p'?PF2.filter(function(x){return x[0]===v})[0][2]:PFPTS[k][v]}
+    function pfTotal(sel){return ['p','r','a','t'].reduce(function(n,k){return n+(sel[k]?pfPts(k,sel[k]):0)},0)}
+    function notebook(){var c=cases[state.caseIndex];
+      return '<details class="notebook"'+(state.answers.risk===undefined?' open':'')+'><summary>🗒️ Detective\'s notebook</summary><ul>'+c.clues.map(function(cl){return '<li><b>'+esc(cl[0])+'</b> '+esc(cl[1])+'</li>'}).join('')+'</ul></details>'}
+    function renderCalc(){
+      var c=cases[state.caseIndex],q=c.risk,sel=state.pf,answer=state.answers.risk,done=answer!==undefined,total=pfTotal(sel);
+      function seg(k,label,opts){
+        return '<div class="pf-item"><strong>'+label+'</strong><div class="seg" data-k="'+k+'">'+opts.map(function(o){
+          var on=sel[k]===o[0],cls=(on?'on ':'')+(done?(c.pf[k]===o[0]?'exp':(on?'wrong':'')):''),p=pfPts(k,o[0]);
+          return '<button type="button" class="'+cls+'" data-v="'+o[0]+'"'+(done?' disabled':'')+'>'+esc(o[1])+'<em>'+(p?'+'+p:'0')+'</em></button>'}).join('')+'</div></div>'}
+      var complete=['p','r','a','t'].every(function(k){return sel[k]});
+      screen.innerHTML=header(2)+'<span class="eyebrow">STEP 2: RISK ASSESSMENT</span><h2>Build the modified PEN-FAST score</h2>'+
+        '<p class="sub">Use your notebook and tap the answer for each item. The score adds up as you go. (The first PEN-FAST item, who reports the allergy, adds no points.)</p>'+notebook()+
+        '<div class="pf">'+seg('p','Was the reaction ever reported as one of these?',PF2)+seg('r','Did the reaction happen within the past 5 years?',PFY)+
+        seg('a','Was it anaphylaxis or angioedema?',PFY)+seg('t','Did it require treatment or hospitalization?',PFY)+'</div>'+
+        '<div class="pf-total"><span>Modified PEN-FAST score</span><b class="'+(total!==lastTotal?'bump':'')+'">'+total+'</b></div>'+
+        (done?'<div class="feedback '+(answer===q.correct?'good':'warn')+'"><strong>'+(answer===q.correct?'Correct: the score is '+q.correct+'.':'Not quite. The score is '+q.correct+'; the answers outlined in green match this history.')+'</strong>'+esc(q.why)+'</div>'+
+          '<div class="actions"><button class="btn" id="ad-next">Choose an evaluation pathway</button><button class="btn secondary" id="ad-back">Back to the interview</button></div>':
+          '<p class="muted" style="margin:10px 0 0">Severe delayed or organ-specific reactions are an important exception: a calculated score never sends these patients through routine challenge algorithms.</p>'+
+          '<div class="actions"><button class="btn" id="ad-lock"'+(complete?'':' disabled')+'>Lock in score</button><button class="btn secondary" id="ad-back">Back to the interview</button></div>');
+      lastTotal=total;
+      if(!done){
+        Array.prototype.forEach.call(screen.querySelectorAll('.seg button'),function(b){b.onclick=function(){sel[b.parentNode.getAttribute('data-k')]=b.getAttribute('data-v');renderCalc()}});
+        screen.querySelector('#ad-lock').onclick=function(){state.answers.risk=pfTotal(sel);if(state.answers.risk===q.correct){state.score+=10;confetti()}renderCalc()};
+      }else screen.querySelector('#ad-next').onclick=function(){renderQuestion('pathway')};
+      screen.querySelector('#ad-back').onclick=renderClues;
     }
     function renderQuestion(key){
       var c=cases[state.caseIndex],q=c[key],step=key==='risk'?2:key==='pathway'?3:4,answer=state.answers[key];
-      var penfast='<div class="case-intro"><h3 style="margin-bottom:8px">Modified PEN-FAST Clinical Decision Rule</h3>'+
-        '<p class="muted">Use the criteria below to calculate the score. The first question identifies who is reporting the history and does not add points.</p><div class="choices">'+
-        '<div><strong>1. Who is reporting the penicillin allergy?</strong><p class="muted">Patient, family, or other caregiver (no points)</p></div>'+
-        '<div><strong>2. Was the allergy ever reported as one of the following?</strong><ul class="muted"><li>Rash, hives, itching: 0 points</li><li>Serum sickness / drug-induced fever: +4</li><li>DRESS / AGEP: +4</li><li>Interstitial nephritis / drug-induced liver injury: +4</li><li>SJS / TEN: +4</li><li>Unknown or none of the above: 0 points</li></ul></div>'+
-        '<div class="row"><strong>3. Reaction within the past 5 years?</strong><span class="pill">Yes +2 • No 0 • Unknown +1</span></div>'+
-        '<div class="row"><strong>4. Anaphylaxis or angioedema?</strong><span class="pill">Yes +3 • No 0 • Unknown +1</span></div>'+
-        '<div class="row"><strong>5. Did the reaction require treatment or hospitalization?</strong><span class="pill">Yes +1 • No 0 • Unknown (no points specified)</span></div></div>'+
-        '<p class="muted" style="margin:10px 0 0">Add the applicable points. Severe delayed or organ-specific reactions are an important exception: do not use a calculated score to send these patients through routine challenge algorithms.</p></div>';
-      var opts=key==='risk'?Array.apply(null,{length:11}).map(function(_,n){return 'Modified PEN-FAST score: '+n}):q.opts;
-      screen.innerHTML=header(step)+(key==='risk'?'<span class="eyebrow">STEP 2: RISK ASSESSMENT</span>'+penfast:'<span class="eyebrow">'+(key==='pathway'?'STEP 3: EVALUATION PATHWAY':'STEP 4: ANTIBIOTIC DECISION')+'</span>')+
+      var opts=q.opts;
+      screen.innerHTML=header(step)+'<span class="eyebrow">'+(key==='pathway'?'STEP 3: EVALUATION PATHWAY':'STEP 4: ANTIBIOTIC DECISION')+'</span>'+notebook()+
         '<h2>'+esc(q.q)+'</h2><div class="choices">'+opts.map(function(o,i){var cls='';if(answer!==undefined){if(i===q.correct)cls='correct';else if(i===answer)cls='incorrect'}
           return '<button class="answer '+cls+'" data-answer="'+i+'" '+(answer!==undefined?'disabled':'')+'>'+esc(String(o))+'</button>'}).join('')+'</div>'+
         (answer!==undefined?
           '<div class="feedback '+(answer===q.correct?'good':'warn')+'"><strong>'+(answer===q.correct?'Correct':'Incorrect. Review the rationale.')+'</strong>'+esc(q.why)+'</div>'+
-          '<div class="actions"><button class="btn" id="ad-next">'+(key==='risk'?'Choose an evaluation pathway':key==='pathway'?'Make the antibiotic decision':'Complete this case')+'</button><button class="btn secondary" id="ad-back">Back to history</button></div>':
+          '<div class="actions"><button class="btn" id="ad-next">'+(key==='risk'?'Choose an evaluation pathway':key==='pathway'?'Make the antibiotic decision':'Complete this case')+'</button><button class="btn secondary" id="ad-back">Back to the interview</button></div>':
           '<p class="muted" style="margin-top:12px">'+(key==='risk'?'Use the criteria above to calculate the total, then select the score. You can go back to review the history.':'Select the best answer. Feedback appears before you continue.')+'</p>'+
-          '<div class="actions"><button class="btn secondary" id="ad-back">Back to history</button></div>');
-      if(answer===undefined){Array.prototype.forEach.call(screen.querySelectorAll('[data-answer]'),function(b){b.onclick=function(){var n=+b.getAttribute('data-answer');state.answers[key]=n;if(n===q.correct)state.score+=10;renderQuestion(key)}})}
-      else screen.querySelector('#ad-next').onclick=function(){if(key==='risk')renderQuestion('pathway');else if(key==='pathway')renderQuestion('drug');else completeCase()};
+          '<div class="actions"><button class="btn secondary" id="ad-back">Back to the interview</button></div>');
+      if(answer===undefined){Array.prototype.forEach.call(screen.querySelectorAll('[data-answer]'),function(b){b.onclick=function(){var n=+b.getAttribute('data-answer');state.answers[key]=n;if(n===q.correct)state.score+=10;renderQuestion(key);if(n===q.correct)confetti()}})}
+      else screen.querySelector('#ad-next').onclick=function(){if(key==='pathway')renderQuestion('drug');else completeCase()};
       screen.querySelector('#ad-back').onclick=renderClues;
     }
     function completeCase(){
       var c=cases[state.caseIndex],correct=['risk','pathway','drug'].filter(function(k){return state.answers[k]===c[k].correct}).length;
       state.caseScores[state.caseIndex]=correct;
-      screen.innerHTML=header(4)+'<div class="case-intro"><span class="eyebrow">CASE COMPLETE</span><h2>'+esc(c.title)+'</h2><p>'+esc(c.takeaway)+'</p></div>'+
+      screen.innerHTML=header(4)+'<div class="case-intro" style="text-align:center"><div class="stamp">CASE CLOSED</div><div class="stars" aria-label="'+correct+' of 3 decisions correct">'+'★★★'.slice(0,correct)+'<i>'+'★★★'.slice(correct)+'</i></div><h2>Case '+(state.caseIndex+1)+'</h2><p style="text-align:left">'+esc(c.takeaway)+'</p></div>'+
         '<div class="stats"><div class="stat"><strong>'+correct+'/3</strong><span>Decisions correct</span></div><div class="stat"><strong>+'+(state.clues.length*2+correct*10)+'</strong><span>Case points</span></div><div class="stat"><strong>'+state.score+'</strong><span>Total score</span></div></div>'+
         '<div class="actions"><button class="btn" id="ad-nextcase">'+(state.caseIndex===3?'View final results':'Next case')+'</button><button class="btn secondary" id="ad-board">Case list</button></div>';
       screen.querySelector('#ad-nextcase').onclick=function(){if(state.caseIndex===3)renderFinal();else{state.caseIndex++;beginCase()}};
@@ -1111,9 +1162,9 @@
     function renderFinal(){
       var total=state.caseScores.reduce(function(a,b){return a+b},0);
       screen.innerHTML='<div class="hero"><div class="eyebrow" style="color:#bfe3ee">ALL CASES COMPLETE</div><h1>Allergy Detective: results</h1><p>You have completed all four patient cases.</p></div>'+
-        '<div class="score">'+state.score+' points</div><p class="sub">Clinical decisions correct: '+total+' of 12</p>'+
+        '<div class="score">'+state.score+' points</div><div class="rank">'+(total===12?'🏅 Chief Detective':total>=9?'🕵️ Senior Detective':total>=6?'🔍 Detective':'📋 Rookie Detective')+'</div><p class="sub">Clinical decisions correct: '+total+' of 12</p>'+
         award('allergy',true,'Complete all four cases',state.score)+
-        '<div class="case-list">'+cases.map(function(c,i){var n=state.caseScores[i]||0;return '<div class="case-tile '+(n===3?'done':'')+'"><strong>'+esc(c.title)+'</strong><span>'+n+' of 3 decisions correct</span></div>'}).join('')+'</div>'+
+        '<div class="case-list">'+cases.map(function(c,i){var n=state.caseScores[i]||0;return '<div class="case-tile '+(n===3?'done':'')+'"><strong>Case '+(i+1)+': '+esc(c.infection)+'</strong><span>'+'★★★'.slice(0,n)+' '+n+' of 3 decisions correct</span></div>'}).join('')+'</div>'+
         '<div class="case-intro"><span class="eyebrow">KEY TAKEAWAYS</span><h2>Putting penicillin allergy assessment into practice</h2>'+
         '<p><strong>1. Use PEN-FAST to help assess risk.</strong><br>The modified PEN-FAST clinical decision rule can help risk-stratify patients with reported penicillin allergies and identify patients who may be appropriate for further evaluation. However, clinical history remains essential. Standard risk-stratification and challenge algorithms do not apply to patients with severe delayed immunologic or organ-specific reactions, such as SCARs, hemolytic anemia, drug-induced liver injury, or acute interstitial nephritis.</p>'+
         '<p><strong>2. Penicillin and cephalosporin cross-reactivity is not a class-wide phenomenon.</strong><br>Cross-reactivity is primarily related to similarities in beta-lactam side chains, particularly the R1 side chain, rather than simply the shared beta-lactam ring. Cefazolin has a unique R1 side chain and can generally be used in many patients with a history of penicillin allergy, including those with prior penicillin anaphylaxis, when there is no history of a severe delayed reaction and the clinical context supports its use.</p>'+
