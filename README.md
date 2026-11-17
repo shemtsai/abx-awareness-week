@@ -20,7 +20,7 @@ This project was built with AI tools. Questions, issues, or ideas? Reach out to 
 | Order Whack | Spotting inappropriate antibiotic orders |
 | Stewardship Catch | Good practices vs. common pitfalls |
 | Stop the Clock | Evidence-based treatment durations |
-| Allergy Detective | Penicillin allergy cases: interview the patient, build the modified PEN-FAST score, then choose a pathway and an antibiotic |
+| Allergy Detective | Penicillin allergy cases (4 of 8 per play): interview the patient, build the modified PEN-FAST score, then choose a pathway and an antibiotic |
 | Myth or Fact | Common misconceptions about antibiotics, allergy labels, side effects and resistance (falling cards) |
 | Bug–Drug Match | Targeted therapy for common pathogens |
 | De-escalation Dash | Narrowing, stopping and switching to oral once cultures return (lane runner) |
