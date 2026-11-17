@@ -27,7 +27,7 @@ scripts.forEach(old => {
 });
 
 // --- Player: random ID + name, remembered in this browser when possible ---
-// Random player names: an adjective + an antimicrobial (all US FDA-approved) starting with the same letter.
+// Random player names: an adjective + an antimicrobial (all US FDA-approved) starting with the same letter (over 1,200 combinations).
 const DRUGS = [
   'Acyclovir', 'Amikacin', 'Amoxicillin', 'Amphotericin', 'Ampicillin', 'Anidulafungin', 'Atovaquone', 'Azithromycin',
   'Aztreonam', 'Baloxavir', 'Bedaquiline', 'Caspofungin', 'Cefadroxil', 'Cefazolin', 'Cefdinir', 'Cefepime', 'Cefiderocol',
@@ -41,23 +41,23 @@ const DRUGS = [
   'Tedizolid', 'Telavancin', 'Terbinafine', 'Tigecycline', 'Tobramycin', 'Valacyclovir', 'Valganciclovir', 'Vancomycin',
   'Voriconazole'];
 const ADJ = {
-  A: ['Agile', 'Astute', 'Adept', 'Ambitious', 'Audacious', 'Awesome'],
-  B: ['Bold', 'Brave', 'Bright', 'Brilliant', 'Brisk', 'Buoyant'],
-  C: ['Calm', 'Clever', 'Confident', 'Courageous', 'Curious', 'Cheerful'],
-  D: ['Daring', 'Dashing', 'Dauntless', 'Dazzling', 'Diligent', 'Dynamic'],
-  E: ['Eager', 'Earnest', 'Elegant', 'Energetic', 'Epic', 'Excellent'],
-  F: ['Fabulous', 'Fearless', 'Fierce', 'Focused', 'Formidable', 'Friendly'],
-  G: ['Gallant', 'Genial', 'Gleaming', 'Gracious', 'Grand', 'Gutsy'],
-  I: ['Illustrious', 'Ingenious', 'Insightful', 'Inspired', 'Intrepid', 'Inventive'],
-  L: ['Legendary', 'Lionhearted', 'Lively', 'Loyal', 'Lucky', 'Luminous'],
-  M: ['Magnificent', 'Marvelous', 'Masterful', 'Merry', 'Mighty', 'Mindful'],
-  N: ['Nifty', 'Nimble', 'Noble', 'Nonstop', 'Notable', 'Nurturing'],
-  O: ['Observant', 'Optimal', 'Optimistic', 'Original', 'Outstanding', 'Overachieving'],
-  P: ['Persistent', 'Plucky', 'Powerful', 'Precise', 'Proactive', 'Prudent'],
-  R: ['Radiant', 'Rapid', 'Reliable', 'Remarkable', 'Resolute', 'Resourceful'],
-  S: ['Sharp', 'Sincere', 'Spirited', 'Steady', 'Stellar', 'Swift'],
-  T: ['Tenacious', 'Terrific', 'Thoughtful', 'Tireless', 'Triumphant', 'Trusty'],
-  V: ['Valiant', 'Venerable', 'Versatile', 'Vibrant', 'Vigilant', 'Vivid'],
+  A: ['Agile', 'Astute', 'Adept', 'Ambitious', 'Audacious', 'Awesome', 'Adventurous', 'Agreeable', 'Alert', 'Amazing', 'Amiable', 'Artful', 'Assured', 'Attentive', 'Authentic', 'Admirable'],
+  B: ['Bold', 'Brave', 'Bright', 'Brilliant', 'Brisk', 'Buoyant', 'Benevolent', 'Blazing', 'Blissful', 'Bountiful', 'Breezy', 'Bubbly', 'Bodacious', 'Boundless'],
+  C: ['Calm', 'Clever', 'Confident', 'Courageous', 'Curious', 'Cheerful', 'Capable', 'Careful', 'Caring', 'Celebrated', 'Champion', 'Charming', 'Classy', 'Colorful', 'Composed', 'Crafty'],
+  D: ['Daring', 'Dashing', 'Dauntless', 'Dazzling', 'Diligent', 'Dynamic', 'Dapper', 'Decisive', 'Dedicated', 'Delightful', 'Dependable', 'Determined', 'Devoted', 'Dexterous', 'Distinguished', 'Driven'],
+  E: ['Eager', 'Earnest', 'Elegant', 'Energetic', 'Epic', 'Excellent', 'Effervescent', 'Efficient', 'Electric', 'Eloquent', 'Eminent', 'Empowered', 'Enchanting', 'Endearing', 'Enthusiastic', 'Exuberant'],
+  F: ['Fabulous', 'Fearless', 'Fierce', 'Focused', 'Formidable', 'Friendly', 'Faithful', 'Fantastic', 'Festive', 'Fiery', 'Flawless', 'Flourishing', 'Fortunate', 'Free-spirited', 'Fresh', 'Fun'],
+  G: ['Gallant', 'Genial', 'Gleaming', 'Gracious', 'Grand', 'Gutsy', 'Generous', 'Gentle', 'Genuine', 'Gifted', 'Gleeful', 'Glorious', 'Golden', 'Good-natured', 'Gritty', 'Groovy'],
+  I: ['Illustrious', 'Ingenious', 'Insightful', 'Inspired', 'Intrepid', 'Inventive', 'Iconic', 'Imaginative', 'Impressive', 'Incredible', 'Indomitable', 'Industrious', 'Informed', 'Innovative', 'Invincible', 'Irrepressible'],
+  L: ['Legendary', 'Lionhearted', 'Lively', 'Loyal', 'Lucky', 'Luminous', 'Laid-back', 'Laudable', 'Learned', 'Level-headed', 'Likable', 'Limitless', 'Lofty', 'Logical', 'Lovable', 'Lustrous'],
+  M: ['Magnificent', 'Marvelous', 'Masterful', 'Merry', 'Mighty', 'Mindful', 'Majestic', 'Masterly', 'Mellow', 'Memorable', 'Methodical', 'Meticulous', 'Mirthful', 'Modest', 'Motivated'],
+  N: ['Nifty', 'Nimble', 'Noble', 'Nonstop', 'Notable', 'Nurturing', 'Natural', 'Neat', 'Neighborly', 'Nerdy', 'Nice', 'Noteworthy', 'Novel', 'Noble-hearted', 'Nonchalant'],
+  O: ['Observant', 'Optimal', 'Optimistic', 'Original', 'Outstanding', 'Overachieving', 'Open-minded', 'Organized', 'Outgoing', 'Orderly', 'On-point', 'Openhearted', 'Outspoken'],
+  P: ['Persistent', 'Plucky', 'Powerful', 'Precise', 'Proactive', 'Prudent', 'Patient', 'Peppy', 'Perceptive', 'Phenomenal', 'Playful', 'Poised', 'Polished', 'Positive', 'Prepared', 'Punctual'],
+  R: ['Radiant', 'Rapid', 'Reliable', 'Remarkable', 'Resolute', 'Resourceful', 'Rad', 'Rational', 'Ready', 'Refined', 'Relentless', 'Resilient', 'Respected', 'Revered', 'Robust', 'Rousing'],
+  S: ['Sharp', 'Sincere', 'Spirited', 'Steady', 'Stellar', 'Swift', 'Savvy', 'Scholarly', 'Sensible', 'Serene', 'Skillful', 'Snappy', 'Sparkling', 'Splendid', 'Stalwart', 'Studious'],
+  T: ['Tenacious', 'Terrific', 'Thoughtful', 'Tireless', 'Triumphant', 'Trusty', 'Tactful', 'Talented', 'Tidy', 'Timely', 'Top-notch', 'Tough', 'Tranquil', 'Trailblazing', 'Tremendous', 'True'],
+  V: ['Valiant', 'Venerable', 'Versatile', 'Vibrant', 'Vigilant', 'Vivid', 'Valorous', 'Venturesome', 'Victorious', 'Virtuous', 'Visionary', 'Vital', 'Vivacious', 'Vocal'],
 };
 const pick = a => a[Math.floor(Math.random() * a.length)];
 const randomName = () => { const d = pick(DRUGS); return `${pick(ADJ[d[0]])} ${d}`; };
@@ -289,11 +289,19 @@ function render(data) {
   $('board-you').innerHTML =
     `<p class="you-name">${esc(me.name)}</p>` +
     `<p class="you-line"><strong>${mine.size} of ${of}</strong> games completed` +
-    (data.me ? ` · <strong>#${data.me.rank}</strong> of ${data.players} overall` : '') + '</p>' +
+    (data.medals?.me ? ` · <strong>#${data.medals.me.rank}</strong> in medals (${data.medals.me.points} pts)` : '') + '</p>' +
     `<div class="chips">${GAMES.map(g => `<button type="button" class="chip ${mine.has(g.id) ? 'on' : ''}" data-jump="${g.id}"` +
       ` aria-label="${g.label}: ${mine.has(g.id) ? 'completed' : 'not completed yet'}">${mine.has(g.id) ? '✓ ' : ''}${g.label}</button>`).join('')}</div>`;
 
-  // Overall standings, with a slim bar showing how many of the games each person has completed
+  // Medal standings: 5 points per #1, 3 per #2, 1 per #3 across every game's board
+  const medalVal = p => `<span class="medals">🥇${p.gold} 🥈${p.silver} 🥉${p.bronze}</span><b>${p.points} pts</b>`;
+  const md = data.medals || { top: [] };
+  $('board-medals').innerHTML = md.top.length
+    ? md.top.map(p => rankRow(p, medalVal(p))).join('') +
+      (md.me && !md.top.some(p => p.me) ? `<li class="gap" aria-hidden="true">⋯</li>` + rankRow({ ...md.me, me: true }, medalVal(md.me)) : '')
+    : '<li class="empty">No scores yet. Finish any game to start earning medals.</li>';
+
+  // Games completed, with a slim bar showing how many of the games each person has completed
   const bar = n => `<span class="bar" aria-hidden="true"><i style="width:${Math.round(n / of * 100)}%"></i></span>`;
   $('board-overall').innerHTML = data.top.length
     ? data.top.map(p => rankRow(p, `${p.count}/${of}${bar(p.count)}`)).join('') +
@@ -326,7 +334,7 @@ async function loadBoard() {
     lastData = data;
     render(data);
   } catch {
-    $('board-overall').innerHTML = '<li class="empty">The leaderboard will appear on the live site.</li>';
+    $('board-medals').innerHTML = '<li class="empty">The leaderboard will appear on the live site.</li>';
   }
 }
 loadBoard();

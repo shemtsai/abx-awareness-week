@@ -75,6 +75,7 @@ export async function players(sql) {
 
 // Best score per player for every game, highest first (ties go to whoever got there first):
 // the top `limit` players, plus `player`'s own rank and best score even if they're further down.
+// Also returns the medal standings: 5 points for each #1, 3 for each #2 and 1 for each #3 across all games.
 export async function gameBoards(sql, player, limit = 10) {
   const best = await sql`
     SELECT DISTINCT ON (game, player_id) game, player_id, score, created_at
@@ -88,12 +89,20 @@ export async function gameBoards(sql, player, limit = 10) {
     ) t ORDER BY player_id, created_at DESC`).map(r => [r.player_id, r.name]));
   const byGame = {};
   for (const r of best) (byGame[r.game] ||= []).push(r);
-  const boards = {};
+  const boards = {}, medals = new Map();
   for (const g in byGame) {
-    const ranked = byGame[g]
-      .sort((a, b) => b.score - a.score || new Date(a.created_at) - new Date(b.created_at))
-      .map((r, i) => ({ rank: i + 1, name: names.get(r.player_id) || 'Anonymous', score: r.score, me: !!player && r.player_id === player }));
+    const sorted = byGame[g].sort((a, b) => b.score - a.score || new Date(a.created_at) - new Date(b.created_at));
+    sorted.slice(0, 3).forEach((r, i) => {
+      const m = medals.get(r.player_id) || { id: r.player_id, gold: 0, silver: 0, bronze: 0 };
+      m[['gold', 'silver', 'bronze'][i]]++;
+      medals.set(r.player_id, m);
+    });
+    const ranked = sorted.map((r, i) => ({ rank: i + 1, name: names.get(r.player_id) || 'Anonymous', score: r.score, me: !!player && r.player_id === player }));
     boards[g] = { top: ranked.slice(0, limit), me: ranked.find(r => r.me) || null, players: ranked.length };
   }
-  return boards;
+  const table = [...medals.values()]
+    .map(m => ({ ...m, points: 5 * m.gold + 3 * m.silver + m.bronze }))
+    .sort((a, b) => b.points - a.points || b.gold - a.gold || b.silver - a.silver)
+    .map((m, i) => ({ rank: i + 1, name: names.get(m.id) || 'Anonymous', gold: m.gold, silver: m.silver, bronze: m.bronze, points: m.points, me: !!player && m.id === player }));
+  return { boards, medals: { top: table.slice(0, limit), me: table.find(r => r.me) || null } };
 }

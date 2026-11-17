@@ -334,3 +334,6 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .reply-form .reply-send { padding: 6px 14px; border: 0; border-radius: 999px; background: var(--teal); color: var(--disk); font: 700 .85rem var(--body); cursor: pointer; }
 .reply-form .reply-send:disabled { opacity: .6; }
 .reply-form .cancel { font: inherit; font-size: .85rem; color: var(--muted); background: none; border: 0; cursor: pointer; text-decoration: underline; }
+#board .board-note { margin: -4px 0 8px; font-size: .82rem; color: var(--muted); }
+#board .val .medals { display: block; font: 600 .82rem var(--body); color: var(--ink); letter-spacing: .02em; }
+#board .val b { display: block; font: 800 .95rem var(--display); color: var(--teal); }
