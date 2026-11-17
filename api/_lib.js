@@ -35,6 +35,8 @@ export function db() {
     await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS player_id TEXT`;
     await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS name TEXT`;
     await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS score INTEGER`;
+    await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS ms INTEGER`; // how long the play took; breaks tied scores
+    await sql`CREATE INDEX IF NOT EXISTS events_board ON events (game, player_id, score DESC) WHERE type = 'finish'`;
     await sql`CREATE TABLE IF NOT EXISTS comments (
       id SERIAL PRIMARY KEY, player_id TEXT, name TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL,
       hidden BOOLEAN NOT NULL DEFAULT false, created_at TIMESTAMPTZ DEFAULT now())`;
@@ -73,14 +75,14 @@ export async function players(sql) {
     .sort((a, b) => b.codes.length - a.codes.length || new Date(a.last) - new Date(b.last));
 }
 
-// Best score per player for every game, highest first (ties go to whoever got there first):
+// Best score per player for every game, highest first (tied scores go to the faster finish, then whoever got there first):
 // the top `limit` players, plus `player`'s own rank and best score even if they're further down.
 // Also returns the medal standings: 5 points for each #1, 3 for each #2 and 1 for each #3 across all games.
 export async function gameBoards(sql, player, limit = 10) {
   const best = await sql`
-    SELECT DISTINCT ON (game, player_id) game, player_id, score, created_at
+    SELECT DISTINCT ON (game, player_id) game, player_id, score, ms, created_at
     FROM events WHERE type = 'finish' AND score IS NOT NULL AND player_id IS NOT NULL
-    ORDER BY game, player_id, score DESC, created_at ASC`;
+    ORDER BY game, player_id, score DESC, ms ASC NULLS LAST, created_at ASC`;
   // Each player's most recent name, from either table
   const names = new Map((await sql`
     SELECT DISTINCT ON (player_id) player_id, name FROM (
@@ -91,13 +93,14 @@ export async function gameBoards(sql, player, limit = 10) {
   for (const r of best) (byGame[r.game] ||= []).push(r);
   const boards = {}, medals = new Map();
   for (const g in byGame) {
-    const sorted = byGame[g].sort((a, b) => b.score - a.score || new Date(a.created_at) - new Date(b.created_at));
+    const fast = r => r.ms ?? Infinity; // older plays with no time sort after timed ones
+    const sorted = byGame[g].sort((a, b) => b.score - a.score || (fast(a) - fast(b) || 0) || new Date(a.created_at) - new Date(b.created_at));
     sorted.slice(0, 3).forEach((r, i) => {
       const m = medals.get(r.player_id) || { id: r.player_id, gold: 0, silver: 0, bronze: 0 };
       m[['gold', 'silver', 'bronze'][i]]++;
       medals.set(r.player_id, m);
     });
-    const ranked = sorted.map((r, i) => ({ rank: i + 1, name: names.get(r.player_id) || 'Anonymous', score: r.score, me: !!player && r.player_id === player }));
+    const ranked = sorted.map((r, i) => ({ rank: i + 1, name: names.get(r.player_id) || 'Anonymous', score: r.score, ms: r.ms ?? null, me: !!player && r.player_id === player }));
     boards[g] = { top: ranked.slice(0, limit), me: ranked.find(r => r.me) || null, players: ranked.length };
   }
   const table = [...medals.values()]

@@ -145,10 +145,11 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') Object.keys(
 // Tuck the buttons away mid-game so they never cover game controls; they return on the menu or results screen
 const arcadeEl = $('arcade');
 const corner = $('corner-btns');
+// (watches only the top level, so it stays quiet while a game updates its own screen)
 new MutationObserver(() => {
-  if (arcadeEl.querySelector('.menu, .again, .ov .go')) corner.classList.remove('playing');
-}).observe(arcadeEl, { childList: true, subtree: true });
-document.addEventListener('aaw', e => { if (e.detail.type === 'start') corner.classList.add('playing'); });
+  if (arcadeEl.querySelector('.menu, .again')) corner.classList.remove('playing');
+}).observe(arcadeEl.querySelector('#aaw-hub') || arcadeEl, { childList: true });
+document.addEventListener('aaw', e => corner.classList.toggle('playing', e.detail.type === 'start'));
 
 // --- Comments & feedback ---
 const talkForm = $('talk-form');
@@ -331,6 +332,7 @@ async function loadBoard() {
     const res = await fetch('/api/leaderboard?player=' + encodeURIComponent(me.id));
     const data = await res.json();
     if (!res.ok) { console.warn('Leaderboard failed:', res.status, data.detail || data.error); throw new Error(data.error); }
+    if (lastData && JSON.stringify(lastData) === JSON.stringify(data)) return; // nothing new: skip the redraw
     lastData = data;
     render(data);
   } catch {
@@ -339,7 +341,7 @@ async function loadBoard() {
 }
 loadBoard();
 setInterval(() => {
-  if (document.hidden) return;
+  if (document.hidden || (corner.classList.contains('playing') && !isOpen('board'))) return; // no refresh mid-game
   loadBoard();
   if (pending.size) save([]).then(() => status('Your saved progress was added to the leaderboard.', 'ok')).catch(() => {}); // keep retrying unsaved progress
 }, 30000);
@@ -363,8 +365,8 @@ function beacon(body) { navigator.sendBeacon?.('/api/event', body) || fetch('/ap
 beacon(JSON.stringify({ session, player: me.id, type: 'visit', game: 'home' }));
 document.addEventListener('aaw', e => {
   const { type, game, unlocked, code } = e.detail;
-  const { score } = e.detail;
-  const body = JSON.stringify({ session, player: me.id, name: me.name, type, game, unlocked: !!unlocked, score });
+  const { score, ms } = e.detail;
+  const body = JSON.stringify({ session, player: me.id, name: me.name, type, game, unlocked: !!unlocked, score, ms });
   beacon(body);
 
   if (type === 'finish' && score != null) {

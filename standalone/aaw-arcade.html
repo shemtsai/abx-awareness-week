@@ -209,6 +209,8 @@
   /* Internal game IDs. Not shown in the games; the website uses them for its leaderboard. */
   var CODES={wheel:'NARROW',blast:'TARGETED',run:'COVERAGE',whack:'TIMEOUT',catch:'SHIELD',clock:'SHORTER',allergy:'PENICILLIN',myth:'DELABEL',match:'PATHOGEN',dash:'DEESCALATE',dur:'DURATION',scr:'STEWARD'};
   /* Reports game activity (start/finish). Does nothing in the standalone file; the Vercel site listens for it to track plays and fill in codes. */
+  var T0=performance.now(); /* when the current play began; reported as ms so tied scores go to the faster finish */
+  root.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.begin,.go,.again'))T0=performance.now()},true);
   function track(type,game,extra){try{var d={type:type,game:game};for(var k in extra)d[k]=extra[k];root.dispatchEvent(new CustomEvent('aaw',{bubbles:true,detail:d}))}catch(e){}}
   /* Reports a finished game and its score (used only by the website's leaderboard). Shows nothing. */
   /* Difficulty: Hard is faster (or tougher) and its scores count 1.5x on the leaderboard. Games without a "hard" note are Normal only. */
@@ -224,15 +226,17 @@
   function pool(bank){return bank.filter(function(x){return (x.l===2)===HARD||Math.random()<(HARD?.5:.3)})}
   function award(id,ok,need,score){
     var pts=HARD?Math.round(score*1.5):score;
-    track('finish',id,{unlocked:!!ok,code:ok?CODES[id]:null,score:pts,hard:HARD});
+    track('finish',id,{unlocked:!!ok,code:ok?CODES[id]:null,score:pts,hard:HARD,ms:Math.round(performance.now()-T0)});
     return HARD?'<p class="hb">Hard mode bonus: '+score.toLocaleString()+' \u00d7 1.5 = <b>'+pts.toLocaleString()+'</b> points</p>':'';
   }
-  function confetti(){
-    var c=document.createElement('canvas');c.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:5';root.appendChild(c);
-    var w=c.width=root.clientWidth,h=c.height=root.clientHeight,x=c.getContext('2d'),P=[],t0=performance.now();
-    for(var i=0;i<140;i++)P.push({x:Math.random()*w,y:-20-Math.random()*h*.5,vx:(Math.random()-.5)*3,vy:2+Math.random()*3,r:Math.random()*6.28,s:5+Math.random()*5,c:['#1f6f8b','#f2c94c','#eb5757','#27ae60','#9b51e0'][i%5]});
-    (function f(t){x.clearRect(0,0,w,h);P.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.r+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore()});
-      if(t-t0<2600&&c.parentNode)requestAnimationFrame(f);else if(c.parentNode)c.parentNode.removeChild(c)})(t0);
+  var cfx=null;
+  function confetti(){ /* one small screen-sized layer at a time, so repeated wins never stack up */
+    if(cfx&&cfx.parentNode)cfx.parentNode.removeChild(cfx);
+    var c=cfx=document.createElement('canvas');c.style.cssText='position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:50';root.appendChild(c);
+    var w=c.width=window.innerWidth,h=c.height=window.innerHeight,x=c.getContext('2d'),P=[],t0=performance.now();
+    for(var i=0;i<90;i++)P.push({x:Math.random()*w,y:-20-Math.random()*h*.4,vx:(Math.random()-.5)*3,vy:2+Math.random()*3,r:Math.random()*6.28,s:5+Math.random()*5,c:['#1f6f8b','#f2c94c','#eb5757','#27ae60','#9b51e0'][i%5]});
+    (function f(t){if(cfx!==c)return;x.clearRect(0,0,w,h);P.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.r+=.1;var co=Math.cos(p.r),si=Math.sin(p.r);x.setTransform(co,si,-si,co,p.x,p.y);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2)});x.setTransform(1,0,0,1,0,0);
+      if(t-t0<2400&&c.parentNode)requestAnimationFrame(f);else{if(c.parentNode)c.parentNode.removeChild(c);if(cfx===c)cfx=null}})(t0);
   }
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
