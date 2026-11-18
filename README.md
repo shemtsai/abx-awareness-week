@@ -27,7 +27,7 @@ This project was built with AI tools. Questions, issues, or ideas? Reach out to 
 | Test or Rest | Diagnostic stewardship: which cultures and tests to send or hold (conveyor) |
 | Stewardship Scramble | Stewardship vocabulary (bouncing letters) |
 
-Every game except Allergy Detective has a Normal/Hard switch on its instructions screen. Hard is faster and draws more of the harder questions, and its scores count 1.5×. Each game pulls from a larger question bank, so replays are different.
+Every game except Allergy Detective has a Normal/Hard switch on its instructions screen. Hard is faster and draws more of the harder questions, and its scores count 1.5×. Leaving a game partway still counts the score you had. Tied scores share a rank (25, 25, 23 ranks 1, 1, 3), and every #1, #2 and #3 earns a medal. Each game pulls from a larger question bank, so replays are different.
 
 Every answer explains the reasoning and cites its source: IDSA, ATS, IDSA/SHEA, CDC, IWGDF/IDSA and ACP guidance, plus key trials such as MERINO, STOP-IT, PTC, BALANCE, SNAP and PALACE.
 

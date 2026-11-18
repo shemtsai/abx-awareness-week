@@ -149,7 +149,10 @@ const corner = $('corner-btns');
 new MutationObserver(() => {
   if (arcadeEl.querySelector('.menu, .again')) corner.classList.remove('playing');
 }).observe(arcadeEl.querySelector('#aaw-hub') || arcadeEl, { childList: true });
-document.addEventListener('aaw', e => corner.classList.toggle('playing', e.detail.type === 'start'));
+document.addEventListener('aaw', e => {
+  if (e.detail.type === 'start') corner.classList.add('playing');
+  else if (e.detail.type === 'finish') corner.classList.remove('playing');
+});
 
 // --- Comments & feedback ---
 const talkForm = $('talk-form');
@@ -319,8 +322,8 @@ function render(data) {
       : 'You haven’t played this one yet.';
     return `<article class="game-card ${g.id === focusGame ? 'focus' : ''}" id="gc-${g.id}">
       <header><h4>${g.label}</h4><button type="button" class="play" data-play="${g.id}">Play</button></header>
-      ${top.length ? `<ol class="ranks">${rows(top.slice(0, 3))}</ol>` +
-        (top.length > 3 ? `<details><summary>Show top ${top.length}</summary><ol class="ranks">${rows(top.slice(3))}</ol></details>` : '')
+      ${top.length ? `<ol class="ranks">${rows(top.filter(p => p.rank <= 3))}</ol>` + // everyone on the podium, ties included
+        (top.some(p => p.rank > 3) ? `<details><summary>Show top ${top.length}</summary><ol class="ranks">${rows(top.filter(p => p.rank > 3))}</ol></details>` : '')
         : '<p class="empty">No scores yet. Be the first.</p>'}
       <p class="mine ${b.me ? '' : 'none'}">${you}</p>
     </article>`;
@@ -375,6 +378,7 @@ document.addEventListener('aaw', e => {
     toggle.classList.remove('nudge'); void toggle.offsetWidth; toggle.classList.add('nudge');
     setTimeout(loadBoard, 1000); // show the new score
   }
+  if (type === 'partial' && !document.hidden) setTimeout(loadBoard, 1000); // left mid-game: that score counts too
 
   if (code && !earned.has(code)) {
     earned.add(code);

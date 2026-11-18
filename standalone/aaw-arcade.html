@@ -210,7 +210,17 @@
   var CODES={wheel:'NARROW',blast:'TARGETED',run:'COVERAGE',whack:'TIMEOUT',catch:'SHIELD',clock:'SHORTER',allergy:'PENICILLIN',myth:'DELABEL',match:'PATHOGEN',dash:'DEESCALATE',dur:'DURATION',scr:'STEWARD'};
   /* Reports game activity (start/finish). Does nothing in the standalone file; the Vercel site listens for it to track plays and fill in codes. */
   var T0=performance.now(); /* when the current play began; reported as ms so tied scores go to the faster finish */
-  root.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.begin,.go,.again'))T0=performance.now()},true);
+  /* Unfinished games still count: each game registers how to read its current score with live(); if the player
+     leaves mid-round (back to the menu, another tab, or closing the page), that score is reported as 'partial'. */
+  var CUR=null,LIVEID=null,LIVE=null,SENT=null;
+  function live(fn){LIVE=fn}
+  function leave(){
+    if(!LIVEID||!LIVE)return;var sc=Math.round(+LIVE()||0);if(sc<=0||sc===SENT)return;SENT=sc;
+    track('partial',LIVEID,{score:HARD?Math.round(sc*1.5):sc,hard:HARD,ms:Math.round(performance.now()-T0)});
+  }
+  root.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.begin,.go,.again,#ad-again')){T0=performance.now();LIVEID=CUR;SENT=null}},true);
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')leave()});
+  window.addEventListener('pagehide',leave);
   function track(type,game,extra){try{var d={type:type,game:game};for(var k in extra)d[k]=extra[k];root.dispatchEvent(new CustomEvent('aaw',{bubbles:true,detail:d}))}catch(e){}}
   /* Reports a finished game and its score (used only by the website's leaderboard). Shows nothing. */
   /* Difficulty: Hard is faster (or tougher) and its scores count 1.5x on the leaderboard. Games without a "hard" note are Normal only. */
@@ -225,7 +235,7 @@
   }
   function pool(bank){return bank.filter(function(x){return (x.l===2)===HARD||Math.random()<(HARD?.5:.3)})}
   function award(id,ok,need,score){
-    var pts=HARD?Math.round(score*1.5):score;
+    var pts=HARD?Math.round(score*1.5):score;LIVEID=null; /* finished: nothing left to report as partial */
     track('finish',id,{unlocked:!!ok,code:ok?CODES[id]:null,score:pts,hard:HARD,ms:Math.round(performance.now()-T0)});
     return HARD?'<p class="hb">Hard mode bonus: '+score.toLocaleString()+' \u00d7 1.5 = <b>'+pts.toLocaleString()+'</b> points</p>':'';
   }
@@ -291,6 +301,7 @@
      how:['A definition appears above the box, with a blank for each letter.','Tap the bouncing letters in the right order (or type them). A wrong letter costs 2 seconds.','Faster words earn more points. Select Skip word to reveal the answer. There are six words.']}
   ];
   function menu(){
+    leave();LIVEID=null;LIVE=null;
     if(cleanup){cleanup();cleanup=null}
     HARD=false;root.classList.remove('hard');
     var h='<div class="card"><h2>Stewardship Learning Challenge</h2><p class="sub">Antibiotic Awareness Week: '+GAMES.length+' short, evidence-based games. Select a game to view its instructions.</p><div class="menu">';
@@ -317,7 +328,7 @@
     wireBack();sc=$('.sc');
     function mult(){return streak>=6?2:streak>=3?1.5:1}
     function hud(){$('.ss').textContent=score.toLocaleString();$('.sl').textContent=Math.max(0,lives);$('.sn').textContent='Card '+Math.min(i+1,cards.length)+' of '+cards.length;$('.sm').textContent=mult()>1?'· streak ×'+mult():''}
-    function start(){cards=pick(G.bank,G.n);i=0;score=0;lives=3;streak=0;right=0;overlay(null);$('.fb').innerHTML='';next()}
+    function start(){live(function(){return score});cards=pick(G.bank,G.n);i=0;score=0;lives=3;streak=0;right=0;overlay(null);$('.fb').innerHTML='';next()}
     function next(){
       clearTimeout(timer);
       if(i>=cards.length||lives<=0)return end();
@@ -399,7 +410,7 @@
     var bw=$('.bw'),gates=$('.gates'),runner=$('.runner'),gts=$$('.gt');
     function hud(){$('.ds').textContent=score.toLocaleString();$('.dl').textContent=Math.max(0,lives);$('.dn').textContent='Case '+Math.min(i+1,cases.length)+' of '+cases.length}
     function setLane(l){lane=Math.max(0,Math.min(2,l));runner.style.left=(lane*33.333)+'%'}
-    function start(){cases=pick(DASH,8);i=0;score=0;lives=3;right=0;overlay(null);$('.fb').innerHTML='';setLane(1);next()}
+    function start(){live(function(){return score});cases=pick(DASH,8);i=0;score=0;lives=3;right=0;overlay(null);$('.fb').innerHTML='';setLane(1);next()}
     function next(){
       $('.fb').innerHTML='';
       if(i>=cases.length||lives<=0)return end();
@@ -463,6 +474,7 @@
     var used=[];PS.forEach(function(p){used=used.concat(p.d,p.also)});
     var decoys=HARD?shuffle(DECOYS.filter(function(d){return used.indexOf(d)<0})).slice(0,3).map(function(d){return{d:d}}):[];
     var bugs=shuffle(PS),drugs=shuffle(PS.concat(decoys)),sel=null,done=0,miss=0,paused=false;
+    live(function(){return Math.max(0,done-miss)});
     var h='<div class="card">'+BACK+'<h2>Bug–Drug Match</h2><p class="sub">Tap an organism, then its preferred targeted therapy.</p>'+
       '<div class="meta"><span class="dn">Matched: 0/'+PS.length+'</span><span class="ms">Misses: 0</span></div><div class="cols"><div class="opts">';
     bugs.forEach(function(p){h+='<button class="opt bug" data-b="'+esc(p.b)+'">'+esc(p.b)+'</button>'});
@@ -502,7 +514,7 @@
     wireBack();cv=$('.bc');ctx=cv.getContext('2d');
     function size(){w=cv.clientWidth;h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);draw()}
     function slots(){$('.wslots').innerHTML=word?word.split('').map(function(c,k){return '<span class="'+(k<got.length?'f':'')+'">'+(k<got.length?c:'')+'</span>'}).join(''):''}
-    function start(){ws=pick(WORDS,6);i=0;score=0;solved=0;overlay(null);next()}
+    function start(){live(function(){return score});ws=pick(WORDS,6);i=0;score=0;solved=0;overlay(null);next()}
     function next(){
       clearTimeout(timer);$('.fb').innerHTML='';
       if(i>=ws.length)return end();
@@ -578,6 +590,7 @@
   function wheel(){
     var SEG=[300,500,'BANKRUPT',400,600,700,'LOSE A TURN',800,250,900,350,1000],COL=['#1f6f8b','#27ae60','#eb5757','#9b51e0','#2d9cdb','#e67e22','#16a085'];
     var ps=pick(PUZ,2),pi=0,total=0,solved=0,bank,strikes,val,phase,used,rot=0,spinning,done,dead=false,VOW='AEIOU',MAXS=HARD?2:3,VCOST=500;
+    live(function(){return total+(bank||0)});
     cleanup=function(){dead=true};
     function letters(){return ps[pi].p.replace(/[^A-Z]/g,'')}
     function left(v){return letters().split('').filter(function(L){return !used[L]&&(VOW.indexOf(L)>=0)===v}).length}
@@ -698,7 +711,7 @@
     function msg(t){$('.bm').innerHTML=t}
     function ov(html){var o=$('.ov'),bw=$('.bw');if(o)o.parentNode.removeChild(o);bw.style.minHeight='';if(!html)return;var d=document.createElement('div');d.className='ov';d.innerHTML=html;bw.appendChild(d);if(d.scrollHeight>bw.clientHeight)bw.style.minHeight=d.scrollHeight+'px';
       var g=d.querySelector('.go');if(g)g.onclick=start;var hm=d.querySelector('.home');if(hm)hm.onclick=menu}
-    function start(){bugs=[];fx=[];score=0;lives=3;res=0;el=0;spawn=.4;running=true;last=performance.now();hud();ov(null);msg('Select an antibiotic, then click or tap an organism.');raf=requestAnimationFrame(loop)}
+    function start(){live(function(){return score});bugs=[];fx=[];score=0;lives=3;res=0;el=0;spawn=.4;running=true;last=performance.now();hud();ov(null);msg('Select an antibiotic, then click or tap an organism.');raf=requestAnimationFrame(loop)}
     function loop(t){
       if(!running)return;
       var dt=Math.min(.05,(t-last)/1000);last=t;el+=dt;spawn-=dt;
@@ -782,7 +795,7 @@
       $('.ws2').textContent=score;
     }});
     function clear(h){h.el.classList.remove('up');setTimeout(function(){if(!h.el.classList.contains('up')){h.el.className='pop';h.el.textContent=''}},160);h.o=null}
-    function start(){score=0;misses=[];t0=performance.now();next=0;running=true;H.forEach(clear);overlay(null);msg('Select the <b>inappropriate</b> orders. Leave appropriate orders alone.');$('.ws2').textContent=0;raf=requestAnimationFrame(loop)}
+    function start(){live(function(){return score});score=0;misses=[];t0=performance.now();next=0;running=true;H.forEach(clear);overlay(null);msg('Select the <b>inappropriate</b> orders. Leave appropriate orders alone.');$('.ws2').textContent=0;raf=requestAnimationFrame(loop)}
     function loop(now){
       if(!running)return;var t=(now-t0)/1000,rem=Math.max(0,LEN-t);
       $('.wt2').textContent=Math.ceil(rem);$('.wtb').style.width=(rem/LEN*100)+'%';
@@ -824,7 +837,7 @@
     function size(){w=cv.clientWidth;h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);if(px==null)px=w/2;draw()}
     function msg(t){$('.bm').innerHTML=t}
     function hud(){$('.cs').textContent=score;$('.cl').textContent=Math.max(0,lives);var m=Math.min(5,1+Math.floor(combo/5));$('.cm').textContent=m>1?'· combo ×'+m:''}
-    function start(){items=[];fx=[];score=0;lives=3;combo=0;el=0;spawn=.3;running=true;last=performance.now();hud();overlay(null);msg('Catch the good practices. Let the others fall.');raf=requestAnimationFrame(loop)}
+    function start(){live(function(){return score});items=[];fx=[];score=0;lives=3;combo=0;el=0;spawn=.3;running=true;last=performance.now();hud();overlay(null);msg('Catch the good practices. Let the others fall.');raf=requestAnimationFrame(loop)}
     function loop(t){
       if(!running)return;var dt=Math.min(.05,(t-last)/1000);last=t;el+=dt;spawn-=dt;
       $('.ct').textContent=Math.max(0,Math.ceil(60-el));if(el>=60)return over(1);
@@ -869,7 +882,7 @@
   /* ---------- STOP THE CLOCK ---------- */
   var CLOCK=[{"l": 1, "q": "Hospitalized (non-ICU) community-acquired pneumonia, clinically stable by day 3", "lo": 3, "hi": 3, "e": "Stopping at day 3 in stable patients was noninferior to 8 days. The 2025 ATS update supports a minimum of 3 days for non-severe CAP.", "s": "Dinh et al., Lancet 2021 (PTC trial); ATS CAP Guideline, 2025"}, {"l": 1, "q": "Uncomplicated cellulitis, improving", "lo": 5, "hi": 6, "e": "5 to 6 days is usually enough. Extend only if it hasn't improved.", "s": "IDSA SSTI Guideline, 2014; ACP Best Practice Advice, 2021"}, {"l": 1, "q": "Acute cystitis treated with nitrofurantoin", "lo": 5, "hi": 5, "e": "Nitrofurantoin for 5 days.", "s": "IDSA Uncomplicated Cystitis Guideline, 2010"}, {"l": 1, "q": "Acute cystitis treated with TMP-SMX", "lo": 3, "hi": 3, "e": "TMP-SMX for 3 days, where local resistance is under 20%.", "s": "IDSA Uncomplicated Cystitis Guideline, 2010"}, {"l": 2, "q": "Acute cystitis treated with fosfomycin", "lo": 1, "hi": 1, "t": "1 day (a single dose)", "e": "Fosfomycin 3 g is given once.", "s": "IDSA Uncomplicated Cystitis Guideline, 2010"}, {"l": 1, "q": "Uncomplicated Gram-negative bacteremia, improving", "lo": 7, "hi": 7, "e": "7 days was noninferior to 14 days, including in the BALANCE trial.", "s": "Yahav et al., Clin Infect Dis 2019; BALANCE trial, N Engl J Med 2025"}, {"l": 1, "q": "Hospital-acquired or ventilator-associated pneumonia", "lo": 7, "hi": 7, "e": "7 days for most patients.", "s": "IDSA/ATS HAP/VAP Guideline, 2016"}, {"l": 1, "q": "Intra-abdominal infection with adequate source control", "lo": 4, "hi": 4, "e": "About 4 days after source control was as good as longer treatment.", "s": "Sawyer et al., N Engl J Med 2015 (STOP-IT)"}, {"l": 2, "q": "Uncomplicated S. aureus bacteremia", "lo": 14, "hi": 14, "e": "At least 14 days from the first negative blood culture.", "s": "IDSA MRSA Guideline, 2011"}, {"l": 1, "q": "C. difficile, initial episode (fidaxomicin or oral vancomycin)", "lo": 10, "hi": 10, "e": "10 days.", "s": "IDSA/SHEA CDI Guideline, 2021"}, {"l": 1, "q": "Strep throat (penicillin or amoxicillin)", "lo": 10, "hi": 10, "e": "10 days of penicillin or amoxicillin, to prevent rheumatic fever.", "s": "IDSA GAS Pharyngitis Guideline, 2012"}, {"l": 2, "q": "COPD exacerbation needing antibiotics", "lo": 5, "hi": 5, "e": "5 days.", "s": "ACP Best Practice Advice, 2021"}, {"l": 2, "q": "Complicated UTI or pyelonephritis treated with a fluoroquinolone, improving", "lo": 5, "hi": 7, "e": "5 to 7 days of a fluoroquinolone.", "s": "IDSA Complicated UTI Guideline, 2025"}, {"l": 1, "q": "Complicated UTI or pyelonephritis treated with a non-fluoroquinolone, improving", "lo": 7, "hi": 7, "e": "7 days of a non-fluoroquinolone agent.", "s": "IDSA Complicated UTI Guideline, 2025"}, {"l": 2, "q": "Acute bacterial sinusitis in an adult", "lo": 5, "hi": 7, "e": "5 to 7 days.", "s": "IDSA Rhinosinusitis Guideline, 2012"}, {"l": 2, "q": "Erythema migrans (early Lyme disease) treated with doxycycline", "lo": 10, "hi": 10, "e": "10 days of doxycycline rather than longer courses.", "s": "IDSA/AAN/ACR Lyme Disease Guideline, 2020"}, {"l": 2, "q": "Uncomplicated candidemia, counted from the first negative blood culture", "lo": 14, "hi": 14, "e": "2 weeks after documented clearance and symptom resolution.", "s": "IDSA Candidiasis Guideline, 2016"}, {"l": 2, "q": "Diabetic foot soft-tissue infection (no bone involvement)", "lo": 7, "hi": 14, "e": "1 to 2 weeks.", "s": "IWGDF/IDSA Diabetes-Related Foot Infection Guideline, 2023"}, {"l": 1, "q": "Uncomplicated gonorrhea treated with ceftriaxone", "lo": 1, "hi": 1, "t": "1 day (a single injection)", "e": "A single 500 mg intramuscular dose.", "s": "CDC STI Treatment Guidelines, 2021"}, {"l": 1, "q": "Chlamydia treated with doxycycline", "lo": 7, "hi": 7, "e": "Doxycycline twice daily for 7 days.", "s": "CDC STI Treatment Guidelines, 2021"}, {"l": 2, "q": "Early syphilis treated with benzathine penicillin G", "lo": 1, "hi": 1, "t": "1 day (a single injection)", "e": "One intramuscular dose treats primary, secondary and early latent syphilis.", "s": "CDC STI Treatment Guidelines, 2021"}, {"l": 1, "q": "Acute bronchitis in an otherwise healthy adult", "lo": 0, "hi": 0, "t": "0 days (no antibiotic)", "e": "Acute bronchitis is mostly viral, and antibiotics don't help.", "s": "ACP/CDC High-Value Care Advice, 2016"}, {"l": 1, "q": "Common cold in an adult", "lo": 0, "hi": 0, "t": "0 days (no antibiotic)", "e": "Colds are viral. Antibiotics add side effects without benefit.", "s": "CDC, Be Antibiotics Aware"}, {"l": 2, "q": "Pertussis (whooping cough) treated with azithromycin", "lo": 5, "hi": 5, "e": "Azithromycin for 5 days.", "s": "CDC, Pertussis Treatment"}, {"l": 2, "q": "Trichomoniasis in women treated with metronidazole", "lo": 7, "hi": 7, "e": "Metronidazole for 7 days, which works better than a single dose in women.", "s": "CDC STI Treatment Guidelines, 2021"}, {"l": 2, "q": "Bacterial vaginosis treated with oral metronidazole", "lo": 7, "hi": 7, "e": "Oral metronidazole for 7 days.", "s": "CDC STI Treatment Guidelines, 2021"}, {"l": 2, "q": "H. pylori treated with bismuth quadruple therapy", "lo": 14, "hi": 14, "e": "Optimized bismuth quadruple therapy for 14 days.", "s": "ACG H. pylori Guideline, 2024"}, {"l": 1, "q": "Ear infection (otitis media) in a child 6 or older, mild to moderate", "lo": 5, "hi": 7, "e": "5 to 7 days for children 6 and older with mild to moderate illness.", "s": "AAP Acute Otitis Media Guideline, 2013"}, {"l": 2, "q": "Ear infection (otitis media) in a child under 2", "lo": 10, "hi": 10, "e": "10 days for children under 2. A shorter course was less effective in this age group.", "s": "AAP Acute Otitis Media Guideline, 2013; Hoberman et al., N Engl J Med 2016"}, {"l": 2, "q": "Erythema migrans (early Lyme disease) treated with amoxicillin", "lo": 14, "hi": 14, "e": "14 days of amoxicillin (doxycycline courses are 10 days).", "s": "IDSA/AAN/ACR Lyme Disease Guideline, 2020"}, {"l": 2, "q": "Acute cystitis treated with an oral beta-lactam", "lo": 3, "hi": 7, "e": "3 to 7 days when first-line agents can't be used.", "s": "IDSA Uncomplicated Cystitis Guideline, 2010"}];
   function clock(){
-    var rs=pick(CLOCK,6),ri=0,score=0,pos,dir,spd,raf,last,running=false,stopped,MAX=21,cv,ctx,w,h,dpr=window.devicePixelRatio||1;
+    var rs=pick(CLOCK,6),ri=0,score=0;live(function(){return score});var pos,dir,spd,raf,last,running=false,stopped,MAX=21,cv,ctx,w,h,dpr=window.devicePixelRatio||1;
     function size(){if(!cv)return;w=cv.clientWidth;h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);draw()}
     function X(d){return 20+(w-40)*d/MAX}
     function draw(){
@@ -922,7 +935,7 @@
     function setD(h){WANT_HARD=h;$$('.diff button').forEach(function(b){b.setAttribute('aria-pressed',String(+b.dataset.h===+h))});
       $('.dn').textContent=h?'Hard: '+g.hard+' Scores count 1.5\u00d7.':'Normal: the standard pace.'}
     if(g.hard){$$('.diff button').forEach(function(b){b.onclick=function(){setD(b.dataset.h==='1')}});setD(WANT_HARD)}
-    $('.begin').onclick=function(){HARD=!!(g.hard&&WANT_HARD);root.classList.toggle('hard',HARD);track('start',g.id,{hard:HARD});g.fn()};
+    $('.begin').onclick=function(){HARD=!!(g.hard&&WANT_HARD);root.classList.toggle('hard',HARD);track('start',g.id,{hard:HARD});CUR=LIVEID=g.id;SENT=null;LIVE=null;g.fn()};
   }
 
   /* ---------- ANTIBIOTIC RUNNER ---------- */
@@ -964,7 +977,7 @@
     function addFx(t,x,y,c){fx.push({t:t,x:x,y:y,vy:50,life:1,c:c})}
     function start(){
       if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
-      bugs=[];fx=[];score=0;lives=3;el=0;spawn=.85;scroll=0;z=0;vz=0;banner=0;earned=false;spdTier=0;
+      live(function(){return score});bugs=[];fx=[];score=0;lives=3;el=0;spawn=.85;scroll=0;z=0;vz=0;banner=0;earned=false;spdTier=0;
       drug=RUN_DRUGS[Math.floor(Math.random()*RUN_DRUGS.length)];running=true;last=performance.now();overlay(null);size();hud();
       msg('Your antibiotic is <b>'+esc(drug.n)+'</b>. Make contact with organisms it covers and jump over those it does not.');
       if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);
@@ -1117,7 +1130,7 @@
     root.innerHTML='<div class="card ad">'+BACK+'<div class="ad-screen"></div></div>';
     wireBack();
     var screen=$('.ad-screen');
-    function start(){cases=shuffle(AD_CASES).slice(0,4);state={caseIndex:0,score:0,caseScores:[],clues:[],answers:{}};renderHome()}
+    function start(){live(function(){return state.score});cases=shuffle(AD_CASES).slice(0,4);state={caseIndex:0,score:0,caseScores:[],clues:[],answers:{}};renderHome()}
     function renderHome(){
       var done=state.caseScores.length;
       screen.innerHTML='<div class="hero"><div class="eyebrow" style="color:#bfe3ee">Antibiotic Awareness Week</div><h1>Allergy Detective</h1><p>Review four patient cases with a reported penicillin allergy. Gather the history, assess the risk, choose an evaluation pathway, and make the antibiotic decision.</p></div>'+

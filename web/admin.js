@@ -34,7 +34,7 @@ async function load() {
   const visible = data.comments.filter(c => !c.hidden).length;
   document.getElementById('stats').innerHTML = tile(t.visitors, 'Unique visitors') + tile(t.visits, 'Total visits') +
     tile(t.players, 'People who played') + tile(pct(t.players, t.visitors), 'Visitors who played') +
-    tile(t.plays, 'Games started') + tile(t.finishes, 'Games finished') +
+    tile(t.plays, 'Games started') + tile(t.finishes, 'Games finished') + tile(t.unfinished, 'Games left unfinished') +
     tile(t.players ? (t.plays / t.players).toFixed(1) : '–', 'Games per player') + tile(t.completers, 'People who hit a target') +
     tile(visible, 'Public comments') + tile(data.feedback.length, 'Feedback messages');
   const pv = Object.fromEntries(data.pages.map(p => [p.page, p.n]));

@@ -40,7 +40,7 @@ export async function GET(request) {
     // Site traffic. Visits = one per page load (random per-visit ID); visitors = one per browser (random ID kept in that browser).
     const [totals] = await sql`SELECT COUNT(DISTINCT session)::int AS visits, COUNT(DISTINCT player_id)::int AS visitors,
         COUNT(DISTINCT player_id) FILTER (WHERE type = 'start')::int AS players, COUNT(*) FILTER (WHERE type = 'start')::int AS plays,
-        COUNT(*) FILTER (WHERE type = 'finish')::int AS finishes,
+        COUNT(*) FILTER (WHERE type = 'finish')::int AS finishes, COUNT(*) FILTER (WHERE type = 'partial')::int AS unfinished,
         COUNT(DISTINCT player_id) FILTER (WHERE type = 'finish' AND unlocked)::int AS completers
       FROM events`;
     const pages = await sql`SELECT game AS page, COUNT(*)::int AS n FROM events WHERE type = 'visit' GROUP BY 1`;
