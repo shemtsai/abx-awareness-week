@@ -1,9 +1,12 @@
 // Admin page: engagement summary, leaderboard, game activity, private feedback and public comments (hide/show).
 // Needs the ADMIN_KEY you set in Vercel. Only anonymous random IDs are counted: no IP addresses, locations or cookies.
+import { inject } from '@vercel/analytics';
 import './style.css';
 import '@fontsource/atkinson-hyperlegible/400.css';
 import '@fontsource/atkinson-hyperlegible/700.css';
 import '@fontsource-variable/bricolage-grotesque/opsz.css';
+
+inject();
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const GAME_NAMES = { blast: 'Bug Blaster', run: 'Antibiotic Runner', clock: 'Stop the Clock', whack: 'Order Whack', catch: 'Stewardship Catch',

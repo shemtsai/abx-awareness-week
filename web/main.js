@@ -3,11 +3,14 @@
 //   2. automatic progress saving + a live leaderboard  -> /api/submit, /api/leaderboard
 //   3. anonymous play tracking                              -> /api/event
 // Edit the games in standalone/aaw-arcade.html; this page picks up changes automatically.
+import { inject } from '@vercel/analytics';
 import arcadeHtml from '../standalone/aaw-arcade.html?raw';
 import './style.css';
 import '@fontsource/atkinson-hyperlegible/400.css';
 import '@fontsource/atkinson-hyperlegible/700.css';
 import '@fontsource-variable/bricolage-grotesque/opsz.css';
+
+inject();
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
