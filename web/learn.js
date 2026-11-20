@@ -1,8 +1,11 @@
 // The "Learn more" page. Content and styles live in learn.html; this loads the site's fonts and base styles and counts the visit.
+import { inject } from '@vercel/analytics';
 import './style.css';
 import '@fontsource/atkinson-hyperlegible/400.css';
 import '@fontsource/atkinson-hyperlegible/700.css';
 import '@fontsource-variable/bricolage-grotesque/opsz.css';
+
+inject();
 
 // Count the visit with the same anonymous browser ID the game page uses
 let visitor;
